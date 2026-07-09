@@ -7,6 +7,8 @@ import { Trust } from "@/components/Trust";
 import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>

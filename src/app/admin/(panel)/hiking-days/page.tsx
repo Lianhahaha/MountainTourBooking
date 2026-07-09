@@ -116,6 +116,7 @@ export default function AdminHikingDaysPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...singleForm,
+          maxSlots: typeof singleForm.maxSlots === "number" ? singleForm.maxSlots : parseInt(singleForm.maxSlots as any, 10) || 12,
           price: singleForm.price ? parseFloat(singleForm.price) : undefined,
         }),
       });
@@ -145,7 +146,7 @@ export default function AdminHikingDaysPage() {
         body: JSON.stringify({
           dates: bulkForm.selectedDates,
           time: bulkForm.time,
-          maxSlots: bulkForm.maxSlots,
+          maxSlots: typeof bulkForm.maxSlots === "number" ? bulkForm.maxSlots : parseInt(bulkForm.maxSlots as any, 10) || 12,
           notes: bulkForm.notes,
           price: bulkForm.price ? parseFloat(bulkForm.price) : undefined,
         }),
@@ -271,9 +272,10 @@ export default function AdminHikingDaysPage() {
               min={1}
               max={50}
               value={singleForm.maxSlots}
-              onChange={(e) =>
-                setSingleForm({ ...singleForm, maxSlots: parseInt(e.target.value, 10) || 1 })
-              }
+              onChange={(e) => {
+                const val = e.target.value;
+                setSingleForm({ ...singleForm, maxSlots: val === "" ? "" as any : parseInt(val, 10) });
+              }}
               className="field-input mt-1 w-32"
             />
           </div>
@@ -450,9 +452,10 @@ export default function AdminHikingDaysPage() {
                 min={1}
                 max={50}
                 value={bulkForm.maxSlots}
-                onChange={(e) =>
-                  setBulkForm({ ...bulkForm, maxSlots: parseInt(e.target.value, 10) || 1 })
-                }
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setBulkForm({ ...bulkForm, maxSlots: val === "" ? "" as any : parseInt(val, 10) });
+                }}
                 className="field-input mt-1"
               />
             </div>
@@ -570,6 +573,7 @@ function SessionList({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...editForm,
+          maxSlots: typeof editForm.maxSlots === "number" ? editForm.maxSlots : parseInt(editForm.maxSlots as any, 10) || 12,
           price: editForm.price ? parseFloat(editForm.price) : null,
         }),
       });
@@ -639,12 +643,13 @@ function SessionList({
                       min={Math.max(1, session.bookedCount)}
                       max={50}
                       value={editForm.maxSlots}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const val = e.target.value;
                         setEditForm({
                           ...editForm,
-                          maxSlots: parseInt(e.target.value, 10) || 1,
-                        })
-                      }
+                          maxSlots: val === "" ? "" as any : parseInt(val, 10),
+                        });
+                      }}
                       className="field-input mt-1 w-32"
                     />
                     {session.bookedCount > 0 && (

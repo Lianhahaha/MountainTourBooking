@@ -5,6 +5,8 @@ import { Footer } from "@/components/Footer";
 import { getAllHikingDays } from "@/lib/hiking-days-file";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function HikesPage() {
   const days = await getAllHikingDays();
 
