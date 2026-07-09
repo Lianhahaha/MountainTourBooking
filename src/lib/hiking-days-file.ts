@@ -1,73 +1,49 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { db } from "@/lib/firebase";
+import { collection, doc, getDocs, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import type { HikingDay } from "@/data/hiking-days";
 import { seedHikingDays } from "@/data/hiking-days";
 
-const HIKING_DAYS_FILE = path.join(process.cwd(), "data", "hiking-days.json");
-
-async function ensureHikingDaysFile(): Promise<HikingDay[]> {
-  const dir = path.dirname(HIKING_DAYS_FILE);
-  await fs.mkdir(dir, { recursive: true });
-  try {
-    const raw = await fs.readFile(HIKING_DAYS_FILE, "utf-8");
-    const parsed = JSON.parse(raw) as HikingDay[];
-    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-  } catch {
-    /* seed on first use */
-  }
-  await fs.writeFile(HIKING_DAYS_FILE, JSON.stringify(seedHikingDays, null, 2), "utf-8");
-  return seedHikingDays;
-}
+const COLLECTION = "hiking_days";
 
 export async function getAllHikingDays(): Promise<HikingDay[]> {
-  const days = await ensureHikingDaysFile();
-  return days.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const snapshot = await getDocs(collection(db, COLLECTION));
+  const days: HikingDay[] = [];
+  snapshot.forEach((doc) => {
+    days.push(doc.data() as HikingDay);
+  });
+  
+  if (days.length === 0) {
+    // Seed on first use
+    for (const day of seedHikingDays) {
+      await setDoc(doc(db, COLLECTION, day.id), day);
+    }
+    return seedHikingDays;
+  }
+  
+  return days.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getHikingDayById(id: string): Promise<HikingDay | undefined> {
-  const days = await getAllHikingDays();
-  return days.find((d) => d.id === id);
+  const ref = doc(db, COLLECTION, id);
+  const snap = await getDoc(ref);
+  return snap.exists() ? (snap.data() as HikingDay) : undefined;
 }
 
-export async function saveHikingDay(
-  day: HikingDay
-): Promise<{ ok: boolean; error?: string }> {
+export async function saveHikingDay(day: HikingDay): Promise<{ ok: boolean; error?: string }> {
   try {
-    const days = await ensureHikingDaysFile();
-    const index = days.findIndex((d) => d.id === day.id);
-    if (index >= 0) {
-      days[index] = day;
-    } else {
-      days.push(day);
-    }
-    await fs.writeFile(HIKING_DAYS_FILE, JSON.stringify(days, null, 2), "utf-8");
+    await setDoc(doc(db, COLLECTION, day.id), day);
     return { ok: true };
   } catch (err) {
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : "Failed to save hiking day",
-    };
+    return { ok: false, error: err instanceof Error ? err.message : "Failed to save" };
   }
 }
 
-export async function deleteHikingDay(
-  id: string
-): Promise<{ ok: boolean; error?: string }> {
+export async function deleteHikingDay(id: string): Promise<{ ok: boolean; error?: string }> {
   try {
-    const days = await ensureHikingDaysFile();
-    const filtered = days.filter((d) => d.id !== id);
-    if (filtered.length === days.length) {
-      return { ok: false, error: "Hiking day not found" };
-    }
-    await fs.writeFile(HIKING_DAYS_FILE, JSON.stringify(filtered, null, 2), "utf-8");
+    await deleteDoc(doc(db, COLLECTION, id));
     return { ok: true };
   } catch (err) {
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : "Failed to delete hiking day",
-    };
+    return { ok: false, error: err instanceof Error ? err.message : "Failed to delete" };
   }
 }
 

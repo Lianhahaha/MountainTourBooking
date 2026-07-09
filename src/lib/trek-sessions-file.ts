@@ -1,23 +1,9 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { db } from "@/lib/firebase";
+import { collection, doc, getDocs, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import type { TrekSession } from "@/types";
 import { seedTrekSessions } from "@/data/trek-sessions";
 
-const SESSIONS_FILE = path.join(process.cwd(), "data", "trek-sessions.json");
-
-async function ensureSessionsFile(): Promise<TrekSession[]> {
-  const dir = path.dirname(SESSIONS_FILE);
-  await fs.mkdir(dir, { recursive: true });
-  try {
-    const raw = await fs.readFile(SESSIONS_FILE, "utf-8");
-    const parsed = JSON.parse(raw) as TrekSession[];
-    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-  } catch {
-    /* seed on first use */
-  }
-  await fs.writeFile(SESSIONS_FILE, JSON.stringify(seedTrekSessions, null, 2), "utf-8");
-  return seedTrekSessions;
-}
+const COLLECTION = "trek_sessions";
 
 export function getSessionSlotsRemaining(session: TrekSession): number {
   return Math.max(0, session.maxSlots - session.bookedCount);
@@ -31,10 +17,20 @@ export function isSessionBookable(session: TrekSession): boolean {
 }
 
 export async function getAllTrekSessions(): Promise<TrekSession[]> {
-  const sessions = await ensureSessionsFile();
-  return sessions.sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  const snapshot = await getDocs(collection(db, COLLECTION));
+  const sessions: TrekSession[] = [];
+  snapshot.forEach((doc) => {
+    sessions.push(doc.data() as TrekSession);
+  });
+  
+  if (sessions.length === 0) {
+    for (const s of seedTrekSessions) {
+      await setDoc(doc(db, COLLECTION, s.id), s);
+    }
+    return seedTrekSessions;
+  }
+  
+  return sessions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 
 export async function getAvailableTrekSessions(): Promise<TrekSession[]> {
@@ -43,20 +39,11 @@ export async function getAvailableTrekSessions(): Promise<TrekSession[]> {
 }
 
 export async function getTrekSessionById(id: string): Promise<TrekSession | undefined> {
-  const sessions = await getAllTrekSessions();
-  return sessions.find((s) => s.id === id);
+  const snap = await getDoc(doc(db, COLLECTION, id));
+  return snap.exists() ? (snap.data() as TrekSession) : undefined;
 }
 
-/**
- * Returns true if a non-cancelled session already exists for the given
- * date + time combination.  Pass `excludeId` when editing so the session
- * being edited is not compared against itself.
- */
-export async function sessionConflictExists(
-  date: string,
-  time: string,
-  excludeId?: string
-): Promise<boolean> {
+export async function sessionConflictExists(date: string, time: string, excludeId?: string): Promise<boolean> {
   const sessions = await getAllTrekSessions();
   const normalizedTime = time.trim().toLowerCase();
   return sessions.some(
@@ -68,50 +55,25 @@ export async function sessionConflictExists(
   );
 }
 
-export async function saveTrekSession(
-  session: TrekSession
-): Promise<{ ok: boolean; error?: string }> {
+export async function saveTrekSession(session: TrekSession): Promise<{ ok: boolean; error?: string }> {
   try {
-    const sessions = await ensureSessionsFile();
-    const index = sessions.findIndex((s) => s.id === session.id);
-    if (index >= 0) {
-      sessions[index] = session;
-    } else {
-      sessions.push(session);
-    }
-    await fs.writeFile(SESSIONS_FILE, JSON.stringify(sessions, null, 2), "utf-8");
+    await setDoc(doc(db, COLLECTION, session.id), session);
     return { ok: true };
   } catch (err) {
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : "Failed to save session",
-    };
+    return { ok: false, error: err instanceof Error ? err.message : "Failed" };
   }
 }
 
-export async function deleteTrekSession(
-  id: string
-): Promise<{ ok: boolean; error?: string }> {
+export async function deleteTrekSession(id: string): Promise<{ ok: boolean; error?: string }> {
   try {
-    const sessions = await ensureSessionsFile();
-    const filtered = sessions.filter((s) => s.id !== id);
-    if (filtered.length === sessions.length) {
-      return { ok: false, error: "Session not found" };
-    }
-    await fs.writeFile(SESSIONS_FILE, JSON.stringify(filtered, null, 2), "utf-8");
+    await deleteDoc(doc(db, COLLECTION, id));
     return { ok: true };
   } catch (err) {
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : "Failed to delete session",
-    };
+    return { ok: false, error: err instanceof Error ? err.message : "Failed" };
   }
 }
 
-export async function reserveSessionSlots(
-  sessionId: string,
-  paxCount: number
-): Promise<{ ok: boolean; session?: TrekSession; error?: string }> {
+export async function reserveSessionSlots(sessionId: string, paxCount: number): Promise<{ ok: boolean; session?: TrekSession; error?: string }> {
   const session = await getTrekSessionById(sessionId);
   if (!session) return { ok: false, error: "Session not found" };
   if (!isSessionBookable(session)) return { ok: false, error: "Session not available" };
@@ -122,8 +84,7 @@ export async function reserveSessionSlots(
   const updated: TrekSession = {
     ...session,
     bookedCount: session.bookedCount + paxCount,
-    status:
-      session.bookedCount + paxCount >= session.maxSlots ? "full" : session.status,
+    status: session.bookedCount + paxCount >= session.maxSlots ? "full" : session.status,
     updatedAt: new Date().toISOString(),
   };
 
@@ -132,10 +93,7 @@ export async function reserveSessionSlots(
   return { ok: true, session: updated };
 }
 
-export async function releaseSessionSlots(
-  sessionId: string,
-  paxCount: number
-): Promise<{ ok: boolean; error?: string }> {
+export async function releaseSessionSlots(sessionId: string, paxCount: number): Promise<{ ok: boolean; error?: string }> {
   const session = await getTrekSessionById(sessionId);
   if (!session) return { ok: false, error: "Session not found" };
 
