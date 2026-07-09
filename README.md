@@ -1,4 +1,4 @@
-# Laag Ta ORB — Mt. Apo Booking Site
+# Tikling — Mt. Apo Booking Site
 
 A mobile-first booking website for **Laag Ta ORB**, a registered hiking organization based in Davao del Sur specializing in guided Mt. Apo treks.
 
