@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { StickyBookButton } from "@/components/StickyBookButton";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Trips } from "@/components/Trips";
@@ -21,7 +20,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-      <StickyBookButton />
     </>
   );
 }

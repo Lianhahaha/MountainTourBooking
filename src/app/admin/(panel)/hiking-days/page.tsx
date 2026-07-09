@@ -14,7 +14,9 @@ type FormMode = "single" | "bulk";
 
 const sharedDefaults = {
   time: "6:00 AM",
+  time: "6:00 AM",
   maxSlots: 12,
+  price: "",
   notes: "",
 };
 
@@ -113,7 +115,10 @@ export default function AdminHikingDaysPage() {
       const res = await fetch("/api/trek-sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(singleForm),
+        body: JSON.stringify({
+          ...singleForm,
+          price: singleForm.price ? parseFloat(singleForm.price) : undefined,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to create");
@@ -143,6 +148,7 @@ export default function AdminHikingDaysPage() {
           time: bulkForm.time,
           maxSlots: bulkForm.maxSlots,
           notes: bulkForm.notes,
+          price: bulkForm.price ? parseFloat(bulkForm.price) : undefined,
         }),
       });
       const data = await res.json();
@@ -273,12 +279,23 @@ export default function AdminHikingDaysPage() {
             />
           </div>
           <div>
+            <label className="block text-sm font-medium text-foreground">Custom price / pax (optional)</label>
+            <input
+              type="number"
+              min={1}
+              placeholder="e.g. 2500"
+              value={singleForm.price}
+              onChange={(e) => setSingleForm({ ...singleForm, price: e.target.value })}
+              className="field-input mt-1"
+            />
+          </div>
+          <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-foreground">
               Notes for hikers (optional)
             </label>
             <textarea
               rows={2}
-              value={singleForm.notes}
+              value={singleForm.notes || ""}
               onChange={(e) => setSingleForm({ ...singleForm, notes: e.target.value })}
               className="field-input mt-1"
               placeholder="e.g. Sta. Cruz trail jump-off. Meet at DENR checkpoint."
@@ -440,6 +457,17 @@ export default function AdminHikingDaysPage() {
                 className="field-input mt-1"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground">Custom price / pax (optional)</label>
+              <input
+                type="number"
+                min={1}
+                placeholder="e.g. 2500"
+                value={bulkForm.price}
+                onChange={(e) => setBulkForm({ ...bulkForm, price: e.target.value })}
+                className="field-input mt-1"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground">
@@ -447,7 +475,7 @@ export default function AdminHikingDaysPage() {
             </label>
             <textarea
               rows={2}
-              value={bulkForm.notes}
+              value={bulkForm.notes || ""}
               onChange={(e) => setBulkForm({ ...bulkForm, notes: e.target.value })}
               className="field-input mt-1"
               placeholder="e.g. Sta. Cruz trail jump-off. Meet at DENR checkpoint."
@@ -509,6 +537,7 @@ function SessionList({
     date: "",
     time: "",
     maxSlots: 12,
+    price: "",
     notes: "",
   });
   const [editSaving, setEditSaving] = useState(false);
@@ -517,10 +546,11 @@ function SessionList({
   function startEdit(session: TrekSession) {
     setEditingId(session.id);
     setEditForm({
-      date: session.date,
-      time: session.time,
-      maxSlots: session.maxSlots,
-      notes: session.notes,
+      date: session.date || "",
+      time: session.time || "",
+      maxSlots: session.maxSlots || 1,
+      price: session.price ? session.price.toString() : "",
+      notes: session.notes || "",
     });
     setEditError("");
   }
@@ -539,7 +569,10 @@ function SessionList({
       const res = await fetch(`/api/trek-sessions/${session.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editForm),
+        body: JSON.stringify({
+          ...editForm,
+          price: editForm.price ? parseFloat(editForm.price) : null,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to save");
@@ -622,12 +655,23 @@ function SessionList({
                     )}
                   </div>
                   <div>
+                    <label className="block text-sm font-medium text-foreground">Custom price / pax (optional)</label>
+                    <input
+                      type="number"
+                      min={1}
+                      placeholder="e.g. 2500"
+                      value={editForm.price}
+                      onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
+                      className="field-input mt-1"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
                     <label className="block text-sm font-medium text-foreground">
                       Notes for hikers (optional)
                     </label>
                     <textarea
                       rows={2}
-                      value={editForm.notes}
+                      value={editForm.notes || ""}
                       onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                       className="field-input mt-1"
                     />
@@ -671,6 +715,7 @@ function SessionList({
                     <p className="mt-1 text-sm text-muted">
                       {session.bookedCount} / {session.maxSlots} booked
                       {!isCancelled && !isFull && ` · ${remaining} slots left`}
+                      {session.price && ` · ₱${session.price.toLocaleString()}/pax`}
                     </p>
                     {session.notes && (
                       <p className="mt-2 text-sm text-muted">{session.notes}</p>

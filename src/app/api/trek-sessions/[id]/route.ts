@@ -29,6 +29,7 @@ export async function PATCH(
       time: body.time?.trim() ?? existing.time,
       maxSlots: body.maxSlots ?? existing.maxSlots,
       notes: body.notes?.trim() ?? existing.notes,
+      price: body.price === null ? undefined : (body.price !== undefined ? body.price : existing.price),
       status: body.status ?? existing.status,
       updatedAt: new Date().toISOString(),
     };

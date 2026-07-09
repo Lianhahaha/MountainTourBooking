@@ -22,7 +22,7 @@ interface FormData {
   sessionId: string;
   preferredDate: string;
   locationPreference: string;
-  paxCount: number;
+  paxCount: number | "";
   participantNames: string[];
   leadName: string;
   phone: string;
@@ -114,19 +114,23 @@ export function BookingForm() {
 
   const isPrivate = selectedTrip?.type === "private";
   const isScheduled = selectedTrip?.type === "scheduled";
-  const estimatedTotal = selectedTrip ? selectedTrip.price * form.paxCount : 0;
+  const estimatedTotal = selectedTrip ? (selectedSession?.price ?? selectedTrip.price) * (Number(form.paxCount) || 1) : 0;
   const maxPaxForStep = isPrivate
     ? selectedTrip?.maxSlots ?? 1
     : selectedSession
       ? sessionSlotsRemaining(selectedSession)
       : 0;
 
-  function updatePaxCount(count: number) {
-    const pax = Math.max(1, count);
+  function updatePaxCount(val: string) {
+    let count: number | "" = val === "" ? "" : parseInt(val, 10);
+    if (typeof count === "number" && isNaN(count)) count = "";
+    
+    const numPax = typeof count === "number" ? Math.max(1, count) : 1;
     const names = [...form.participantNames];
-    while (names.length < pax) names.push("");
-    while (names.length > pax) names.pop();
-    setForm({ ...form, paxCount: pax, participantNames: names });
+    while (names.length < numPax) names.push("");
+    while (names.length > numPax) names.pop();
+    
+    setForm({ ...form, paxCount: count, participantNames: names });
   }
 
   function canProceed(): boolean {
@@ -137,11 +141,12 @@ export function BookingForm() {
         return true;
       case 1:
         if (isPrivate) {
-          return !!form.preferredDate && form.paxCount >= 1;
+          return !!form.preferredDate && typeof form.paxCount === "number" && form.paxCount >= 1;
         }
         return (
           !!form.sessionId &&
           !!selectedSession &&
+          typeof form.paxCount === "number" &&
           form.paxCount >= 1 &&
           sessionSlotsRemaining(selectedSession) >= form.paxCount
         );
@@ -182,7 +187,7 @@ export function BookingForm() {
           preferredDate: isPrivate ? form.preferredDate : selectedSession?.date ?? null,
           trekTime: isScheduled ? selectedSession?.time ?? null : null,
           locationPreference: isPrivate ? form.locationPreference : null,
-          paxCount: form.paxCount,
+          paxCount: typeof form.paxCount === "number" ? form.paxCount : 1,
           participantNames: form.participantNames.filter(Boolean),
           leadName: form.leadName,
           phone: form.phone,
@@ -305,7 +310,7 @@ export function BookingForm() {
                             ? sessionsLoading
                               ? "Loading available dates..."
                               : sessionCount > 0
-                                ? `${formatPrice(trip.price)}/person`
+                              ? `${formatPrice(selectedTrip.type === "scheduled" && sessionCount === 1 && sessions[0].price ? sessions[0].price : trip.price)}/person`
                                 : "No hiking days scheduled yet"
                             : `From ${formatPrice(trip.price)}/person · Flexible dates`}
                         </p>
@@ -353,7 +358,7 @@ export function BookingForm() {
                           setForm({
                             ...form,
                             sessionId: session.id,
-                            paxCount: Math.min(form.paxCount, max),
+                            paxCount: typeof form.paxCount === "number" ? Math.min(form.paxCount, max) : 1,
                           });
                         }}
                         className={cn(
@@ -378,6 +383,11 @@ export function BookingForm() {
                               {remaining} slot{remaining !== 1 ? "s" : ""} left
                               {lowSlots && " — book soon"}
                             </p>
+                            {session.price && (
+                              <p className="mt-2 text-sm font-semibold text-primary">
+                                Special Rate: {formatPrice(session.price)}/person
+                              </p>
+                            )}
                             {session.notes && (
                               <div className="booking-note-callout">
                                 <p className="text-xs font-bold uppercase tracking-wide text-muted">
@@ -440,14 +450,14 @@ export function BookingForm() {
                   min={1}
                   max={maxPaxForStep || 1}
                   value={form.paxCount}
-                  onChange={(e) => updatePaxCount(parseInt(e.target.value, 10) || 1)}
+                  onChange={(e) => updatePaxCount(e.target.value)}
                   className="field-input w-32 text-lg font-bold"
                   disabled={isScheduled && !form.sessionId}
                 />
               </ImportantField>
             </div>
 
-            {form.paxCount > 1 && (
+            {typeof form.paxCount === "number" && form.paxCount > 1 && (
               <div className="mt-4 space-y-2">
                 <p className="text-sm font-medium text-foreground">Other participant names (optional)</p>
                 {form.participantNames.slice(1).map((name, i) => (
@@ -583,6 +593,9 @@ export function BookingForm() {
                   }
                   highlight
                 />
+                {isScheduled && selectedSession && (
+                  <ReviewRow label="Price per pax" value={formatPrice(selectedSession.price ?? selectedTrip.price)} />
+                )}
                 {isScheduled && selectedSession && (
                   <ReviewRow label="Meet-up time" value={selectedSession.time} highlight />
                 )}

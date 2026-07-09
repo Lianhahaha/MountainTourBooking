@@ -33,6 +33,7 @@ export interface TrekSession {
   maxSlots: number;
   bookedCount: number;
   status: "open" | "full" | "cancelled";
+  price?: number;
   notes: string;
   createdAt: string;
   updatedAt: string;

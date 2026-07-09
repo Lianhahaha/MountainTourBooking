@@ -30,10 +30,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { date, time, maxSlots, notes } = body as {
+    const { date, time, maxSlots, notes, price } = body as {
       date?: string;
       time?: string;
       maxSlots?: number;
+      maxSlots?: number;
+      price?: number;
       notes?: string;
     };
 
@@ -62,6 +64,7 @@ export async function POST(request: NextRequest) {
       maxSlots,
       bookedCount: 0,
       status: "open",
+      price: typeof price === "number" ? price : undefined,
       notes: notes?.trim() ?? "",
       createdAt: now,
       updatedAt: now,
