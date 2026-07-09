@@ -26,6 +26,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title, summary, and date are required" }, { status: 400 });
     }
 
+    if (photos && photos.length > 20) {
+      return NextResponse.json({ error: "Maximum of 20 photos allowed per album." }, { status: 400 });
+    }
+
+    const days = await getAllHikingDays();
+    if (days.length >= 13) {
+      return NextResponse.json({ error: "Maximum of 13 albums allowed. Please delete an old album first." }, { status: 400 });
+    }
+
     const now = new Date().toISOString();
     const baseId = slugify(title);
     const id = `${baseId}-${Date.now().toString(36)}`;

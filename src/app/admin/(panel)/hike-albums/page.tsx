@@ -86,13 +86,19 @@ export default function AdminHikeAlbumsPage() {
             Hikes page.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowForm(!showForm)}
-          className="btn-cta-sm !px-2.5 !py-1 !text-xs md:!px-4 md:!py-2 md:!text-sm"
-        >
-          {showForm ? "Cancel" : "Add album"}
-        </button>
+        {days.length >= 13 && !showForm ? (
+          <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
+            Album limit reached (13/13). Delete one to add more.
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowForm(!showForm)}
+            className="btn-cta-sm !px-2.5 !py-1 !text-xs md:!px-4 md:!py-2 md:!text-sm"
+          >
+            {showForm ? "Cancel" : "Add album"}
+          </button>
+        )}
       </div>
 
       {showForm && (
@@ -134,14 +140,16 @@ export default function AdminHikeAlbumsPage() {
 
           <div>
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-foreground">Photos</label>
-              <button
-                type="button"
-                onClick={() => setForm({ ...form, photos: [...form.photos, emptyPhoto()] })}
-                className="text-sm text-accent hover:underline"
-              >
-                + Add photo
-              </button>
+              <label className="text-sm font-medium text-foreground">Photos ({form.photos.length}/20)</label>
+              {form.photos.length < 20 && (
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, photos: [...form.photos, emptyPhoto()] })}
+                  className="text-sm text-accent hover:underline"
+                >
+                  + Add photo
+                </button>
+              )}
             </div>
             <p className="mt-1 text-xs text-muted">
               Use image URLs for now. Firebase Storage can handle uploads later.
