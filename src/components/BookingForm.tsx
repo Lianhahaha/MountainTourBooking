@@ -310,7 +310,7 @@ export function BookingForm() {
                             ? sessionsLoading
                               ? "Loading available dates..."
                               : sessionCount > 0
-                              ? `${formatPrice(selectedTrip.type === "scheduled" && sessionCount === 1 && sessions[0].price ? sessions[0].price : trip.price)}/person`
+                              ? `${formatPrice(trip.type === "scheduled" && sessionCount === 1 && sessions[0].price ? sessions[0].price : trip.price)}/person`
                                 : "No hiking days scheduled yet"
                             : `From ${formatPrice(trip.price)}/person · Flexible dates`}
                         </p>
