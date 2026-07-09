@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
       date?: string;
       time?: string;
       maxSlots?: number;
-      maxSlots?: number;
       price?: number;
       notes?: string;
     };

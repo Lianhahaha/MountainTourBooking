@@ -14,7 +14,6 @@ type FormMode = "single" | "bulk";
 
 const sharedDefaults = {
   time: "6:00 AM",
-  time: "6:00 AM",
   maxSlots: 12,
   price: "",
   notes: "",
