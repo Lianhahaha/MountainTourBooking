@@ -17,7 +17,7 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <h1 className="text-lg font-bold text-foreground md:text-2xl">Owner dashboard</h1>
-      <p className="mt-0.5 text-xs text-muted md:mt-1 md:text-base">Manage bookings, hiking days, and hike albums for Laag Ta ORB.</p>
+      <p className="mt-0.5 text-xs text-muted md:mt-1 md:text-base">Manage bookings, hiking days, and hike albums for Tikling.</p>
 
       {pending.length > 0 && (
         <div className="mt-4 rounded-md border border-border bg-surface p-4 sm:mt-6 sm:p-5">

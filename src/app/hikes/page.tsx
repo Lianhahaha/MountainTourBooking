@@ -21,7 +21,7 @@ export default async function HikesPage() {
               Past treks on Mt. Apo
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-muted">
-              Photo albums and summaries from each hiking day with Laag Ta ORB.
+              Photo albums and summaries from each hiking day with Tikling.
             </p>
           </div>
 
