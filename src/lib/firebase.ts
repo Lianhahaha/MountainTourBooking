@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore, memoryLocalCache } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpkRh4k5CXHvP_X9chmAgHLQhLATRY16I",
@@ -11,4 +11,14 @@ const firebaseConfig = {
 };
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-export const db = getFirestore(app);
+
+// Use memoryLocalCache (no IndexedDB needed) so it works on both server and client.
+// initializeFirestore throws if called twice on the same app, so we catch that.
+export let db;
+try {
+  db = initializeFirestore(app, {
+    localCache: memoryLocalCache(),
+  });
+} catch {
+  db = getFirestore(app);
+}
