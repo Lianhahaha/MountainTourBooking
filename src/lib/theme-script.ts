@@ -1,0 +1,2 @@
+// Inlined in <head> by the server layout; runs before first paint to avoid a theme flash.
+export const themeInitScript = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"&&t!=="system")t="dark";var d=t==="system"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;var r=document.documentElement;r.classList.remove("light","dark");r.classList.add(d);r.style.colorScheme=d}catch(e){}`;

@@ -17,20 +17,25 @@ export function isSessionBookable(session: TrekSession): boolean {
 }
 
 export async function getAllTrekSessions(): Promise<TrekSession[]> {
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  const sessions: TrekSession[] = [];
-  snapshot.forEach((doc) => {
-    sessions.push(doc.data() as TrekSession);
-  });
-  
-  if (sessions.length === 0) {
-    for (const s of seedTrekSessions) {
-      await setDoc(doc(db, COLLECTION, s.id), s);
+  try {
+    const snapshot = await getDocs(collection(db, COLLECTION));
+    const sessions: TrekSession[] = [];
+    snapshot.forEach((doc) => {
+      sessions.push(doc.data() as TrekSession);
+    });
+
+    if (sessions.length === 0) {
+      for (const s of seedTrekSessions) {
+        await setDoc(doc(db, COLLECTION, s.id), s);
+      }
+      return seedTrekSessions;
     }
+
+    return sessions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  } catch (err) {
+    console.error("Firestore unavailable, serving seed trek sessions:", err);
     return seedTrekSessions;
   }
-  
-  return sessions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 
 export async function getAvailableTrekSessions(): Promise<TrekSession[]> {
@@ -39,8 +44,13 @@ export async function getAvailableTrekSessions(): Promise<TrekSession[]> {
 }
 
 export async function getTrekSessionById(id: string): Promise<TrekSession | undefined> {
-  const snap = await getDoc(doc(db, COLLECTION, id));
-  return snap.exists() ? (snap.data() as TrekSession) : undefined;
+  try {
+    const snap = await getDoc(doc(db, COLLECTION, id));
+    return snap.exists() ? (snap.data() as TrekSession) : undefined;
+  } catch (err) {
+    console.error("Firestore unavailable, looking up seed trek session:", err);
+    return seedTrekSessions.find((s) => s.id === id);
+  }
 }
 
 export async function sessionConflictExists(date: string, time: string, excludeId?: string): Promise<boolean> {

@@ -6,27 +6,35 @@ import { seedHikingDays } from "@/data/hiking-days";
 const COLLECTION = "hiking_days";
 
 export async function getAllHikingDays(): Promise<HikingDay[]> {
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  const days: HikingDay[] = [];
-  snapshot.forEach((doc) => {
-    days.push(doc.data() as HikingDay);
-  });
-  
-  if (days.length === 0) {
-    // Seed on first use
-    for (const day of seedHikingDays) {
-      await setDoc(doc(db, COLLECTION, day.id), day);
+  try {
+    const snapshot = await getDocs(collection(db, COLLECTION));
+    const days: HikingDay[] = [];
+    snapshot.forEach((doc) => {
+      days.push(doc.data() as HikingDay);
+    });
+
+    if (days.length === 0) {
+      for (const day of seedHikingDays) {
+        await setDoc(doc(db, COLLECTION, day.id), day);
+      }
+      return seedHikingDays;
     }
+
+    return days.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (err) {
+    console.error("Firestore unavailable, serving seed hiking days:", err);
     return seedHikingDays;
   }
-  
-  return days.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getHikingDayById(id: string): Promise<HikingDay | undefined> {
-  const ref = doc(db, COLLECTION, id);
-  const snap = await getDoc(ref);
-  return snap.exists() ? (snap.data() as HikingDay) : undefined;
+  try {
+    const snap = await getDoc(doc(db, COLLECTION, id));
+    return snap.exists() ? (snap.data() as HikingDay) : undefined;
+  } catch (err) {
+    console.error("Firestore unavailable, looking up seed hiking day:", err);
+    return seedHikingDays.find((d) => d.id === id);
+  }
 }
 
 export async function saveHikingDay(day: HikingDay): Promise<{ ok: boolean; error?: string }> {

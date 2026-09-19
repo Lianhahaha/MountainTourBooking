@@ -3,7 +3,9 @@ import { DM_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 import { org } from "@/data/org";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { themeInitScript } from "@/lib/theme-script";
 import { Analytics } from "@vercel/analytics/react";
+import PWAInstaller from "@/components/PWAInstaller";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -41,10 +43,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${outfit.variable} scroll-smooth`} suppressHydrationWarning>
+    <html lang="en" className={`${dmSans.variable} ${outfit.variable}`} suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1a7f37" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
+        <PWAInstaller />
       </body>
     </html>
   );
