@@ -14,6 +14,35 @@ export default async function AdminDashboardPage() {
   const pending = bookings.filter((b) => b.status === "pending");
   const confirmed = bookings.filter((b) => b.status === "confirmed");
 
+  // Revenue summary
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  const totalRevenue = confirmed.reduce((sum, b) => sum + b.estimatedTotal, 0);
+  const thisMonthRevenue = confirmed
+    .filter((b) => {
+      const d = new Date(b.createdAt);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    })
+    .reduce((sum, b) => sum + b.estimatedTotal, 0);
+  const totalBookings = bookings.length;
+  const totalPax = bookings.reduce((sum, b) => sum + b.paxCount, 0);
+
+  // Top services by revenue
+  const serviceMap = new Map<string, { revenue: number; pax: number }>();
+  for (const b of confirmed) {
+    const existing = serviceMap.get(b.tripTitle) ?? { revenue: 0, pax: 0 };
+    serviceMap.set(b.tripTitle, {
+      revenue: existing.revenue + b.estimatedTotal,
+      pax: existing.pax + b.paxCount,
+    });
+  }
+  const topServices = [...serviceMap.entries()]
+    .map(([title, data]) => ({ title, ...data }))
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 5);
+
   return (
     <div>
       <h1 className="text-lg font-bold text-foreground md:text-2xl">Owner dashboard</h1>
@@ -57,6 +86,52 @@ export default async function AdminDashboardPage() {
         </Link>
       </div>
 
+      {/* Revenue Summary Cards */}
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-8 sm:grid-cols-4 sm:gap-4">
+        <div className="rounded-md border border-border bg-surface p-3 sm:p-5">
+          <p className="text-xs font-medium text-muted">Total Revenue</p>
+          <p className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{formatPrice(totalRevenue)}</p>
+        </div>
+        <div className="rounded-md border border-border bg-surface p-3 sm:p-5">
+          <p className="text-xs font-medium text-muted">This Month</p>
+          <p className="mt-1 text-xl font-bold text-primary sm:text-2xl">{formatPrice(thisMonthRevenue)}</p>
+        </div>
+        <div className="rounded-md border border-border bg-surface p-3 sm:p-5">
+          <p className="text-xs font-medium text-muted">Total Bookings</p>
+          <p className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{totalBookings}</p>
+        </div>
+        <div className="rounded-md border border-border bg-surface p-3 sm:p-5">
+          <p className="text-xs font-medium text-muted">Total Pax</p>
+          <p className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{totalPax}</p>
+        </div>
+      </div>
+
+      {/* Top Services by Revenue */}
+      {topServices.length > 0 && (
+        <div className="mt-4 sm:mt-8">
+          <h2 className="text-base font-semibold text-foreground">Top services by revenue</h2>
+          <ul className="mt-3 space-y-2">
+            {topServices.map((s, i) => (
+              <li
+                key={s.title}
+                className="flex items-center justify-between gap-2 rounded-md border border-border bg-surface px-4 py-3 text-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-muted text-xs font-bold text-primary">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="font-medium text-foreground">{s.title}</p>
+                    <p className="text-muted">{s.pax} pax</p>
+                  </div>
+                </div>
+                <p className="shrink-0 font-semibold text-foreground">{formatPrice(s.revenue)}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {pending.length > 0 && (
         <div className="mt-4 sm:mt-8">
           <h2 className="text-base font-semibold text-foreground sm:text-lg">Queue preview</h2>
@@ -86,6 +161,16 @@ export default async function AdminDashboardPage() {
           Manage albums →
         </Link>
       </p>
+
+      <div className="mt-6">
+        <a
+          href="/api/admin/export-bookings"
+          download="bookings.csv"
+          className="btn-secondary"
+        >
+          Export all bookings (CSV)
+        </a>
+      </div>
     </div>
   );
 }

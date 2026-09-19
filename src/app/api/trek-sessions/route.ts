@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       maxSlots,
       bookedCount: 0,
       status: "open",
-      price: typeof price === "number" ? price : undefined,
+      ...(typeof price === "number" ? { price } : {}),
       notes: notes?.trim() ?? "",
       createdAt: now,
       updatedAt: now,

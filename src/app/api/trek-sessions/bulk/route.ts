@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         maxSlots,
         bookedCount: 0,
         status: "open",
-        price: typeof price === "number" ? price : undefined,
+        ...(typeof price === "number" ? { price } : {}),
         notes: trimmedNotes,
         createdAt: now,
         updatedAt: now,
@@ -90,8 +90,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (created.length === 0) {
+      console.error("Bulk add failed. Skipped reasons:", skipped);
+      const reasons = Array.from(new Set(skipped.map((s) => s.reason))).join(", ");
       return NextResponse.json(
-        { error: "No hiking days were added", skipped },
+        { error: `No hiking days were added. Reasons: ${reasons}`, skipped },
         { status: 400 }
       );
     }
