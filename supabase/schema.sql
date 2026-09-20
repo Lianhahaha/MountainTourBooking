@@ -3,9 +3,11 @@
 create table if not exists booking_requests (
   id text primary key,
   trip_id text,
+  session_id text,
   trip_type text not null,
   trip_title text not null,
   preferred_date text,
+  trek_time text,
   location_preference text,
   pax_count integer not null,
   participant_names text[] default '{}',

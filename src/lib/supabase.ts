@@ -25,9 +25,11 @@ export async function saveBookingToSupabase(
   const { error } = await client.from("booking_requests").insert({
     id: booking.id,
     trip_id: booking.tripId,
+    session_id: booking.sessionId,
     trip_type: booking.tripType,
     trip_title: booking.tripTitle,
     preferred_date: booking.preferredDate,
+    trek_time: booking.trekTime,
     location_preference: booking.locationPreference,
     pax_count: booking.paxCount,
     participant_names: booking.participantNames,
