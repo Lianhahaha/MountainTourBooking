@@ -50,6 +50,8 @@ export async function POST(request: NextRequest) {
       !booking.leadName ||
       !booking.phone ||
       !booking.email ||
+      !booking.emergencyContactName ||
+      !booking.emergencyContactPhone ||
       !booking.fitnessConfirmed ||
       !booking.waiverAccepted ||
       !booking.ageConfirmed
