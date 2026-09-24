@@ -1,5 +1,6 @@
 export function formatPrice(amount: number): string {
-  return `₱${amount.toLocaleString("en-PH")}`;
+  const safe = Number.isFinite(amount) ? amount : 0;
+  return `₱${safe.toLocaleString("en-PH")}`;
 }
 
 /** Today's date in Asia/Manila (business timezone), as YYYY-MM-DD. */
@@ -14,7 +15,9 @@ export function todayInManila(): string {
 
 export function formatDate(dateStr: string | null): string {
   if (!dateStr) return "Flexible";
-  return new Date(dateStr + "T00:00:00").toLocaleDateString("en-PH", {
+  const d = new Date(dateStr + "T00:00:00");
+  if (Number.isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString("en-PH", {
     weekday: "long",
     year: "numeric",
     month: "long",
