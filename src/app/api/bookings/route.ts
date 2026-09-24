@@ -117,6 +117,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid trip type" }, { status: 400 });
     }
 
+    // Resolve the trip server-side; never trust client-sent tripTitle/tripId.
+    let resolvedTripTitle: string;
+    if (booking.tripType === "scheduled") {
+      if (!booking.sessionId) {
+        return NextResponse.json({ error: "Please select a hiking day" }, { status: 400 });
+      }
+      const scheduledTrip = booking.tripId ? getTripById(booking.tripId) : undefined;
+      if (!scheduledTrip || scheduledTrip.type !== "scheduled") {
+        return NextResponse.json({ error: "Invalid trip selection" }, { status: 400 });
+      }
+      resolvedTripTitle = scheduledTrip.title;
+    } else {
+      if (booking.tripId && booking.tripId !== "private-custom") {
+        return NextResponse.json({ error: "Invalid trip selection" }, { status: 400 });
+      }
+      resolvedTripTitle = getPrivateTrip().title;
+    }
+    booking.tripTitle = resolvedTripTitle;
+
     if (booking.tripType === "private") {
       if (booking.sessionId) {
         return NextResponse.json(
@@ -141,10 +160,7 @@ export async function POST(request: NextRequest) {
     let sessionPrice: number | undefined;
 
     if (booking.tripType === "scheduled") {
-      if (!booking.sessionId) {
-        return NextResponse.json({ error: "Please select a hiking day" }, { status: 400 });
-      }
-      const session = await getTrekSessionById(booking.sessionId);
+      const session = await getTrekSessionById(booking.sessionId!);
       if (!session) {
         return NextResponse.json({ error: "Selected hiking day not found" }, { status: 400 });
       }
@@ -162,7 +178,17 @@ export async function POST(request: NextRequest) {
     const unitPrice = sessionPrice ?? trip?.price ?? 0;
     booking.estimatedTotal = Math.round(unitPrice * Number(booking.paxCount) || 0);
 
-    if (booking.sessionId) {
+    if (booking.tripType === "private") {
+      const privateTrip = getPrivateTrip();
+      if (booking.paxCount > privateTrip.maxSlots) {
+        return NextResponse.json(
+          { error: `Private group size cannot exceed ${privateTrip.maxSlots}` },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (booking.sessionId && booking.tripType === "scheduled") {
       const reserve = await reserveSessionSlots(booking.sessionId, booking.paxCount);
       if (!reserve.ok) {
         return NextResponse.json(
