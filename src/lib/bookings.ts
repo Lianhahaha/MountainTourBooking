@@ -37,7 +37,8 @@ export async function getAllBookings(): Promise<BookingRequest[]> {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (!error && data?.length) {
+    // An empty table is a valid result — only fall back on actual errors.
+    if (!error && data) {
       return data.map(rowToBooking);
     }
   }
