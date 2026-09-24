@@ -45,10 +45,12 @@ export default async function AdminReviewsPage() {
                 <span className="text-muted">{r.tripTitle}</span>
               </div>
               <p className="mt-1 text-foreground">
-                {r.comment.length > 120 ? r.comment.slice(0, 120) + "…" : r.comment}
+                {(r.comment ?? "").length > 120 ? (r.comment ?? "").slice(0, 120) + "…" : r.comment ?? ""}
               </p>
               <p className="mt-1 text-xs text-muted">
-                {new Date(r.createdAt).toLocaleDateString()}
+                {Number.isNaN(new Date(r.createdAt).getTime())
+                  ? ""
+                  : new Date(r.createdAt).toLocaleDateString()}
               </p>
             </div>
 
