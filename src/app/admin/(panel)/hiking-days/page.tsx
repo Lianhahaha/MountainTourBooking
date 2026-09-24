@@ -54,6 +54,7 @@ export default function AdminHikingDaysPage() {
   });
 
   function loadSessions() {
+    setError("");
     fetch("/api/trek-sessions")
       .then(async (res) => {
         if (res.status === 401) throw new Error("Session expired — please log in again");
