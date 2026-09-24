@@ -54,7 +54,19 @@ export async function PATCH(
     // is confirmed again.
     if (result.booking.sessionId) {
       if (status === "cancelled" && existing.status !== "cancelled") {
-        await releaseSessionSlots(result.booking.sessionId, result.booking.paxCount);
+        const release = await releaseSessionSlots(
+          result.booking.sessionId,
+          result.booking.paxCount
+        );
+        if (!release.ok) {
+          // Do not fail the status change (already committed), but make the
+          // leaked capacity visible in logs so it can be corrected.
+          console.error(
+            "Failed to release slots for cancelled booking",
+            result.booking.id,
+            release.error
+          );
+        }
       } else if (status === "confirmed" && existing.status === "cancelled") {
         const reserve = await reserveSessionSlots(
           result.booking.sessionId,
