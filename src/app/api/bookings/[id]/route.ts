@@ -87,7 +87,8 @@ export async function PATCH(
     }
 
     return NextResponse.json({ booking: result.booking });
-  } catch {
+  } catch (err) {
+    console.error("Booking PATCH error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

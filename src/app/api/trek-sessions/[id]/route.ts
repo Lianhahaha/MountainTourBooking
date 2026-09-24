@@ -98,7 +98,8 @@ export async function PATCH(
     }
 
     return NextResponse.json(updated);
-  } catch {
+  } catch (err) {
+    console.error("Trek session PATCH error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

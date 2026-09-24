@@ -216,7 +216,8 @@ export async function POST(request: NextRequest) {
     await sendBookingEmails(booking);
 
     return NextResponse.json({ id: booking.id, status: "pending" });
-  } catch {
+  } catch (err) {
+    console.error("Booking POST error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

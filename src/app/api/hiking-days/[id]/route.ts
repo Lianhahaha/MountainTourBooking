@@ -73,7 +73,8 @@ export async function PATCH(
     }
 
     return NextResponse.json(updated);
-  } catch {
+  } catch (err) {
+    console.error("Hiking day PATCH error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

@@ -88,7 +88,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(session, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error("Trek session POST error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

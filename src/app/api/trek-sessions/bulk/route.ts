@@ -99,7 +99,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ created, skipped }, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error("Trek session bulk POST error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

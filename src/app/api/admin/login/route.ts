@@ -24,7 +24,8 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
     });
     return response;
-  } catch {
+  } catch (err) {
+    console.error("Admin login error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }
