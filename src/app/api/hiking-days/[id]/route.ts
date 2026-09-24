@@ -110,6 +110,11 @@ export async function DELETE(
   }
 
   const { id } = await params;
+  const existing = await getHikingDayById(id);
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const result = await deleteHikingDay(id);
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 404 });
