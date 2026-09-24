@@ -32,6 +32,10 @@ export async function PATCH(
     const status = body.status as BookingStatus;
     const ownerNote = (body.ownerNote as string | undefined)?.trim();
 
+    if (ownerNote && ownerNote.length > 1000) {
+      return NextResponse.json({ error: "Message must be at most 1000 characters" }, { status: 400 });
+    }
+
     if (status !== "confirmed" && status !== "cancelled") {
       return NextResponse.json(
         { error: "Status must be confirmed or cancelled" },
