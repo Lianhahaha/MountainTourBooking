@@ -38,12 +38,9 @@ create table if not exists contact_messages (
 alter table booking_requests enable row level security;
 alter table contact_messages enable row level security;
 
-create policy "Service role full access on bookings"
-  on booking_requests for all
-  using (true)
-  with check (true);
-
-create policy "Service role full access on contacts"
-  on contact_messages for all
-  using (true)
-  with check (true);
+-- No public policies: the service role key bypasses RLS entirely.
+-- Never create USING (true) policies — they expose tables to the anon key.
+--
+-- If you previously ran the permissive policies, remove them:
+drop policy if exists "Service role full access on bookings" on booking_requests;
+drop policy if exists "Service role full access on contacts" on contact_messages;
