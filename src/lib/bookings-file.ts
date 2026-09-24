@@ -12,7 +12,8 @@ export async function getBookingsFromFile(): Promise<BookingRequest[]> {
       bookings.push(doc.data() as BookingRequest);
     });
     return bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  } catch {
+  } catch (err) {
+    console.error("Firestore unavailable, returning no bookings:", err);
     return [];
   }
 }
@@ -47,7 +48,8 @@ export async function saveContactToFile(data: {
   message: string;
 }): Promise<{ ok: boolean; error?: string }> {
   try {
-    const id = Date.now().toString();
+    // Date.now() collides for messages in the same millisecond — use a UUID.
+    const id = crypto.randomUUID();
     await setDoc(doc(db, "contact_messages", id), { ...data, createdAt: new Date().toISOString() });
     return { ok: true };
   } catch (err) {
