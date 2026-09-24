@@ -10,8 +10,9 @@ export default function PWAInstaller() {
       // Clear service workers during development to prevent HMR loops.
       navigator.serviceWorker.getRegistrations().then((registrations) => {
         for (const registration of registrations) {
-          registration.unregister();
-          console.log("SW unregistered to prevent dev loop");
+          registration.unregister().catch(() => {
+            // Unregister is best-effort; ignore races with an already-dead worker.
+          });
         }
       });
       return;
