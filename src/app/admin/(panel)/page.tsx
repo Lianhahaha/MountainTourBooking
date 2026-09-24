@@ -24,13 +24,19 @@ export default async function AdminDashboardPage() {
     }).format(date);
   const currentMonthKey = monthKeyInManila(new Date());
 
-  const totalRevenue = confirmed.reduce((sum, b) => sum + b.estimatedTotal, 0);
+  const totalRevenue = confirmed.reduce(
+    (sum, b) => sum + (Number.isFinite(b.estimatedTotal) ? b.estimatedTotal : 0),
+    0
+  );
   const thisMonthRevenue = confirmed
     .filter((b) => {
       const created = new Date(b.createdAt);
       return !Number.isNaN(created.getTime()) && monthKeyInManila(created) === currentMonthKey;
     })
-    .reduce((sum, b) => sum + b.estimatedTotal, 0);
+    .reduce(
+      (sum, b) => sum + (Number.isFinite(b.estimatedTotal) ? b.estimatedTotal : 0),
+      0
+    );
   const totalBookings = bookings.length;
   const totalPax = bookings
     .filter((b) => b.status !== "cancelled")
