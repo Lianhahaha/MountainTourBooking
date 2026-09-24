@@ -85,12 +85,14 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <div className="mt-4 rounded bg-surface-elevated p-3 text-center text-xs text-muted">
-          <p className="font-semibold text-foreground">Demo Access</p>
-          <p className="mt-1">
-            Use password <code className="rounded bg-background px-1.5 py-0.5 font-mono text-accent">password123</code> to log in.
-          </p>
-        </div>
+        {process.env.NODE_ENV !== "production" && (
+          <div className="mt-4 rounded bg-surface-elevated p-3 text-center text-xs text-muted">
+            <p className="font-semibold text-foreground">Demo Access</p>
+            <p className="mt-1">
+              Use password <code className="rounded bg-background px-1.5 py-0.5 font-mono text-accent">password123</code> to log in.
+            </p>
+          </div>
+        )}
 
         <Link href="/" className="mt-4 block text-center text-sm text-muted hover:text-accent">
           ← Back to site
