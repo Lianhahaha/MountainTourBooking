@@ -14,16 +14,21 @@ export default async function AdminDashboardPage() {
   const pending = bookings.filter((b) => b.status === "pending");
   const confirmed = bookings.filter((b) => b.status === "confirmed");
 
-  // Revenue summary
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
+  // Revenue summary — month boundaries follow the business timezone
+  // (Asia/Manila), not the server's UTC clock.
+  const monthKeyInManila = (date: Date): string =>
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Manila",
+      year: "numeric",
+      month: "2-digit",
+    }).format(date);
+  const currentMonthKey = monthKeyInManila(new Date());
 
   const totalRevenue = confirmed.reduce((sum, b) => sum + b.estimatedTotal, 0);
   const thisMonthRevenue = confirmed
     .filter((b) => {
-      const d = new Date(b.createdAt);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      const created = new Date(b.createdAt);
+      return !Number.isNaN(created.getTime()) && monthKeyInManila(created) === currentMonthKey;
     })
     .reduce((sum, b) => sum + b.estimatedTotal, 0);
   const totalBookings = bookings.length;
