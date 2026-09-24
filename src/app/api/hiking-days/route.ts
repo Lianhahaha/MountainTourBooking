@@ -30,6 +30,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
     }
 
+    if (title.length > 200 || summary.length > 5000) {
+      return NextResponse.json(
+        { error: "Title must be at most 200 characters and summary at most 5000" },
+        { status: 400 }
+      );
+    }
+
     if (photos !== undefined) {
       if (
         !Array.isArray(photos) ||
