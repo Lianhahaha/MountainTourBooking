@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAdminPassword, ADMIN_COOKIE } from "@/lib/admin-auth";
+import { verifyAdminPassword, createAdminToken, ADMIN_COOKIE } from "@/lib/admin-auth";
 
 export async function POST(request: NextRequest) {
   if (!process.env.ADMIN_PASSWORD) {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = NextResponse.json({ ok: true });
-    response.cookies.set(ADMIN_COOKIE, "1", {
+    response.cookies.set(ADMIN_COOKIE, createAdminToken(), {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
