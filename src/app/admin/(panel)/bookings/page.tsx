@@ -160,15 +160,16 @@ function AdminBookingsPageInner() {
   );
 
   function loadBookings() {
-    setLoading(true);
-    setError("");
     fetch("/api/bookings")
       .then(async (res) => {
         if (res.status === 401) throw new Error("Session expired — please log in again");
         if (!res.ok) throw new Error("Failed to load bookings");
         return res.json();
       })
-      .then(setBookings)
+      .then((data) => {
+        setError("");
+        setBookings(Array.isArray(data) ? data : []);
+      })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }
