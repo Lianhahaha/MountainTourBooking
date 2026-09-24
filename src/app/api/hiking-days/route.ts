@@ -26,6 +26,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title, summary, and date are required" }, { status: 400 });
     }
 
+    if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+    }
+
     if (photos !== undefined) {
       if (
         !Array.isArray(photos) ||

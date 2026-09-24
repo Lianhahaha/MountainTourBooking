@@ -62,6 +62,10 @@ export async function PATCH(
       }
     }
 
+    if (date !== undefined && (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date))) {
+      return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+    }
+
     const updated = {
       ...existing,
       title: title?.trim() ?? existing.title,
