@@ -15,7 +15,7 @@ export default async function HikeDayPage({
   const day = await getHikingDayById(id);
   if (!day) notFound();
 
-  const [featured, ...rest] = day.photos;
+  const [featured, ...rest] = day.photos ?? [];
 
   return (
     <>
