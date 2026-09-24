@@ -5,8 +5,17 @@ function toLocalDateISO(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
+function isValidDateISO(dateISO: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(dateISO) && !Number.isNaN(new Date(`${dateISO}T00:00:00`).getTime());
+}
+
 /** Monday of the ISO week containing `dateISO` (YYYY-MM-DD). */
 export function getMondayOfWeek(dateISO: string): string {
+  if (!isValidDateISO(dateISO)) {
+    // Fall back to today's local date so an emptied date input cannot
+    // produce "NaN-NaN-NaN" week labels.
+    dateISO = toLocalDateISO(new Date());
+  }
   const d = new Date(`${dateISO}T00:00:00`);
   const day = d.getDay();
   const diff = day === 0 ? -6 : 1 - day;
@@ -26,6 +35,7 @@ export function getWeekDatesFrom(dateISO: string): string[] {
 }
 
 export function formatWeekdayLabel(dateISO: string): string {
+  if (!isValidDateISO(dateISO)) return dateISO;
   return new Date(`${dateISO}T00:00:00`).toLocaleDateString("en-PH", {
     weekday: "long",
     month: "short",
@@ -34,6 +44,9 @@ export function formatWeekdayLabel(dateISO: string): string {
 }
 
 export function shiftWeek(dateISO: string, weeks: number): string {
+  if (!isValidDateISO(dateISO)) {
+    dateISO = toLocalDateISO(new Date());
+  }
   const d = new Date(`${dateISO}T00:00:00`);
   d.setDate(d.getDate() + weeks * 7);
   return toLocalDateISO(d);
