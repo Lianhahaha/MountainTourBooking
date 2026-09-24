@@ -47,7 +47,7 @@ export default async function AdminDashboardPage() {
   for (const b of confirmed) {
     const existing = serviceMap.get(b.tripTitle) ?? { revenue: 0, pax: 0 };
     serviceMap.set(b.tripTitle, {
-      revenue: existing.revenue + b.estimatedTotal,
+      revenue: existing.revenue + (Number.isFinite(b.estimatedTotal) ? b.estimatedTotal : 0),
       pax: existing.pax + b.paxCount,
     });
   }
