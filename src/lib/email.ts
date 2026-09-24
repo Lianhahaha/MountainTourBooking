@@ -17,7 +17,7 @@ Type: ${booking.tripType}
 ${booking.preferredDate ? `Preferred date: ${booking.preferredDate}` : ""}
 ${booking.locationPreference ? `Location preference: ${booking.locationPreference}` : ""}
 Participants: ${booking.paxCount}
-Estimated total: ₱${booking.estimatedTotal.toLocaleString()}
+Estimated total: ₱${safeAmount(booking.estimatedTotal)}
 
 Lead: ${booking.leadName}
 Phone: ${booking.phone}
@@ -60,7 +60,7 @@ Thank you for your booking request with ${org.name}!
 Reference: ${booking.id}
 Trip: ${booking.tripTitle}
 Participants: ${booking.paxCount}
-Estimated total: ₱${booking.estimatedTotal.toLocaleString()} (pay in person on trek day)
+Estimated total: ₱${safeAmount(booking.estimatedTotal)} (pay in person on trek day)
 
 We will review your request and email you once your slot is approved and scheduled — usually within 24–48 hours.
 
@@ -115,7 +115,7 @@ Scheduled date: ${details.scheduledDate}
 Meet-up time: ${details.meetupTime}
 Meet-up point: ${details.meetupPoint}
 Participants: ${booking.paxCount}
-Amount due on trek day: ₱${booking.estimatedTotal.toLocaleString()} (cash or GCash)
+Amount due on trek day: ₱${safeAmount(booking.estimatedTotal)} (cash or GCash)
 ${noteBlock}
 Please save this email. If you need to make changes, contact us at ${org.contact.phone} or ${org.contact.email}.
 
@@ -192,4 +192,9 @@ export function generateBookingId(): string {
     .toUpperCase()
     .slice(0, 6);
   return `LTO-${date}-${rand}`;
+}
+
+/** Guard against corrupt rows so email formatting never throws on NaN/undefined. */
+function safeAmount(value: number): string {
+  return (Number.isFinite(value) ? value : 0).toLocaleString();
 }
