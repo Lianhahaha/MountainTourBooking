@@ -84,7 +84,9 @@ function BookingCard({
         </p>
         <p>
           <span className="font-medium text-foreground">Submitted:</span>{" "}
-          {new Date(booking.createdAt).toLocaleString("en-PH")}
+          {Number.isNaN(new Date(booking.createdAt).getTime())
+            ? "—"
+            : new Date(booking.createdAt).toLocaleString("en-PH")}
         </p>
         <p className="sm:col-span-2">
           <span className="font-medium text-foreground">Emergency:</span>{" "}
