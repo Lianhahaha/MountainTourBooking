@@ -3,7 +3,12 @@ import { getAllBookings } from "@/lib/bookings";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 function escapeCsvCell(value: string): string {
-  if (value.includes('"') || value.includes(",") || value.includes("\n")) {
+  if (
+    value.includes('"') ||
+    value.includes(",") ||
+    value.includes("\n") ||
+    value.includes("\r")
+  ) {
     return `"${value.replace(/"/g, '""')}"`;
   }
   return value;
@@ -36,7 +41,7 @@ export async function GET() {
   ];
 
   const rows = bookings.map((b) => [
-    b.id,
+    escapeCsvCell(b.id),
     escapeCsvCell(b.leadName),
     escapeCsvCell(b.phone),
     escapeCsvCell(b.email),
@@ -45,7 +50,7 @@ export async function GET() {
     b.preferredDate ?? "",
     b.trekTime ?? "",
     String(b.paxCount),
-    `"${(b.participantNames ?? []).join(" ; ")}"`,
+    escapeCsvCell((b.participantNames ?? []).join(" ; ")),
     String(b.estimatedTotal),
     b.status,
     escapeCsvCell(b.emergencyContactName),
