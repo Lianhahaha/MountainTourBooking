@@ -3,7 +3,8 @@ const PRECACHE_URLS = ["/", "/book", "/hikes"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS))
+    // Precache is best-effort — a single 404 would otherwise abort install.
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)).catch(() => {})
   );
   self.skipWaiting();
 });
