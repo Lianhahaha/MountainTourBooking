@@ -52,9 +52,14 @@ export async function getApprovedReviews(): Promise<Review[]> {
 }
 
 export async function getAllReviews(): Promise<Review[]> {
-  const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Review));
+  try {
+    const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Review));
+  } catch (e) {
+    console.error("Firestore unavailable, returning no reviews:", e);
+    return [];
+  }
 }
 
 export async function updateReviewStatus(
