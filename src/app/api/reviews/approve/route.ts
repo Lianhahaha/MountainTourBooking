@@ -31,12 +31,25 @@ export async function POST(req: NextRequest) {
   }
 
   if (!id || (status !== "approved" && status !== "rejected")) {
+    // Form posts from the admin UI should bounce back to the page, not show raw JSON.
+    if (!isJson) {
+      return new NextResponse(null, {
+        status: 302,
+        headers: { Location: "/admin/reviews" },
+      });
+    }
     return NextResponse.json({ ok: false, error: "Invalid input" }, { status: 400 });
   }
 
   const result = await updateReviewStatus(id, status);
 
   if (!result.ok) {
+    if (!isJson) {
+      return new NextResponse(null, {
+        status: 302,
+        headers: { Location: "/admin/reviews" },
+      });
+    }
     return NextResponse.json({ ok: false, error: result.error }, { status: 500 });
   }
 
