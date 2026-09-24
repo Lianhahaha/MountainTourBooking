@@ -75,7 +75,7 @@ export function BookingForm() {
   useEffect(() => {
     fetch("/api/trek-sessions?available=true")
       .then((res) => res.json())
-      .then(setSessions)
+      .then((data) => setSessions(Array.isArray(data) ? data : []))
       .catch(() => setSessions([]))
       .finally(() => setSessionsLoading(false));
   }, []);
