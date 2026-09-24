@@ -93,12 +93,16 @@ export function BookingForm() {
         (s) => s.id === preselectedSession && sessionSlotsRemaining(s) > 0
       )
     ) {
-      setForm((prev) => ({
-        ...prev,
-        tripId: preselectedTrip,
-        sessionId: preselectedSession,
-      }));
-      setStep(1);
+      // Defer state updates so the effect body stays free of synchronous setState.
+      const timer = setTimeout(() => {
+        setForm((prev) => ({
+          ...prev,
+          tripId: preselectedTrip,
+          sessionId: preselectedSession,
+        }));
+        setStep(1);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [sessionsLoading, sessions, preselectedTrip, preselectedSession]);
 
