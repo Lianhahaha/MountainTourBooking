@@ -49,6 +49,23 @@ export function verifyAdminPassword(password: string): boolean {
 const FAILED_ATTEMPTS = new Map<string, { count: number; resetAt: number }>();
 const MAX_ATTEMPTS = 10;
 const WINDOW_MS = 15 * 60 * 1000;
+const MAX_TRACKED_IPS = 10_000;
+
+/** Drop expired entries (and oldest overflow) so the map cannot grow forever. */
+function pruneFailedAttempts(now: number): void {
+  for (const [ip, entry] of FAILED_ATTEMPTS) {
+    if (now > entry.resetAt) FAILED_ATTEMPTS.delete(ip);
+  }
+  if (FAILED_ATTEMPTS.size > MAX_TRACKED_IPS) {
+    const excess = FAILED_ATTEMPTS.size - MAX_TRACKED_IPS;
+    let removed = 0;
+    for (const ip of FAILED_ATTEMPTS.keys()) {
+      if (removed >= excess) break;
+      FAILED_ATTEMPTS.delete(ip);
+      removed++;
+    }
+  }
+}
 
 export function isLoginRateLimited(ip: string): boolean {
   const entry = FAILED_ATTEMPTS.get(ip);
@@ -62,6 +79,7 @@ export function isLoginRateLimited(ip: string): boolean {
 
 export function recordFailedLogin(ip: string): void {
   const now = Date.now();
+  pruneFailedAttempts(now);
   const entry = FAILED_ATTEMPTS.get(ip);
   if (!entry || now > entry.resetAt) {
     FAILED_ATTEMPTS.set(ip, { count: 1, resetAt: now + WINDOW_MS });
