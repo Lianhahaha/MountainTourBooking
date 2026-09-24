@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import type { TrekSession } from "@/types";
 import { seedTrekSessions } from "@/data/trek-sessions";
+import { todayInManila } from "@/lib/utils";
 
 const COLLECTION = "trek_sessions";
 
@@ -19,7 +20,7 @@ export function getSessionSlotsRemaining(session: TrekSession): number {
 
 export function isSessionBookable(session: TrekSession): boolean {
   if (session.status === "cancelled") return false;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayInManila();
   if (session.date < today) return false;
   return getSessionSlotsRemaining(session) > 0;
 }

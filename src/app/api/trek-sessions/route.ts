@@ -7,6 +7,7 @@ import {
   sessionConflictExists,
 } from "@/lib/trek-sessions-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { todayInManila } from "@/lib/utils";
 import type { TrekSession } from "@/types";
 
 export async function GET(request: NextRequest) {
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = todayInManila();
     if (date.trim() < today) {
       return NextResponse.json(
         { error: "Date cannot be in the past" },

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trips, getTripById } from "@/data/trips";
-import { formatDate, formatPrice, cn } from "@/lib/utils";
+import { formatDate, formatPrice, cn, todayInManila } from "@/lib/utils";
 import type { Trip, TripType, TrekSession } from "@/types";
 
 const STEPS = [
@@ -418,7 +418,7 @@ export function BookingForm() {
                     type="date"
                     required
                     value={form.preferredDate}
-                    min={new Date().toISOString().slice(0, 10)}
+                    min={todayInManila()}
                     onChange={(e) => setForm({ ...form, preferredDate: e.target.value })}
                     className="field-input text-base font-semibold"
                   />

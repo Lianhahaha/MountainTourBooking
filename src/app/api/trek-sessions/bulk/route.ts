@@ -5,6 +5,7 @@ import {
   slugifySessionDate,
 } from "@/lib/trek-sessions-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { todayInManila } from "@/lib/utils";
 import type { TrekSession } from "@/types";
 
 export async function POST(request: NextRequest) {
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = todayInManila();
     const existing = await getAllTrekSessions();
     // Build a set of "date|normalizedTime" keys for all non-cancelled sessions
     const normalizedTime = time.trim().toLowerCase();

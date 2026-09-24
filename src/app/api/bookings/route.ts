@@ -7,6 +7,7 @@ import { sendBookingEmails, generateBookingId } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { reserveSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
 import { getTripById, getPrivateTrip } from "@/data/trips";
+import { todayInManila } from "@/lib/utils";
 
 export async function GET() {
   if (!(await isAdminAuthenticated())) {
@@ -149,7 +150,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      if (booking.preferredDate < new Date().toISOString().slice(0, 10)) {
+      if (booking.preferredDate < todayInManila()) {
         return NextResponse.json(
           { error: "Preferred date cannot be in the past" },
           { status: 400 }

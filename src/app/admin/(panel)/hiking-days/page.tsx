@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { TrekSession } from "@/types";
-import { formatDate, cn } from "@/lib/utils";
+import { formatDate, cn, todayInManila } from "@/lib/utils";
 import {
   formatWeekdayLabel,
   getMondayOfWeek,
@@ -36,7 +36,7 @@ function slotsRemaining(session: TrekSession): number {
 }
 
 function todayISO(): string {
-  return new Date().toISOString().slice(0, 10);
+  return todayInManila();
 }
 
 export default function AdminHikingDaysPage() {

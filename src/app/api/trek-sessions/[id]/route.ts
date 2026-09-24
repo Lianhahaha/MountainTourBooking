@@ -6,6 +6,7 @@ import {
   sessionConflictExists,
 } from "@/lib/trek-sessions-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { todayInManila } from "@/lib/utils";
 
 export async function PATCH(
   request: NextRequest,
@@ -73,7 +74,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Date and time are required" }, { status: 400 });
     }
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = todayInManila();
     if (updated.date < today) {
       return NextResponse.json({ error: "Date cannot be in the past" }, { status: 400 });
     }
