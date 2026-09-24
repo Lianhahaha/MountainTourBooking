@@ -659,7 +659,10 @@ export function BookingForm() {
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
           <button
             type="button"
-            onClick={() => setStep((s) => s - 1)}
+            onClick={() => {
+              setError("");
+              setStep((s) => s - 1);
+            }}
             disabled={step === 0}
             className="btn-secondary w-full disabled:opacity-40 sm:w-auto"
           >
@@ -668,7 +671,10 @@ export function BookingForm() {
           {step < STEPS.length - 1 ? (
             <button
               type="button"
-              onClick={() => setStep((s) => s + 1)}
+              onClick={() => {
+                setError("");
+                setStep((s) => s + 1);
+              }}
               disabled={!canProceed()}
               className="btn-cta w-full disabled:opacity-40 sm:w-auto"
             >
