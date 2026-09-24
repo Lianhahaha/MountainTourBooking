@@ -34,6 +34,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (
+      price !== undefined &&
+      price !== null &&
+      (typeof price !== "number" || !Number.isFinite(price) || price < 0)
+    ) {
+      return NextResponse.json({ error: "Price must be a non-negative number" }, { status: 400 });
+    }
+
     const today = todayInManila();
     const existing = await getAllTrekSessions();
     // Build a set of "date|normalizedTime" keys for all non-cancelled sessions

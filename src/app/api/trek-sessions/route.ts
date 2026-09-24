@@ -55,6 +55,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
     }
 
+    if (
+      price !== undefined &&
+      price !== null &&
+      (typeof price !== "number" || !Number.isFinite(price) || price < 0)
+    ) {
+      return NextResponse.json(
+        { error: "Price must be a non-negative number" },
+        { status: 400 }
+      );
+    }
+
     const today = todayInManila();
     if (date.trim() < today) {
       return NextResponse.json(
