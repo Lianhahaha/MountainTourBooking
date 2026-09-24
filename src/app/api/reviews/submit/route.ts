@@ -17,8 +17,10 @@ export async function POST(req: NextRequest) {
       typeof leadName !== "string" ||
       !leadName.trim() ||
       leadName.length > 100 ||
-      (bookingId !== undefined && typeof bookingId !== "string") ||
-      (tripTitle !== undefined && typeof tripTitle !== "string")
+      (bookingId !== undefined &&
+        (typeof bookingId !== "string" || bookingId.length > 100)) ||
+      (tripTitle !== undefined &&
+        (typeof tripTitle !== "string" || tripTitle.length > 200))
     ) {
       return NextResponse.json({ ok: false, error: "Invalid input" }, { status: 400 });
     }
