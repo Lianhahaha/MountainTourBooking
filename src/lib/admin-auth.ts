@@ -32,8 +32,46 @@ export async function isAdminAuthenticated(): Promise<boolean> {
 
 export function verifyAdminPassword(password: string): boolean {
   const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  return password === expected;
+  if (!expected || typeof password !== "string") return false;
+
+  // Constant-time compare so response time does not leak password prefix.
+  const a = Buffer.from(password, "utf8");
+  const b = Buffer.from(expected, "utf8");
+  if (a.length !== b.length) {
+    // Still perform a compare of equal-length buffers to keep timing uniform.
+    timingSafeEqual(a, a);
+    return false;
+  }
+  return timingSafeEqual(a, b);
+}
+
+// Simple in-memory rate limit: max 10 failed attempts per IP per 15 minutes.
+const FAILED_ATTEMPTS = new Map<string, { count: number; resetAt: number }>();
+const MAX_ATTEMPTS = 10;
+const WINDOW_MS = 15 * 60 * 1000;
+
+export function isLoginRateLimited(ip: string): boolean {
+  const entry = FAILED_ATTEMPTS.get(ip);
+  if (!entry) return false;
+  if (Date.now() > entry.resetAt) {
+    FAILED_ATTEMPTS.delete(ip);
+    return false;
+  }
+  return entry.count >= MAX_ATTEMPTS;
+}
+
+export function recordFailedLogin(ip: string): void {
+  const now = Date.now();
+  const entry = FAILED_ATTEMPTS.get(ip);
+  if (!entry || now > entry.resetAt) {
+    FAILED_ATTEMPTS.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return;
+  }
+  entry.count += 1;
+}
+
+export function clearFailedLogins(ip: string): void {
+  FAILED_ATTEMPTS.delete(ip);
 }
 
 export { ADMIN_COOKIE };
