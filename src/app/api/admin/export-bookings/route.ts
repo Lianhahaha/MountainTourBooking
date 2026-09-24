@@ -3,15 +3,20 @@ import { getAllBookings } from "@/lib/bookings";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 function escapeCsvCell(value: string): string {
-  if (
-    value.includes('"') ||
-    value.includes(",") ||
-    value.includes("\n") ||
-    value.includes("\r")
-  ) {
-    return `"${value.replace(/"/g, '""')}"`;
+  // Neutralize spreadsheet formula injection (=, +, -, @ at cell start).
+  let cell = value;
+  if (/^[=+\-@\t\r]/.test(cell)) {
+    cell = `'${cell}`;
   }
-  return value;
+  if (
+    cell.includes('"') ||
+    cell.includes(",") ||
+    cell.includes("\n") ||
+    cell.includes("\r")
+  ) {
+    return `"${cell.replace(/"/g, '""')}"`;
+  }
+  return cell;
 }
 
 export async function GET() {
