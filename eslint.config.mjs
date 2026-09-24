@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local agent worktrees / tooling directories (duplicate source copies):
+    ".kilo/**",
+    ".zcode/**",
+    ".mimocode/**",
+    ".claude/**",
+    "node_modules/**",
   ]),
 ]);
 
