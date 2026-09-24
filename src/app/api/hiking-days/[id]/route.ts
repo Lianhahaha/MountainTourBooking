@@ -66,10 +66,24 @@ export async function PATCH(
       return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
     }
 
+    // Guard against empty strings: `??` only skips null/undefined, so a blank
+    // title/summary would otherwise wipe the existing value.
+    if (
+      (title !== undefined && typeof title !== "string") ||
+      (summary !== undefined && typeof summary !== "string")
+    ) {
+      return NextResponse.json({ error: "Invalid field types" }, { status: 400 });
+    }
+    const trimmedTitle = title?.trim();
+    const trimmedSummary = summary?.trim();
+    if (trimmedTitle === "" || trimmedSummary === "") {
+      return NextResponse.json({ error: "Title and summary are required" }, { status: 400 });
+    }
+
     const updated = {
       ...existing,
-      title: title?.trim() ?? existing.title,
-      summary: summary?.trim() ?? existing.summary,
+      title: trimmedTitle ?? existing.title,
+      summary: trimmedSummary ?? existing.summary,
       date: date ?? existing.date,
       photos: photos ?? existing.photos,
       updatedAt: new Date().toISOString(),
