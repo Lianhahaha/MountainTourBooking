@@ -6,6 +6,7 @@ import { getAllBookings } from "@/lib/bookings";
 import { sendBookingEmails, generateBookingId } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { reserveSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
+import { getTripById, getPrivateTrip } from "@/data/trips";
 
 export async function GET() {
   if (!(await isAdminAuthenticated())) {
@@ -40,7 +41,8 @@ export async function POST(request: NextRequest) {
       fitnessConfirmed: body.fitnessConfirmed,
       waiverAccepted: body.waiverAccepted,
       ageConfirmed: body.ageConfirmed,
-      estimatedTotal: body.estimatedTotal,
+      // Never trust the client-sent total — overwritten with the server price below.
+      estimatedTotal: 0,
       status: "pending",
       createdAt: new Date().toISOString(),
     };
@@ -59,6 +61,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    let sessionPrice: number | undefined;
+
     if (booking.tripType === "scheduled") {
       if (!booking.sessionId) {
         return NextResponse.json({ error: "Please select a hiking day" }, { status: 400 });
@@ -69,7 +73,17 @@ export async function POST(request: NextRequest) {
       }
       booking.preferredDate = session.date;
       booking.trekTime = session.time;
+      sessionPrice = session.price;
     }
+
+    // Compute the total from trip/session price data on the server.
+    const trip = booking.tripId
+      ? getTripById(booking.tripId)
+      : booking.tripType === "private"
+        ? getPrivateTrip()
+        : undefined;
+    const unitPrice = sessionPrice ?? trip?.price ?? 0;
+    booking.estimatedTotal = Math.round(unitPrice * Number(booking.paxCount) || 0);
 
     if (booking.sessionId) {
       const reserve = await reserveSessionSlots(booking.sessionId, booking.paxCount);
