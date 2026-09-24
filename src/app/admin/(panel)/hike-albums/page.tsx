@@ -201,6 +201,7 @@ export default function AdminHikeAlbumsPage() {
                 href={`/hikes/${day.id}`}
                 className="mt-2 inline-block text-sm text-accent hover:underline"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 View public page →
               </Link>
