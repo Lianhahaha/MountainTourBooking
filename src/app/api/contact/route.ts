@@ -36,6 +36,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json(
+        { error: "Please provide a valid email address" },
+        { status: 400 }
+      );
+    }
+
     const supabaseResult = await saveContactToSupabase({ name, email, phone, message });
     if (!supabaseResult.ok) {
       const fileResult = await saveContactToFile({ name, email, phone, message });
@@ -44,10 +51,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    await sendContactEmail({ name, email, phone, message });
+    try {
+      await sendContactEmail({ name, email, phone, message });
+    } catch (err) {
+      console.error("Contact email failed:", err);
+      return NextResponse.json(
+        { error: "Message saved, but email notification failed" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (err) {
+    console.error("Contact form error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
