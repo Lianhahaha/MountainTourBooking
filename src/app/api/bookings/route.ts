@@ -48,19 +48,26 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
     };
 
-    if (
+    // Waiver flags must be real booleans — truthy strings like "yes" would
+    // otherwise pass the required check and get stored as-is.
+    const missingRequired =
       !booking.tripTitle ||
       !booking.leadName ||
       !booking.phone ||
       !booking.email ||
       !booking.emergencyContactName ||
       !booking.emergencyContactPhone ||
-      !booking.fitnessConfirmed ||
-      !booking.waiverAccepted ||
-      !booking.ageConfirmed
-    ) {
+      body.fitnessConfirmed !== true ||
+      body.waiverAccepted !== true ||
+      body.ageConfirmed !== true;
+
+    if (missingRequired) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    booking.fitnessConfirmed = true;
+    booking.waiverAccepted = true;
+    booking.ageConfirmed = true;
 
     if (
       !Number.isInteger(booking.paxCount) ||
