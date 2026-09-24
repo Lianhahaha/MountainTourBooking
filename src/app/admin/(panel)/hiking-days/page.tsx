@@ -60,7 +60,10 @@ export default function AdminHikingDaysPage() {
         if (!res.ok) throw new Error("Failed to load hiking days");
         return res.json();
       })
-      .then(setSessions)
+      .then((data) => {
+        if (!Array.isArray(data)) throw new Error("Invalid response");
+        setSessions(data);
+      })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }
