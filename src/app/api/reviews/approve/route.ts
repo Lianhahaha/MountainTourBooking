@@ -3,15 +3,24 @@ import { updateReviewStatus } from "@/lib/reviews";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 export async function POST(req: NextRequest) {
+  const contentType = req.headers.get("content-type") ?? "";
+  const isJson = contentType.includes("application/json");
+
   if (!(await isAdminAuthenticated())) {
+    // Form posts from the admin UI should bounce to login, not show raw JSON.
+    if (!isJson) {
+      return new NextResponse(null, {
+        status: 302,
+        headers: { Location: "/admin/login" },
+      });
+    }
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
   let id: string | undefined;
   let status: string | undefined;
 
-  const contentType = req.headers.get("content-type") ?? "";
-  if (contentType.includes("application/json")) {
+  if (isJson) {
     const body = await req.json();
     id = body.id;
     status = body.status;
@@ -32,7 +41,7 @@ export async function POST(req: NextRequest) {
   }
 
   // For form submissions (from the admin UI), redirect back to the reviews page
-  if (!contentType.includes("application/json")) {
+  if (!isJson) {
     return new NextResponse(null, {
       status: 302,
       headers: { Location: "/admin/reviews" },
