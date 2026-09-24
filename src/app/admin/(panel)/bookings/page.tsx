@@ -159,6 +159,7 @@ function AdminBookingsPageInner() {
 
   function loadBookings() {
     setLoading(true);
+    setError("");
     fetch("/api/bookings")
       .then(async (res) => {
         if (res.status === 401) throw new Error("Session expired — please log in again");
