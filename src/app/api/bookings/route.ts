@@ -61,6 +61,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    if (
+      !Number.isInteger(booking.paxCount) ||
+      booking.paxCount < 1 ||
+      booking.paxCount > 50
+    ) {
+      return NextResponse.json(
+        { error: "Number of participants must be between 1 and 50" },
+        { status: 400 }
+      );
+    }
+
     let sessionPrice: number | undefined;
 
     if (booking.tripType === "scheduled") {
