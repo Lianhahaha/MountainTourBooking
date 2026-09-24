@@ -55,9 +55,13 @@ export default function AdminHikingDaysPage() {
 
   function loadSessions() {
     fetch("/api/trek-sessions")
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (res.status === 401) throw new Error("Session expired — please log in again");
+        if (!res.ok) throw new Error("Failed to load hiking days");
+        return res.json();
+      })
       .then(setSessions)
-      .catch(() => setError("Failed to load hiking days"))
+      .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }
 
@@ -189,12 +193,18 @@ export default function AdminHikingDaysPage() {
 
   async function handleCancel(id: string) {
     if (!confirm("Cancel this hiking day? Existing bookings will keep their date.")) return;
+    setError("");
     const res = await fetch(`/api/trek-sessions/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "cancelled" }),
     });
-    if (res.ok) loadSessions();
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error ?? "Could not cancel hiking day");
+      return;
+    }
+    loadSessions();
   }
 
   async function handleDelete(id: string) {

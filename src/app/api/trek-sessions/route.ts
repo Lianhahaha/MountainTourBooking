@@ -14,6 +14,11 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const availableOnly = searchParams.get("available") === "true";
 
+  // Full list (no available=true) is only used by the admin panel.
+  if (!availableOnly && !admin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (admin && !availableOnly) {
     const sessions = await getAllTrekSessions();
     return NextResponse.json(sessions);
