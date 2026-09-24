@@ -15,7 +15,7 @@ export function StickyBookButton() {
   if (!visible) return null;
 
   return (
-    <div className="sticky-book-bar fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 md:hidden">
+    <div className="sticky-book-bar fixed bottom-0 left-0 right-0 z-40 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:hidden">
       <Link
         href="/book"
         className="btn-cta flex w-full items-center justify-center gap-2 shadow-lg shadow-black/20"
