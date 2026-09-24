@@ -79,6 +79,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const textLimits: Array<[string, unknown, number, boolean]> = [
+      ["tripTitle", booking.tripTitle, 200, false],
+      ["leadName", booking.leadName, 100, false],
+      ["phone", booking.phone, 30, false],
+      ["email", booking.email, 254, false],
+      ["emergencyContactName", booking.emergencyContactName, 100, false],
+      ["emergencyContactPhone", booking.emergencyContactPhone, 30, false],
+      ["notes", booking.notes, 5000, true],
+      ["trekTime", booking.trekTime, 50, true],
+      ["locationPreference", booking.locationPreference, 100, true],
+    ];
+    for (const [field, value, max, allowNull] of textLimits) {
+      if (value === null && allowNull) continue;
+      if (typeof value !== "string" || value.length > max) {
+        return NextResponse.json(
+          { error: `${field} must be a string of at most ${max} characters` },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (
+      !Array.isArray(booking.participantNames) ||
+      booking.participantNames.length > booking.paxCount ||
+      booking.participantNames.some(
+        (n) => typeof n !== "string" || n.length > 100 || n.trim().length === 0
+      )
+    ) {
+      return NextResponse.json(
+        { error: "Participant names must be non-empty strings (max 100 chars each)" },
+        { status: 400 }
+      );
+    }
+
     if (booking.tripType !== "scheduled" && booking.tripType !== "private") {
       return NextResponse.json({ error: "Invalid trip type" }, { status: 400 });
     }
