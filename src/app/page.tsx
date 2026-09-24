@@ -6,6 +6,7 @@ import { Trips } from "@/components/Trips";
 import { Trust } from "@/components/Trust";
 import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
+import { StickyBookButton } from "@/components/StickyBookButton";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <StickyBookButton />
     </>
   );
 }
