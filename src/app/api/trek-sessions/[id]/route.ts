@@ -83,6 +83,18 @@ export async function DELETE(
   }
 
   const { id } = await params;
+  const existing = await getTrekSessionById(id);
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  if (existing.bookedCount > 0) {
+    return NextResponse.json(
+      { error: "Cannot delete a hiking day with active bookings. Cancel it instead." },
+      { status: 400 }
+    );
+  }
+
   const result = await deleteTrekSession(id);
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 404 });
