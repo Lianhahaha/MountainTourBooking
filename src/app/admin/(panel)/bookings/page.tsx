@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { BookingRequest, BookingStatus } from "@/types";
 import { formatDate, formatPrice, cn } from "@/lib/utils";
 
@@ -144,11 +145,17 @@ function BookingCard({
   );
 }
 
-export default function AdminBookingsPage() {
+function AdminBookingsPageInner() {
+  const searchParams = useSearchParams();
   const [bookings, setBookings] = useState<BookingRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [filter, setFilter] = useState<"all" | BookingStatus>("pending");
+  const filterParam = searchParams.get("filter");
+  const [filter, setFilter] = useState<"all" | BookingStatus>(
+    filterParam === "confirmed" || filterParam === "cancelled" || filterParam === "all"
+      ? filterParam
+      : "pending"
+  );
 
   function loadBookings() {
     setLoading(true);
@@ -222,5 +229,13 @@ export default function AdminBookingsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminBookingsPage() {
+  return (
+    <Suspense fallback={<p className="text-muted">Loading booking queue...</p>}>
+      <AdminBookingsPageInner />
+    </Suspense>
   );
 }
