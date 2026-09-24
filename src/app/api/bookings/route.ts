@@ -8,6 +8,7 @@ import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { reserveSessionSlots, releaseSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
 import { getTripById, getPrivateTrip } from "@/data/trips";
 import { todayInManila } from "@/lib/utils";
+import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function GET() {
   if (!(await isAdminAuthenticated())) {
@@ -19,6 +20,17 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit per IP so scripted abuse cannot reserve every slot on a
+  // hiking day with junk bookings.
+  const ip = clientIp(request.headers);
+  if (isRateLimited("bookings", ip, 10, 15 * 60 * 1000)) {
+    return NextResponse.json(
+      { error: "Too many booking attempts. Please try again later." },
+      { status: 429 }
+    );
+  }
+  hitRateLimit("bookings", ip, 10, 15 * 60 * 1000);
+
   let booking: BookingRequest | undefined;
   let slotsReserved = false;
   try {
