@@ -43,7 +43,7 @@ export async function PATCH(
       return NextResponse.json({ booking: existing });
     }
 
-    const result = await updateBookingStatus(id, status);
+    const result = await updateBookingStatus(id, status, existing.status);
     if (!result.ok || !result.booking) {
       return NextResponse.json({ error: result.error ?? "Update failed" }, { status: 500 });
     }

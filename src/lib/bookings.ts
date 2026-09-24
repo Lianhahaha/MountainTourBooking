@@ -64,19 +64,41 @@ export async function getBookingById(id: string): Promise<BookingRequest | undef
 
 export async function updateBookingStatus(
   id: string,
-  status: BookingStatus
+  status: BookingStatus,
+  expectedStatus?: BookingStatus
 ): Promise<{ ok: boolean; booking?: BookingRequest; error?: string }> {
   const client = getSupabase();
   if (client) {
-    const { data, error } = await client
+    let query = client
       .from("booking_requests")
       .update({ status })
-      .eq("id", id)
-      .select("*")
-      .single();
+      .eq("id", id);
+    if (expectedStatus) {
+      query = query.eq("status", expectedStatus);
+    }
+    const { data, error } = await query.select("*").maybeSingle();
 
-    if (!error && data) {
-      return { ok: true, booking: rowToBooking(data) };
+    if (error) {
+      return { ok: false, error: error.message };
+    }
+    if (!data) {
+      return {
+        ok: false,
+        error: expectedStatus
+          ? "Booking status changed by another request"
+          : "Booking not found",
+      };
+    }
+    return { ok: true, booking: rowToBooking(data) };
+  }
+
+  if (expectedStatus) {
+    const current = (await getBookingsFromFile()).find((b) => b.id === id);
+    if (!current) {
+      return { ok: false, error: "Booking not found" };
+    }
+    if (current.status !== expectedStatus) {
+      return { ok: false, error: "Booking status changed by another request" };
     }
   }
 
