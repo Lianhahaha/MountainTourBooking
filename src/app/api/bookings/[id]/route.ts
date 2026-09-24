@@ -75,15 +75,21 @@ export async function PATCH(
       ? formatDate(result.booking.preferredDate)
       : "To be confirmed";
 
-    if (status === "confirmed") {
-      await sendBookingApprovedEmail(result.booking, {
-        scheduledDate,
-        meetupPoint: trip?.meetupPoint ?? "We will confirm the meet-up point via SMS or email",
-        meetupTime: result.booking.trekTime ?? trip?.time ?? "To be confirmed",
-        ownerNote,
-      });
-    } else {
-      await sendBookingCancelledEmail(result.booking, { ownerNote });
+    // Email is best-effort: the status change already committed, so a Resend
+    // failure must not roll back or surface as a 500 to the admin.
+    try {
+      if (status === "confirmed") {
+        await sendBookingApprovedEmail(result.booking, {
+          scheduledDate,
+          meetupPoint: trip?.meetupPoint ?? "We will confirm the meet-up point via SMS or email",
+          meetupTime: result.booking.trekTime ?? trip?.time ?? "To be confirmed",
+          ownerNote,
+        });
+      } else {
+        await sendBookingCancelledEmail(result.booking, { ownerNote });
+      }
+    } catch (err) {
+      console.error("Failed to send status email for booking", result.booking.id, err);
     }
 
     return NextResponse.json({ booking: result.booking });
