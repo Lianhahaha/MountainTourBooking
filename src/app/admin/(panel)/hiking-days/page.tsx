@@ -12,12 +12,24 @@ import {
 
 type FormMode = "single" | "bulk";
 
+type SlotsValue = number | "";
+
 const sharedDefaults = {
   time: "6:00 AM",
-  maxSlots: 12,
+  maxSlots: 12 as SlotsValue,
   price: "",
   notes: "",
 };
+
+function parseSlotsInput(value: string): SlotsValue {
+  if (value === "") return "";
+  const n = parseInt(value, 10);
+  return Number.isNaN(n) ? "" : n;
+}
+
+function slotsToSubmit(value: SlotsValue): number {
+  return typeof value === "number" && Number.isInteger(value) && value >= 1 ? value : 12;
+}
 
 function slotsRemaining(session: TrekSession): number {
   return Math.max(0, session.maxSlots - session.bookedCount);
@@ -116,7 +128,7 @@ export default function AdminHikingDaysPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...singleForm,
-          maxSlots: typeof singleForm.maxSlots === "number" ? singleForm.maxSlots : parseInt(singleForm.maxSlots as any, 10) || 12,
+          maxSlots: slotsToSubmit(singleForm.maxSlots),
           price: singleForm.price ? parseFloat(singleForm.price) : undefined,
         }),
       });
@@ -146,7 +158,7 @@ export default function AdminHikingDaysPage() {
         body: JSON.stringify({
           dates: bulkForm.selectedDates,
           time: bulkForm.time,
-          maxSlots: typeof bulkForm.maxSlots === "number" ? bulkForm.maxSlots : parseInt(bulkForm.maxSlots as any, 10) || 12,
+          maxSlots: slotsToSubmit(bulkForm.maxSlots),
           notes: bulkForm.notes,
           price: bulkForm.price ? parseFloat(bulkForm.price) : undefined,
         }),
@@ -274,7 +286,7 @@ export default function AdminHikingDaysPage() {
               value={singleForm.maxSlots}
               onChange={(e) => {
                 const val = e.target.value;
-                setSingleForm({ ...singleForm, maxSlots: val === "" ? "" as any : parseInt(val, 10) });
+                setSingleForm({ ...singleForm, maxSlots: parseSlotsInput(val) });
               }}
               className="field-input mt-1 w-32"
             />
@@ -454,7 +466,7 @@ export default function AdminHikingDaysPage() {
                 value={bulkForm.maxSlots}
                 onChange={(e) => {
                   const val = e.target.value;
-                  setBulkForm({ ...bulkForm, maxSlots: val === "" ? "" as any : parseInt(val, 10) });
+                  setBulkForm({ ...bulkForm, maxSlots: parseSlotsInput(val) });
                 }}
                 className="field-input mt-1"
               />
@@ -538,7 +550,7 @@ function SessionList({
   const [editForm, setEditForm] = useState({
     date: "",
     time: "",
-    maxSlots: 12,
+    maxSlots: 12 as SlotsValue,
     price: "",
     notes: "",
   });
@@ -573,7 +585,7 @@ function SessionList({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...editForm,
-          maxSlots: typeof editForm.maxSlots === "number" ? editForm.maxSlots : parseInt(editForm.maxSlots as any, 10) || 12,
+          maxSlots: slotsToSubmit(editForm.maxSlots),
           price: editForm.price ? parseFloat(editForm.price) : null,
         }),
       });
@@ -647,7 +659,7 @@ function SessionList({
                         const val = e.target.value;
                         setEditForm({
                           ...editForm,
-                          maxSlots: val === "" ? "" as any : parseInt(val, 10),
+                          maxSlots: parseSlotsInput(val),
                         });
                       }}
                       className="field-input mt-1 w-32"
