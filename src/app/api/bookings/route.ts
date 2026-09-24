@@ -214,7 +214,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    await sendBookingEmails(booking);
+    const emailResult = await sendBookingEmails(booking);
+    if (!emailResult.ownerSent || !emailResult.clientSent) {
+      console.warn("Booking emails incomplete for", booking.id, emailResult);
+    }
 
     return NextResponse.json({ id: booking.id, status: "pending" });
   } catch (err) {
