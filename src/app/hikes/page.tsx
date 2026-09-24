@@ -59,12 +59,14 @@ export default async function HikesPage() {
                         </p>
                         <h2 className="mt-2 text-2xl font-bold text-foreground">{day.title}</h2>
                         <p className="mt-4 flex-1 leading-relaxed text-muted">{day.summary}</p>
-                        <Link
-                          href={`/hikes/${day.id}`}
-                          className="mt-6 inline-flex text-sm font-semibold text-accent hover:underline"
-                        >
-                          View all {day.photos.length} photos →
-                        </Link>
+                        {day.photos.length > 0 && (
+                          <Link
+                            href={`/hikes/${day.id}`}
+                            className="mt-6 inline-flex text-sm font-semibold text-accent hover:underline"
+                          >
+                            View all {day.photos.length} photos →
+                          </Link>
+                        )}
                       </div>
                     </div>
 
