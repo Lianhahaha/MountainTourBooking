@@ -22,7 +22,9 @@ export function ReviewCard({ rating, comment, leadName, tripTitle, createdAt }: 
       <p className="text-sm text-muted">{tripTitle}</p>
       <p className="mt-2 text-sm text-foreground">{comment}</p>
       <p className="mt-1 text-xs text-muted">
-        {new Date(createdAt).toLocaleDateString()}
+        {Number.isNaN(new Date(createdAt).getTime())
+          ? ""
+          : new Date(createdAt).toLocaleDateString()}
       </p>
     </div>
   );
