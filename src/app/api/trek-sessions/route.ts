@@ -51,6 +51,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date.trim())) {
+      return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+    }
+
     const today = todayInManila();
     if (date.trim() < today) {
       return NextResponse.json(

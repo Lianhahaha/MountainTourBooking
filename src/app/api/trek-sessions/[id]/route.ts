@@ -74,6 +74,10 @@ export async function PATCH(
       return NextResponse.json({ error: "Date and time are required" }, { status: 400 });
     }
 
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(updated.date)) {
+      return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+    }
+
     const today = todayInManila();
     if (updated.date < today) {
       return NextResponse.json({ error: "Date cannot be in the past" }, { status: 400 });

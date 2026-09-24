@@ -51,8 +51,13 @@ export async function POST(request: NextRequest) {
     const trimmedNotes = notes?.trim() ?? "";
 
     for (const rawDate of dates) {
-      const date = rawDate.trim();
+      const date = typeof rawDate === "string" ? rawDate.trim() : "";
       if (!date) continue;
+
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        skipped.push({ date, reason: "Invalid date format" });
+        continue;
+      }
 
       if (date < today) {
         skipped.push({ date, reason: "Date is in the past" });
