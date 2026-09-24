@@ -23,6 +23,30 @@ export async function PATCH(
 
   try {
     const body = await request.json();
+
+    if (
+      body.status !== undefined &&
+      body.status !== "open" &&
+      body.status !== "full" &&
+      body.status !== "cancelled"
+    ) {
+      return NextResponse.json(
+        { error: "Status must be open, full, or cancelled" },
+        { status: 400 }
+      );
+    }
+
+    if (
+      body.price !== undefined &&
+      body.price !== null &&
+      (typeof body.price !== "number" || !Number.isFinite(body.price) || body.price < 0)
+    ) {
+      return NextResponse.json(
+        { error: "Price must be a non-negative number" },
+        { status: 400 }
+      );
+    }
+
     const updated = {
       ...existing,
       date: body.date?.trim() ?? existing.date,
@@ -47,6 +71,11 @@ export async function PATCH(
 
     if (!updated.date || !updated.time) {
       return NextResponse.json({ error: "Date and time are required" }, { status: 400 });
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (updated.date < today) {
+      return NextResponse.json({ error: "Date cannot be in the past" }, { status: 400 });
     }
 
     // Block if another active session already occupies the new date + time

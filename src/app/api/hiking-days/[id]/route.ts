@@ -38,6 +38,26 @@ export async function PATCH(
       photos?: HikingDayPhoto[];
     };
 
+    if (photos !== undefined) {
+      if (
+        !Array.isArray(photos) ||
+        photos.some(
+          (p) =>
+            !p ||
+            typeof p !== "object" ||
+            typeof p.id !== "string" ||
+            typeof p.src !== "string" ||
+            p.src.length === 0 ||
+            typeof p.alt !== "string"
+        )
+      ) {
+        return NextResponse.json(
+          { error: "Photos must be an array of { id, src, alt } objects" },
+          { status: 400 }
+        );
+      }
+    }
+
     const updated = {
       ...existing,
       title: title?.trim() ?? existing.title,
