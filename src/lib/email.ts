@@ -185,6 +185,11 @@ export async function sendContactEmail(data: {
 
 export function generateBookingId(): string {
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
+  const bytes = new Uint8Array(6);
+  crypto.getRandomValues(bytes);
+  const rand = Array.from(bytes, (b) => b.toString(36).padStart(2, "0"))
+    .join("")
+    .toUpperCase()
+    .slice(0, 6);
   return `LTO-${date}-${rand}`;
 }

@@ -8,8 +8,8 @@ A mobile-first booking website for **Laag Ta ORB**, a registered hiking organiza
 - **Trip catalog** — scheduled Mt. Apo group treks with slot availability + private group bookings
 - **Multi-step booking** — participant info, health waivers, manual payment notice, booking reference ID
 - **Hike log** — `/hikes` page with photo albums per trekking day (title, summary, photos)
-- **Admin dashboard** — `/admin` for bookings and hiking day management (JSON storage until Firebase)
-- **Backend** — Supabase (production) with local JSON file fallback (development)
+- **Admin dashboard** — `/admin` for bookings and hiking day management
+- **Backend** — Supabase (production) with Firestore fallback
 - **Email notifications** — owner + client auto-reply via Resend (optional)
 
 ## Quick start
@@ -43,7 +43,7 @@ Copy `.env.example` to `.env.local`:
 cp .env.example .env.local
 ```
 
-- **Without env vars**: bookings save to `data/bookings.json` locally
+- **Without Supabase env vars**: bookings fall back to Firestore (`booking_requests` collection)
 - **With Supabase**: bookings persist on Vercel (required for production deploy)
 - **With Resend**: owner and client receive email on each booking
 
@@ -73,10 +73,10 @@ src/
   app/           # Pages and API routes
   components/    # UI sections and booking form
   data/          # Editable content (replace with client data)
-  lib/           # Supabase, email, utilities
+  lib/           # Firestore, Supabase, email, utilities
   types/         # TypeScript interfaces
 data/
-  bookings.json  # Local booking storage (dev fallback)
+  bookings.json  # Legacy local file (unused — Firestore is the fallback)
 supabase/
   schema.sql     # Database schema
 ```
