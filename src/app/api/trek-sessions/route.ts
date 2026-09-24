@@ -56,6 +56,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
     }
 
+    if (time.trim().length > 50) {
+      return NextResponse.json({ error: "Time must be at most 50 characters" }, { status: 400 });
+    }
+
+    if (notes !== undefined && typeof notes === "string" && notes.length > 1000) {
+      return NextResponse.json({ error: "Notes must be at most 1000 characters" }, { status: 400 });
+    }
+
     if (
       price !== undefined &&
       price !== null &&
