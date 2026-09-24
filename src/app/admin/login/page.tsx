@@ -89,7 +89,7 @@ export default function AdminLoginPage() {
           <div className="mt-4 rounded bg-surface-elevated p-3 text-center text-xs text-muted">
             <p className="font-semibold text-foreground">Demo Access</p>
             <p className="mt-1">
-              Use password <code className="rounded bg-background px-1.5 py-0.5 font-mono text-accent">password123</code> to log in.
+              Set <code className="rounded bg-background px-1.5 py-0.5 font-mono text-accent">ADMIN_PASSWORD</code> in <code className="rounded bg-background px-1.5 py-0.5 font-mono text-accent">.env.local</code> to log in.
             </p>
           </div>
         )}
