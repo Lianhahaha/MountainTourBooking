@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveReview } from "@/lib/reviews";
+import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const ip = clientIp(req.headers);
+  if (isRateLimited("reviews", ip, 5, 10 * 60 * 1000)) {
+    return NextResponse.json(
+      { ok: false, error: "Too many submissions. Please try again later." },
+      { status: 429 }
+    );
+  }
+  hitRateLimit("reviews", ip, 5, 10 * 60 * 1000);
+
   try {
     const body = await req.json();
     const { bookingId, leadName, tripTitle, rating, comment } = body;
