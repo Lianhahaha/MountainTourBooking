@@ -38,13 +38,13 @@ export async function saveReview(
 
 export async function getApprovedReviews(): Promise<Review[]> {
   try {
-    const q = query(
-      collection(db, "reviews"),
-      where("status", "==", "approved"),
-      orderBy("createdAt", "desc")
-    );
+    // Avoid where + orderBy together: that needs a composite index which may
+    // not exist (query would always fail). Filter then sort in memory instead.
+    const q = query(collection(db, "reviews"), where("status", "==", "approved"));
     const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Review));
+    return snap.docs
+      .map((d) => ({ id: d.id, ...d.data() } as Review))
+      .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
   } catch (e) {
     console.error("Firestore unavailable, returning no reviews:", e);
     return [];
