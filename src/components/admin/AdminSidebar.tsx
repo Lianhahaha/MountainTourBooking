@@ -10,6 +10,7 @@ const adminLinks = [
   { href: "/admin/bookings", label: "Booking queue" },
   { href: "/admin/hiking-days", label: "Hiking days" },
   { href: "/admin/hike-albums", label: "Hike albums" },
+  { href: "/admin/reviews", label: "Reviews" },
 ];
 
 export function AdminSidebar() {
