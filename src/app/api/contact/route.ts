@@ -61,17 +61,20 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // The message is already persisted at this point — an email failure must
+    // not surface as a 500, or the client shows an error and resubmits a
+    // duplicate message.
+    let emailSent = false;
     try {
-      await sendContactEmail({ name, email, phone, message });
+      emailSent = await sendContactEmail({ name, email, phone, message });
     } catch (err) {
       console.error("Contact email failed:", err);
-      return NextResponse.json(
-        { error: "Message saved, but email notification failed" },
-        { status: 500 }
-      );
+    }
+    if (!emailSent) {
+      console.warn("Contact email not sent (missing key or provider error)");
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, emailSent });
   } catch (err) {
     console.error("Contact form error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
