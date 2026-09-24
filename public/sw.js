@@ -1,4 +1,4 @@
-const CACHE_NAME = "tikling-v1";
+const CACHE_NAME = "tikling-v2";
 const PRECACHE_URLS = ["/", "/book", "/hikes"];
 
 self.addEventListener("install", (event) => {
@@ -22,11 +22,25 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      if (cached) return cached;
+      const networkFetch = fetch(event.request)
+        .then((response) => {
+          if (response && response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => {
+          if (cached) return cached;
+          return new Response("Offline", { status: 503 });
+        });
 
-      return fetch(event.request).catch(() => {
-        return new Response("Offline", { status: 503 });
-      });
+      // Stale-while-revalidate: serve cache immediately, refresh in background.
+      if (cached) {
+        return cached;
+      }
+
+      return networkFetch;
     })
   );
 });
