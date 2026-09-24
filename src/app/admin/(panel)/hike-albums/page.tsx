@@ -27,7 +27,10 @@ export default function AdminHikeAlbumsPage() {
   function loadDays() {
     fetch("/api/hiking-days")
       .then((res) => res.json())
-      .then(setDays)
+      .then((data) => {
+        if (!Array.isArray(data)) throw new Error("Invalid response");
+        setDays(data);
+      })
       .catch(() => setError("Failed to load hike albums"))
       .finally(() => setLoading(false));
   }
