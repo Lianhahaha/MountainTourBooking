@@ -45,6 +45,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const today = new Date().toISOString().slice(0, 10);
+    if (date.trim() < today) {
+      return NextResponse.json(
+        { error: "Date cannot be in the past" },
+        { status: 400 }
+      );
+    }
+
     const now = new Date().toISOString();
     const id = slugifySessionDate(date, time);
 
