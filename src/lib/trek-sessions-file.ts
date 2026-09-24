@@ -1,5 +1,13 @@
 import { db } from "@/lib/firebase";
-import { collection, doc, getDocs, getDoc, setDoc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  runTransaction,
+} from "firebase/firestore";
 import type { TrekSession } from "@/types";
 import { seedTrekSessions } from "@/data/trek-sessions";
 
@@ -84,37 +92,62 @@ export async function deleteTrekSession(id: string): Promise<{ ok: boolean; erro
 }
 
 export async function reserveSessionSlots(sessionId: string, paxCount: number): Promise<{ ok: boolean; session?: TrekSession; error?: string }> {
-  const session = await getTrekSessionById(sessionId);
-  if (!session) return { ok: false, error: "Session not found" };
-  if (!isSessionBookable(session)) return { ok: false, error: "Session not available" };
-  if (getSessionSlotsRemaining(session) < paxCount) {
-    return { ok: false, error: "Not enough slots for this date" };
+  try {
+    // Read-modify-write in a transaction so concurrent bookings cannot oversell.
+    const updated = await runTransaction(db, async (tx) => {
+      const ref = doc(db, COLLECTION, sessionId);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error("Session not found");
+
+      const session = snap.data() as TrekSession;
+      if (!isSessionBookable(session)) throw new Error("Session not available");
+      if (getSessionSlotsRemaining(session) < paxCount) {
+        throw new Error("Not enough slots for this date");
+      }
+
+      const next: TrekSession = {
+        ...session,
+        bookedCount: session.bookedCount + paxCount,
+        status: session.bookedCount + paxCount >= session.maxSlots ? "full" : session.status,
+        updatedAt: new Date().toISOString(),
+      };
+      tx.set(ref, next);
+      return next;
+    });
+
+    return { ok: true, session: updated };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to reserve slots",
+    };
   }
-
-  const updated: TrekSession = {
-    ...session,
-    bookedCount: session.bookedCount + paxCount,
-    status: session.bookedCount + paxCount >= session.maxSlots ? "full" : session.status,
-    updatedAt: new Date().toISOString(),
-  };
-
-  const result = await saveTrekSession(updated);
-  if (!result.ok) return { ok: false, error: result.error };
-  return { ok: true, session: updated };
 }
 
 export async function releaseSessionSlots(sessionId: string, paxCount: number): Promise<{ ok: boolean; error?: string }> {
-  const session = await getTrekSessionById(sessionId);
-  if (!session) return { ok: false, error: "Session not found" };
+  try {
+    await runTransaction(db, async (tx) => {
+      const ref = doc(db, COLLECTION, sessionId);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error("Session not found");
 
-  const updated: TrekSession = {
-    ...session,
-    bookedCount: Math.max(0, session.bookedCount - paxCount),
-    status: session.status === "full" ? "open" : session.status,
-    updatedAt: new Date().toISOString(),
-  };
+      const session = snap.data() as TrekSession;
+      const next: TrekSession = {
+        ...session,
+        bookedCount: Math.max(0, session.bookedCount - paxCount),
+        status: session.status === "full" ? "open" : session.status,
+        updatedAt: new Date().toISOString(),
+      };
+      tx.set(ref, next);
+    });
 
-  return saveTrekSession(updated);
+    return { ok: true };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to release slots",
+    };
+  }
 }
 
 export function slugifySessionDate(date: string, time: string): string {
