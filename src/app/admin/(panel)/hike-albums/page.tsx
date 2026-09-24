@@ -25,6 +25,7 @@ export default function AdminHikeAlbumsPage() {
   });
 
   function loadDays() {
+    setError("");
     fetch("/api/hiking-days")
       .then((res) => res.json())
       .then((data) => {
@@ -198,7 +199,7 @@ export default function AdminHikeAlbumsPage() {
           >
             <div>
               <p className="font-semibold text-foreground">{day.title}</p>
-              <p className="text-sm text-muted">{formatDate(day.date)} · {day.photos.length} photos</p>
+              <p className="text-sm text-muted">{formatDate(day.date)} · {(day.photos ?? []).length} photos</p>
               <p className="mt-2 line-clamp-2 text-sm text-muted">{day.summary}</p>
               <Link
                 href={`/hikes/${day.id}`}
