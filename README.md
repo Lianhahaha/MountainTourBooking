@@ -29,7 +29,6 @@ Edit files in `src/data/`:
 |------|---------|
 | `org.ts` | Organization name, guide bio, contact info, stats |
 | `trips.ts` | Mt. Apo scheduled treks and private group template |
-| `gallery.ts` | Photo gallery items |
 | `licenses.ts` | License and permit documents |
 | `faq.ts` | FAQ and policy text |
 
@@ -75,8 +74,6 @@ src/
   data/          # Editable content (replace with client data)
   lib/           # Firestore, Supabase, email, utilities
   types/         # TypeScript interfaces
-data/
-  bookings.json  # Legacy local file (unused — Firestore is the fallback)
 supabase/
   schema.sql     # Database schema
 ```
