@@ -79,6 +79,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (booking.tripType !== "scheduled" && booking.tripType !== "private") {
+      return NextResponse.json({ error: "Invalid trip type" }, { status: 400 });
+    }
+
+    if (booking.tripType === "private") {
+      if (!booking.preferredDate || !/^\d{4}-\d{2}-\d{2}$/.test(booking.preferredDate)) {
+        return NextResponse.json(
+          { error: "Please choose a preferred trek date" },
+          { status: 400 }
+        );
+      }
+      if (booking.preferredDate < new Date().toISOString().slice(0, 10)) {
+        return NextResponse.json(
+          { error: "Preferred date cannot be in the past" },
+          { status: 400 }
+        );
+      }
+    }
+
     let sessionPrice: number | undefined;
 
     if (booking.tripType === "scheduled") {
