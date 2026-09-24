@@ -72,6 +72,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.email)) {
+      return NextResponse.json(
+        { error: "Please provide a valid email address" },
+        { status: 400 }
+      );
+    }
+
     let sessionPrice: number | undefined;
 
     if (booking.tripType === "scheduled") {
