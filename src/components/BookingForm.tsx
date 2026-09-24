@@ -141,7 +141,13 @@ export function BookingForm() {
         return true;
       case 1:
         if (isPrivate) {
-          return !!form.preferredDate && typeof form.paxCount === "number" && form.paxCount >= 1;
+          const maxPax = selectedTrip?.maxSlots ?? 1;
+          return (
+            !!form.preferredDate &&
+            typeof form.paxCount === "number" &&
+            form.paxCount >= 1 &&
+            form.paxCount <= maxPax
+          );
         }
         return (
           !!form.sessionId &&
