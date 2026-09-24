@@ -118,6 +118,12 @@ export async function POST(request: NextRequest) {
     }
 
     if (booking.tripType === "private") {
+      if (booking.sessionId) {
+        return NextResponse.json(
+          { error: "Private bookings cannot use a hiking day session" },
+          { status: 400 }
+        );
+      }
       if (!booking.preferredDate || !/^\d{4}-\d{2}-\d{2}$/.test(booking.preferredDate)) {
         return NextResponse.json(
           { error: "Please choose a preferred trek date" },
