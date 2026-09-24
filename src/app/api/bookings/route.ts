@@ -5,7 +5,7 @@ import { saveBookingToFile } from "@/lib/bookings-file";
 import { getAllBookings } from "@/lib/bookings";
 import { sendBookingEmails, generateBookingId } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { reserveSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
+import { reserveSessionSlots, releaseSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
 import { getTripById, getPrivateTrip } from "@/data/trips";
 import { todayInManila } from "@/lib/utils";
 
@@ -19,10 +19,12 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  let booking: BookingRequest | undefined;
+  let slotsReserved = false;
   try {
     const body = await request.json();
 
-    const booking: BookingRequest = {
+    booking = {
       id: generateBookingId(),
       tripId: body.tripId ?? null,
       sessionId: body.sessionId ?? null,
@@ -204,14 +206,14 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+      slotsReserved = true;
     }
 
     const supabaseResult = await saveBookingToSupabase(booking);
     if (!supabaseResult.ok) {
       const fileResult = await saveBookingToFile(booking);
       if (!fileResult.ok) {
-        if (booking.sessionId) {
-          const { releaseSessionSlots } = await import("@/lib/trek-sessions-file");
+        if (slotsReserved && booking.sessionId) {
           await releaseSessionSlots(booking.sessionId, booking.paxCount);
         }
         return NextResponse.json(
@@ -220,6 +222,7 @@ export async function POST(request: NextRequest) {
         );
       }
     }
+    slotsReserved = false;
 
     const emailResult = await sendBookingEmails(booking);
     if (!emailResult.ownerSent || !emailResult.clientSent) {
@@ -229,6 +232,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ id: booking.id, status: "pending" });
   } catch (err) {
     console.error("Booking POST error:", err);
+    // Release any slots reserved before the failure, otherwise a thrown error
+    // after reservation permanently leaks capacity on that hiking day.
+    if (slotsReserved && booking?.sessionId) {
+      try {
+        await releaseSessionSlots(booking.sessionId, booking.paxCount);
+      } catch (releaseErr) {
+        console.error("Failed to release slots after booking error:", releaseErr);
+      }
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
