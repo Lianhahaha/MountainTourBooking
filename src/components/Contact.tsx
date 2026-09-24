@@ -5,6 +5,7 @@ import { org } from "@/data/org";
 
 export function Contact() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -23,10 +24,19 @@ export function Contact() {
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) {
+        let message = "Failed";
+        try {
+          const data = await res.json();
+          if (data?.error) message = data.error;
+        } catch {}
+        throw new Error(message);
+      }
       setStatus("success");
+      setErrorMsg("");
       setForm({ name: "", email: "", phone: "", message: "" });
-    } catch {
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed");
       setStatus("error");
     }
   }
@@ -146,7 +156,7 @@ export function Contact() {
             )}
             {status === "error" && (
               <p className="mt-3 text-center text-sm text-danger">
-                Something went wrong. Please try again or contact us directly.
+                {errorMsg || "Something went wrong. Please try again or contact us directly."}
               </p>
             )}
           </form>
