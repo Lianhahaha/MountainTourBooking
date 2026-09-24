@@ -7,7 +7,10 @@ import {
 } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getTripById } from "@/data/trips";
-import { releaseSessionSlots } from "@/lib/trek-sessions-file";
+import {
+  releaseSessionSlots,
+  reserveSessionSlots,
+} from "@/lib/trek-sessions-file";
 import { formatDate } from "@/lib/utils";
 
 export async function PATCH(
@@ -45,12 +48,26 @@ export async function PATCH(
       return NextResponse.json({ error: result.error ?? "Update failed" }, { status: 500 });
     }
 
-    if (
-      status === "cancelled" &&
-      result.booking.sessionId &&
-      existing.status === "pending"
-    ) {
-      await releaseSessionSlots(result.booking.sessionId, result.booking.paxCount);
+    // Slots are reserved when a booking is first created (pending) and stay
+    // reserved while the booking is active. Release on any transition into
+    // cancelled from an active status; re-reserve when a cancelled booking
+    // is confirmed again.
+    if (result.booking.sessionId) {
+      if (status === "cancelled" && existing.status !== "cancelled") {
+        await releaseSessionSlots(result.booking.sessionId, result.booking.paxCount);
+      } else if (status === "confirmed" && existing.status === "cancelled") {
+        const reserve = await reserveSessionSlots(
+          result.booking.sessionId,
+          result.booking.paxCount
+        );
+        if (!reserve.ok) {
+          await updateBookingStatus(id, "cancelled");
+          return NextResponse.json(
+            { error: reserve.error ?? "Not enough slots to re-confirm this booking" },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     const trip = result.booking.tripId ? getTripById(result.booking.tripId) : undefined;
