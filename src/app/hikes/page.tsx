@@ -32,8 +32,9 @@ export default async function HikesPage() {
           ) : (
             <div className="mt-12 space-y-10">
               {days.map((day, index) => {
-                const featured = day.photos[0];
-                const rest = day.photos.slice(1, 5);
+                const photos = day.photos ?? [];
+                const featured = photos[0];
+                const rest = photos.slice(1, 5);
 
                 return (
                   <article
@@ -59,12 +60,12 @@ export default async function HikesPage() {
                         </p>
                         <h2 className="mt-2 text-2xl font-bold text-foreground">{day.title}</h2>
                         <p className="mt-4 flex-1 leading-relaxed text-muted">{day.summary}</p>
-                        {day.photos.length > 0 && (
+                        {photos.length > 0 && (
                           <Link
                             href={`/hikes/${day.id}`}
                             className="mt-6 inline-flex text-sm font-semibold text-accent hover:underline"
                           >
-                            View all {day.photos.length} photos →
+                            View all {photos.length} photos →
                           </Link>
                         )}
                       </div>
