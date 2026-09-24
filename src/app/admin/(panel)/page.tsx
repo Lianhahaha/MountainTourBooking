@@ -27,7 +27,9 @@ export default async function AdminDashboardPage() {
     })
     .reduce((sum, b) => sum + b.estimatedTotal, 0);
   const totalBookings = bookings.length;
-  const totalPax = bookings.reduce((sum, b) => sum + b.paxCount, 0);
+  const totalPax = bookings
+    .filter((b) => b.status !== "cancelled")
+    .reduce((sum, b) => sum + b.paxCount, 0);
 
   // Top services by revenue
   const serviceMap = new Map<string, { revenue: number; pax: number }>();
