@@ -72,9 +72,14 @@ Questions? Reach us at ${org.contact.phone} or ${org.contact.email}.
     }),
   ]);
 
+  // Resend resolves with an `error` field instead of rejecting on API failures,
+  // so a "fulfilled" promise alone does not mean the email was sent.
+  const sent = (result: PromiseSettledResult<{ error?: unknown }>): boolean =>
+    result.status === "fulfilled" && !result.value?.error;
+
   return {
-    ownerSent: results[0].status === "fulfilled",
-    clientSent: results[1].status === "fulfilled",
+    ownerSent: sent(results[0]),
+    clientSent: sent(results[1]),
   };
 }
 
