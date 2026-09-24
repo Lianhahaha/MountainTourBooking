@@ -26,8 +26,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title, summary, and date are required" }, { status: 400 });
     }
 
-    if (photos && photos.length > 20) {
-      return NextResponse.json({ error: "Maximum of 20 photos allowed per album." }, { status: 400 });
+    if (photos !== undefined) {
+      if (
+        !Array.isArray(photos) ||
+        photos.some(
+          (p) =>
+            !p ||
+            typeof p !== "object" ||
+            typeof p.id !== "string" ||
+            typeof p.src !== "string" ||
+            p.src.length === 0 ||
+            typeof p.alt !== "string"
+        )
+      ) {
+        return NextResponse.json(
+          { error: "Photos must be an array of { id, src, alt } objects" },
+          { status: 400 }
+        );
+      }
+
+      if (photos.length > 20) {
+        return NextResponse.json({ error: "Maximum of 20 photos allowed per album." }, { status: 400 });
+      }
     }
 
     const days = await getAllHikingDays();

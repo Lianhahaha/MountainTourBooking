@@ -56,6 +56,10 @@ export async function PATCH(
           { status: 400 }
         );
       }
+
+      if (photos.length > 20) {
+        return NextResponse.json({ error: "Maximum of 20 photos allowed per album." }, { status: 400 });
+      }
     }
 
     const updated = {
