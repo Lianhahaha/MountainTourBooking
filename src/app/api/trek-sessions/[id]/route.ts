@@ -74,6 +74,14 @@ export async function PATCH(
       return NextResponse.json({ error: "Date and time are required" }, { status: 400 });
     }
 
+    if (updated.time.length > 50) {
+      return NextResponse.json({ error: "Time must be at most 50 characters" }, { status: 400 });
+    }
+
+    if (updated.notes.length > 1000) {
+      return NextResponse.json({ error: "Notes must be at most 1000 characters" }, { status: 400 });
+    }
+
     if (!/^\d{4}-\d{2}-\d{2}$/.test(updated.date)) {
       return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
     }
