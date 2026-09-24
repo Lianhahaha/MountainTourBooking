@@ -6,13 +6,13 @@ import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   const ip = clientIp(request.headers);
-  if (isRateLimited("contact", ip, 5, 10 * 60 * 1000)) {
+  if (isRateLimited("contact", ip, 5)) {
     return NextResponse.json(
       { error: "Too many messages. Please try again later." },
       { status: 429 }
     );
   }
-  hitRateLimit("contact", ip, 5, 10 * 60 * 1000);
+  hitRateLimit("contact", ip, 10 * 60 * 1000);
 
   try {
     const body = await request.json();

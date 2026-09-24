@@ -15,8 +15,7 @@ function isExpired(entry: { resetAt: number }, now: number): boolean {
 export function isRateLimited(
   namespace: string,
   key: string,
-  max: number = DEFAULT_MAX,
-  windowMs: number = DEFAULT_WINDOW_MS
+  max: number = DEFAULT_MAX
 ): boolean {
   const id = `${namespace}:${key}`;
   const entry = BUCKETS.get(id);
@@ -32,7 +31,6 @@ export function isRateLimited(
 export function hitRateLimit(
   namespace: string,
   key: string,
-  max: number = DEFAULT_MAX,
   windowMs: number = DEFAULT_WINDOW_MS
 ): void {
   const id = `${namespace}:${key}`;

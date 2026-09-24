@@ -4,13 +4,13 @@ import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   const ip = clientIp(req.headers);
-  if (isRateLimited("reviews", ip, 5, 10 * 60 * 1000)) {
+  if (isRateLimited("reviews", ip, 5)) {
     return NextResponse.json(
       { ok: false, error: "Too many submissions. Please try again later." },
       { status: 429 }
     );
   }
-  hitRateLimit("reviews", ip, 5, 10 * 60 * 1000);
+  hitRateLimit("reviews", ip, 10 * 60 * 1000);
 
   try {
     const body = await req.json();
