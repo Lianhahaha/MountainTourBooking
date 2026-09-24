@@ -51,6 +51,12 @@ export async function POST(request: NextRequest) {
         .filter((s) => s.status !== "cancelled")
         .map((s) => `${s.date}|${s.time.trim().toLowerCase()}`)
     );
+    // Slug IDs can collide when different time strings normalize the same,
+    // which would overwrite an active session document. Cancelled docs may be
+    // overwritten (re-adding that slot).
+    const existingIds = new Set(
+      existing.filter((s) => s.status !== "cancelled").map((s) => s.id)
+    );
 
     const created: TrekSession[] = [];
     const skipped: { date: string; reason: string }[] = [];
@@ -79,6 +85,10 @@ export async function POST(request: NextRequest) {
       }
 
       const id = slugifySessionDate(date, trimmedTime);
+      if (existingIds.has(id)) {
+        skipped.push({ date, reason: "Already scheduled for this time" });
+        continue;
+      }
 
       const session: TrekSession = {
         id,
@@ -100,6 +110,7 @@ export async function POST(request: NextRequest) {
       }
 
       existingKeys.add(conflictKey);
+      existingIds.add(id);
       created.push(session);
     }
 

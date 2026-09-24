@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getAllTrekSessions,
   getAvailableTrekSessions,
+  getTrekSessionById,
   saveTrekSession,
   slugifySessionDate,
   sessionConflictExists,
@@ -76,6 +77,17 @@ export async function POST(request: NextRequest) {
 
     const now = new Date().toISOString();
     const id = slugifySessionDate(date, time);
+
+    // The slug ID collides when different time strings normalize the same
+    // (e.g. "6:00 AM" vs "6.00 AM"), which would overwrite an active session.
+    // Overwriting a cancelled document is allowed (re-adding that slot).
+    const idOwner = await getTrekSessionById(id);
+    if (idOwner && idOwner.status !== "cancelled") {
+      return NextResponse.json(
+        { error: "A hiking day already exists for this date and time" },
+        { status: 409 }
+      );
+    }
 
     // Block if any active session already uses this date + time
     if (await sessionConflictExists(date.trim(), time.trim())) {
