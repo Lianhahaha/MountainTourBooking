@@ -38,9 +38,9 @@ export async function POST(request: NextRequest) {
       notes?: string;
     };
 
-    if (!date?.trim() || !time?.trim() || !maxSlots || maxSlots < 1) {
+    if (!date?.trim() || !time?.trim() || !maxSlots || !Number.isInteger(maxSlots) || maxSlots < 1) {
       return NextResponse.json(
-        { error: "Date, time, and max slots are required" },
+        { error: "Date, time, and max slots (whole number ≥ 1) are required" },
         { status: 400 }
       );
     }

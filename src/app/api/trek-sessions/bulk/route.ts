@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Select at least one date" }, { status: 400 });
     }
 
-    if (!time?.trim() || !maxSlots || maxSlots < 1) {
+    if (!time?.trim() || !maxSlots || !Number.isInteger(maxSlots) || maxSlots < 1) {
       return NextResponse.json(
-        { error: "Time and max slots are required" },
+        { error: "Time and max slots (whole number ≥ 1) are required" },
         { status: 400 }
       );
     }

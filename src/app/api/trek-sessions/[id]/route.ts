@@ -41,8 +41,8 @@ export async function PATCH(
       );
     }
 
-    if (updated.maxSlots < 1) {
-      return NextResponse.json({ error: "Max slots must be at least 1" }, { status: 400 });
+    if (!Number.isInteger(updated.maxSlots) || updated.maxSlots < 1) {
+      return NextResponse.json({ error: "Max slots must be a whole number of at least 1" }, { status: 400 });
     }
 
     if (!updated.date || !updated.time) {
