@@ -21,6 +21,10 @@ export default async function AdminReviewsPage() {
         {total} total, {pending} pending, {approved} approved, {rejected} rejected
       </p>
 
+      {reviews.length === 0 && (
+        <p className="mt-6 text-muted">No reviews yet. Submissions appear here for moderation.</p>
+      )}
+
       <ul className="mt-4 space-y-3">
         {reviews.map((r) => (
           <li
