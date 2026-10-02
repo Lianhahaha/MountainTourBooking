@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getHikingDayById } from "@/lib/hiking-days-file";
+import { isSampleAlbum } from "@/data/hiking-days";
 import { formatDate } from "@/lib/utils";
 import { Icon } from "@/components/Icon";
 
@@ -31,7 +32,14 @@ export default async function HikeDayPage({
             All albums
           </Link>
 
-          <p className="tabular mt-4 text-[13px] font-medium text-muted">{formatDate(day.date)}</p>
+          <p className="tabular mt-4 flex flex-wrap items-center gap-2 text-[13px] font-medium text-muted">
+            {formatDate(day.date)}
+            {isSampleAlbum(day.id) && (
+              <span className="rounded-full border border-warning/40 px-2 py-0.5 text-[11px] font-medium text-warning">
+                Sample album · stock photos
+              </span>
+            )}
+          </p>
           <h1 className="mt-1 font-display text-3xl font-extrabold text-foreground sm:text-4xl">
             {day.title}
           </h1>

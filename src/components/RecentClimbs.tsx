@@ -2,14 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { formatDate } from "@/lib/utils";
-import { seedHikingDays, type HikingDay } from "@/data/hiking-days";
-
-// Seed albums are stock placeholders, not real climbs; the landing page only
-// features albums the owner has posted.
-const seedIds = new Set(seedHikingDays.map((d) => d.id));
+import { isSampleAlbum, type HikingDay } from "@/data/hiking-days";
 
 export function RecentClimbs({ days }: { days: HikingDay[] }) {
-  const latest = days.find((d) => !seedIds.has(d.id) && (d.photos ?? []).length > 0);
+  // Only feature albums the owner has posted, never the stock sample albums.
+  const latest = days.find((d) => !isSampleAlbum(d.id) && (d.photos ?? []).length > 0);
   if (!latest) return null;
 
   // Even counts keep the 2-column grid free of holes.

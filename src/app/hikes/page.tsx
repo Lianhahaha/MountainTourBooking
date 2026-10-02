@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getAllHikingDays } from "@/lib/hiking-days-file";
+import { isSampleAlbum } from "@/data/hiking-days";
 import { formatDate } from "@/lib/utils";
 import { Icon } from "@/components/Icon";
 
@@ -56,8 +57,13 @@ export default async function HikesPage() {
                         </Link>
                       )}
                       <div className="flex flex-col p-4 sm:p-6">
-                        <p className="tabular text-[13px] font-medium text-muted">
+                        <p className="tabular flex flex-wrap items-center gap-2 text-[13px] font-medium text-muted">
                           {formatDate(day.date)}
+                          {isSampleAlbum(day.id) && (
+                            <span className="rounded-full border border-warning/40 px-2 py-0.5 text-[11px] font-medium text-warning">
+                            Sample album · stock photos
+                          </span>
+                          )}
                         </p>
                         <h2 className="mt-1 font-display text-xl font-bold text-foreground sm:text-2xl">
                           <Link href={`/hikes/${day.id}`} className="hover:text-accent">

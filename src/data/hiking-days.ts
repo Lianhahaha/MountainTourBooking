@@ -74,3 +74,10 @@ export const seedHikingDays: HikingDay[] = [
     updatedAt: "2025-07-22T00:00:00.000Z",
   },
 ];
+
+const seedIds = new Set(seedHikingDays.map((d) => d.id));
+
+/** Built-in sample albums use stock photos, not real Mt. Apo climbs. */
+export function isSampleAlbum(id: string): boolean {
+  return seedIds.has(id);
+}
