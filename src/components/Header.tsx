@@ -1,96 +1,167 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { org } from "@/data/org";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { Icon } from "@/components/Icon";
+import { ThemeToggle, ThemeSegmented } from "@/components/ThemeToggle";
 import { OwnerNavLink } from "@/components/OwnerNavLink";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: "/#about", label: "About" },
-  { href: "/#trips", label: "Trips" },
-  { href: "/hikes", label: "Hikes" },
-  { href: "/#trust", label: "Licenses" },
-  { href: "/#faq", label: "FAQ" },
-  { href: "/#contact", label: "Contact" },
+  { id: "dates", href: "/#dates", label: "Dates" },
+  { id: "included", href: "/#included", label: "Inclusions" },
+  { id: "about", href: "/#about", label: "About" },
+  { id: "photos", href: "/hikes", label: "Photos" },
+  { id: "faq", href: "/#faq", label: "FAQ" },
+  { id: "contact", href: "/#contact", label: "Contact" },
 ];
 
+/** Highlights the landing-page section currently in view. */
+function useActiveSection(enabled: boolean) {
+  const [active, setActive] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const sections = navLinks
+      .map((l) => document.getElementById(l.id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [enabled]);
+
+  return enabled ? active : null;
+}
+
 export function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isHome = pathname === "/";
+  const active = useActiveSection(isHome);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  function isCurrent(link: (typeof navLinks)[number]) {
+    if (link.href.startsWith("/#")) return active === link.id;
+    return pathname.startsWith(link.href);
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <Link
           href="/"
-          className="font-semibold tracking-wide text-foreground"
+          className="flex items-center gap-2 text-foreground"
+          onClick={() => setOpen(false)}
         >
-          {org.name}
+          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <Icon name="peak" className="h-4 w-4" />
+          </span>
+          <span className="font-condensed text-[17px] font-bold leading-none tracking-tight">
+            {org.name}
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-3 md:flex lg:gap-4">
+        <nav aria-label="Main" className="hidden items-center gap-0.5 md:flex">
           {navLinks.map((link) => (
             <a
-              key={link.href}
+              key={link.id}
               href={link.href}
-              className="text-sm font-medium text-muted transition hover:text-accent"
+              aria-current={isCurrent(link) ? "true" : undefined}
+              className={cn(
+                "rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors",
+                isCurrent(link)
+                  ? "bg-surface text-foreground"
+                  : "text-muted hover:text-foreground"
+              )}
             >
               {link.label}
             </a>
           ))}
-          <ThemeToggle />
+          <span className="mx-1.5 h-5 w-px bg-border" aria-hidden />
           <OwnerNavLink />
-          <Link
-            href="/book"
-            className="btn-cta-sm !px-4"
-          >
-            Book a Hike
+          <ThemeToggle />
+          <Link href="/book" className="btn-cta-sm ml-1.5">
+            Book a climb
           </Link>
         </nav>
 
-        <div className="flex items-center gap-1 md:hidden">
-          <ThemeToggle />
+        <div className="flex items-center gap-1.5 md:hidden">
+          <Link href="/book" className="btn-cta-sm !min-h-[36px] !px-3 !text-[13px]">
+            Book
+          </Link>
           <button
             type="button"
-            className="rounded-lg p-2 text-foreground"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-foreground hover:bg-surface"
             onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
           >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {open ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            <Icon name={open ? "close" : "menu"} className="h-5 w-5" />
           </button>
         </div>
       </div>
 
       {open && (
-        <nav className="absolute inset-x-0 top-full flex flex-col border-b border-border bg-surface/95 px-4 py-6 shadow-xl backdrop-blur-md md:hidden">
-          <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="block rounded-md px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted/10 hover:text-accent active:bg-muted/20"
-                onClick={() => setOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className="my-2 border-t border-border/60 mx-4" />
-            <OwnerNavLink mobile />
-            <Link
-              href="/book"
-              className="btn-cta mt-4 block text-center !py-3.5 text-base"
-              onClick={() => setOpen(false)}
-            >
-              Book a Hike
-            </Link>
-          </div>
-        </nav>
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            tabIndex={-1}
+            className="fixed inset-0 top-14 z-40 bg-black/30 md:hidden"
+            onClick={() => setOpen(false)}
+          />
+          <nav
+            id="mobile-menu"
+            aria-label="Main"
+            className="absolute inset-x-0 top-full z-50 border-b border-border bg-background px-4 pb-4 pt-2 shadow-[var(--shadow)] md:hidden"
+          >
+            <ul className="grid grid-cols-2 gap-1">
+              {navLinks.map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={isCurrent(link) ? "true" : undefined}
+                    className={cn(
+                      "flex items-center rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors",
+                      isCurrent(link)
+                        ? "bg-surface text-foreground"
+                        : "text-foreground/85 hover:bg-surface"
+                    )}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-2">
+              <OwnerNavLink mobile />
+            </div>
+            <div className="mt-3 border-t border-border pt-3">
+              <ThemeSegmented />
+            </div>
+          </nav>
+        </>
       )}
     </header>
   );

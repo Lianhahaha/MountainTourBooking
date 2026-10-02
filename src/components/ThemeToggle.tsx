@@ -1,65 +1,84 @@
 "use client";
 
 import { useTheme } from "@/components/ThemeProvider";
+import { Icon, type IconName } from "@/components/Icon";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
-export function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+type Theme = "light" | "dark" | "system";
 
+const options: { value: Theme; label: string; icon: IconName }[] = [
+  { value: "light", label: "Light", icon: "sun" },
+  { value: "dark", label: "Dark", icon: "moon" },
+  { value: "system", label: "Device", icon: "monitor" },
+];
+
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     // Deferred so the mount flag is not set synchronously inside the effect.
     const t = setTimeout(() => setMounted(true), 0);
     return () => clearTimeout(t);
   }, []);
+  return mounted;
+}
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const mounted = useMounted();
 
   if (!mounted) {
-    return (
-      <button
-        type="button"
-        className="rounded-lg p-2 text-muted"
-        aria-label="Toggle theme"
-      >
-        <span className="block h-5 w-5" />
-      </button>
-    );
+    return <span className="block h-8 w-8" aria-hidden />;
   }
 
-  function cycleTheme() {
-    if (theme === "light") setTheme("dark");
-    else if (theme === "dark") setTheme("system");
-    else setTheme("light");
-  }
-
-  const isDark = resolvedTheme === "dark";
+  const current = options.find((o) => o.value === theme) ?? options[1];
+  const next = options[(options.indexOf(current) + 1) % options.length];
 
   return (
     <button
       type="button"
-      onClick={cycleTheme}
-      className="rounded-md border border-border p-2 text-muted transition hover:border-muted hover:bg-surface-elevated hover:text-foreground"
-      aria-label={`Current theme: ${theme}. Click to cycle.`}
-      title={`Theme: ${theme}`}
+      onClick={() => setTheme(next.value)}
+      className="flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface hover:text-foreground"
+      aria-label={`Theme: ${current.label}. Switch to ${next.label}.`}
+      title={`Theme: ${current.label}`}
     >
-      {isDark ? (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
-        </svg>
-      ) : (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
-        </svg>
-      )}
+      <Icon name={current.icon} className="h-[18px] w-[18px]" />
     </button>
+  );
+}
+
+/** Explicit three-way theme picker for the mobile menu. */
+export function ThemeSegmented() {
+  const { theme, setTheme } = useTheme();
+  const mounted = useMounted();
+
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Theme"
+      className="grid grid-cols-3 gap-1 rounded-lg border border-border bg-surface p-1"
+    >
+      {options.map((o) => {
+        const active = mounted && theme === o.value;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => setTheme(o.value)}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-[13px] font-medium transition-colors",
+              active
+                ? "bg-surface-elevated text-foreground shadow-[var(--shadow)]"
+                : "text-muted hover:text-foreground"
+            )}
+          >
+            <Icon name={o.icon} className="h-4 w-4" />
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
