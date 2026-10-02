@@ -88,9 +88,10 @@ export async function POST(request: NextRequest) {
 
     // The slug ID collides when different time strings normalize the same
     // (e.g. "6:00 AM" vs "6.00 AM"), which would overwrite an active session.
-    // Overwriting a cancelled document is allowed (re-adding that slot).
+    // Overwriting a cancelled document is allowed (re-adding that slot), but
+    // only once it holds no bookings — otherwise its count would reset to 0.
     const idOwner = await getTrekSessionById(id);
-    if (idOwner && idOwner.status !== "cancelled") {
+    if (idOwner && (idOwner.status !== "cancelled" || idOwner.bookedCount > 0)) {
       return NextResponse.json(
         { error: "A hiking day already exists for this date and time" },
         { status: 409 }

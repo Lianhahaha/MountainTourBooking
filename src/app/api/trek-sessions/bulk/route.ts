@@ -62,8 +62,10 @@ export async function POST(request: NextRequest) {
     // Slug IDs can collide when different time strings normalize the same,
     // which would overwrite an active session document. Cancelled docs may be
     // overwritten (re-adding that slot).
+    // Cancelled docs that still hold bookings are kept too, so re-adding the
+    // slot can't reset their booked count to 0.
     const existingIds = new Set(
-      existing.filter((s) => s.status !== "cancelled").map((s) => s.id)
+      existing.filter((s) => s.status !== "cancelled" || s.bookedCount > 0).map((s) => s.id)
     );
 
     const created: TrekSession[] = [];
