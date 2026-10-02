@@ -651,6 +651,17 @@ export function BookingForm() {
                 emphasized
               />
             </div>
+            <p className="mt-4 text-xs leading-relaxed text-muted">
+              By submitting, you agree to our{" "}
+              <a href="/terms" target="_blank" rel="noopener" className="link-accent">
+                Terms of Use
+              </a>{" "}
+              and confirm you have read our{" "}
+              <a href="/privacy" target="_blank" rel="noopener" className="link-accent">
+                Privacy Policy
+              </a>
+              . Both open in a new tab, so your form stays filled in.
+            </p>
           </div>
         )}
 
