@@ -1,0 +1,796 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-02T06:02:18.462Z",
+  "title": "Design System: Tikling Apo Tours",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Dimmed Slate Ground",
+        "canonical": "#22272e",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Dimmed Ink",
+        "canonical": "#adbac7",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.008 250)",
+          "oklch(27% 0.02 250)",
+          "oklch(39% 0.02 250)",
+          "oklch(51% 0.02 250)",
+          "oklch(63% 0.02 250)",
+          "oklch(75% 0.02 250)",
+          "oklch(85% 0.02 250)",
+          "oklch(95% 0.008 250)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Slate Surface",
+        "canonical": "#262c34",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "surface-elevated": {
+        "role": "neutral",
+        "displayName": "Raised Slate",
+        "canonical": "#2d333b",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "canonical": "#909dab",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.008 250)",
+          "oklch(27% 0.02 250)",
+          "oklch(39% 0.02 250)",
+          "oklch(51% 0.02 250)",
+          "oklch(63% 0.02 250)",
+          "oklch(75% 0.02 250)",
+          "oklch(85% 0.02 250)",
+          "oklch(95% 0.008 250)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Slate Rule",
+        "canonical": "#444c56",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "input-bg": {
+        "role": "neutral",
+        "displayName": "Well Slate",
+        "canonical": "#1c2128",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Primer Green",
+        "canonical": "#3b8640",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.048 145)",
+          "oklch(27% 0.12 145)",
+          "oklch(39% 0.12 145)",
+          "oklch(51% 0.12 145)",
+          "oklch(63% 0.12 145)",
+          "oklch(75% 0.12 145)",
+          "oklch(85% 0.12 145)",
+          "oklch(95% 0.048 145)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Primer Green Hover",
+        "canonical": "#46954a",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.048 145)",
+          "oklch(27% 0.12 145)",
+          "oklch(39% 0.12 145)",
+          "oklch(51% 0.12 145)",
+          "oklch(63% 0.12 145)",
+          "oklch(75% 0.12 145)",
+          "oklch(85% 0.12 145)",
+          "oklch(95% 0.048 145)"
+        ]
+      },
+      "primary-foreground": {
+        "role": "primary",
+        "displayName": "On Green White",
+        "canonical": "#ffffff",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.000 0)",
+          "oklch(27% 0 0)",
+          "oklch(39% 0 0)",
+          "oklch(51% 0 0)",
+          "oklch(63% 0 0)",
+          "oklch(75% 0 0)",
+          "oklch(85% 0 0)",
+          "oklch(95% 0.000 0)"
+        ]
+      },
+      "primary-muted": {
+        "role": "primary",
+        "displayName": "Green Wash",
+        "canonical": "rgba(70, 149, 74, 0.15)",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.048 145)",
+          "oklch(27% 0.12 145)",
+          "oklch(39% 0.12 145)",
+          "oklch(51% 0.12 145)",
+          "oklch(63% 0.12 145)",
+          "oklch(75% 0.12 145)",
+          "oklch(85% 0.12 145)",
+          "oklch(95% 0.048 145)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Link Blue",
+        "canonical": "#539bf5",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.060 255)",
+          "oklch(27% 0.15 255)",
+          "oklch(39% 0.15 255)",
+          "oklch(51% 0.15 255)",
+          "oklch(63% 0.15 255)",
+          "oklch(75% 0.15 255)",
+          "oklch(85% 0.15 255)",
+          "oklch(95% 0.060 255)"
+        ]
+      },
+      "accent-hover": {
+        "role": "secondary",
+        "displayName": "Link Blue Hover",
+        "canonical": "#6cb6ff",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.060 255)",
+          "oklch(27% 0.15 255)",
+          "oklch(39% 0.15 255)",
+          "oklch(51% 0.15 255)",
+          "oklch(63% 0.15 255)",
+          "oklch(75% 0.15 255)",
+          "oklch(85% 0.15 255)",
+          "oklch(95% 0.060 255)"
+        ]
+      },
+      "accent-muted": {
+        "role": "secondary",
+        "displayName": "Blue Wash",
+        "canonical": "rgba(83, 155, 245, 0.15)",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.060 255)",
+          "oklch(27% 0.15 255)",
+          "oklch(39% 0.15 255)",
+          "oklch(51% 0.15 255)",
+          "oklch(63% 0.15 255)",
+          "oklch(75% 0.15 255)",
+          "oklch(85% 0.15 255)",
+          "oklch(95% 0.060 255)"
+        ]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Trail Amber",
+        "canonical": "#c69026",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.048 75)",
+          "oklch(27% 0.12 75)",
+          "oklch(39% 0.12 75)",
+          "oklch(51% 0.12 75)",
+          "oklch(63% 0.12 75)",
+          "oklch(75% 0.12 75)",
+          "oklch(85% 0.12 75)",
+          "oklch(95% 0.048 75)"
+        ]
+      },
+      "warning-muted": {
+        "role": "tertiary",
+        "displayName": "Amber Wash",
+        "canonical": "rgba(198, 144, 38, 0.15)",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.048 75)",
+          "oklch(27% 0.12 75)",
+          "oklch(39% 0.12 75)",
+          "oklch(51% 0.12 75)",
+          "oklch(63% 0.12 75)",
+          "oklch(75% 0.12 75)",
+          "oklch(85% 0.12 75)",
+          "oklch(95% 0.048 75)"
+        ]
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Signal Red",
+        "canonical": "#e5534b",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.068 25)",
+          "oklch(27% 0.17 25)",
+          "oklch(39% 0.17 25)",
+          "oklch(51% 0.17 25)",
+          "oklch(63% 0.17 25)",
+          "oklch(75% 0.17 25)",
+          "oklch(85% 0.17 25)",
+          "oklch(95% 0.068 25)"
+        ]
+      },
+      "danger-muted": {
+        "role": "tertiary",
+        "displayName": "Red Wash",
+        "canonical": "rgba(229, 83, 75, 0.15)",
+        "theme": "dark",
+        "tonalRamp": [
+          "oklch(15% 0.068 25)",
+          "oklch(27% 0.17 25)",
+          "oklch(39% 0.17 25)",
+          "oklch(51% 0.17 25)",
+          "oklch(63% 0.17 25)",
+          "oklch(75% 0.17 25)",
+          "oklch(85% 0.17 25)",
+          "oklch(95% 0.068 25)"
+        ]
+      },
+      "background-light": {
+        "role": "neutral",
+        "displayName": "Soft Paper",
+        "canonical": "#fafbfc",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "foreground-light": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#2c333a",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.008 250)",
+          "oklch(27% 0.02 250)",
+          "oklch(39% 0.02 250)",
+          "oklch(51% 0.02 250)",
+          "oklch(63% 0.02 250)",
+          "oklch(75% 0.02 250)",
+          "oklch(85% 0.02 250)",
+          "oklch(95% 0.008 250)"
+        ]
+      },
+      "surface-light": {
+        "role": "neutral",
+        "displayName": "Slate Surface (light)",
+        "canonical": "#f3f5f7",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "surface-elevated-light": {
+        "role": "neutral",
+        "displayName": "Raised Slate (light)",
+        "canonical": "#ffffff",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "muted-light": {
+        "role": "neutral",
+        "displayName": "Quiet Ink (light)",
+        "canonical": "#59636e",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.008 250)",
+          "oklch(27% 0.02 250)",
+          "oklch(39% 0.02 250)",
+          "oklch(51% 0.02 250)",
+          "oklch(63% 0.02 250)",
+          "oklch(75% 0.02 250)",
+          "oklch(85% 0.02 250)",
+          "oklch(95% 0.008 250)"
+        ]
+      },
+      "border-light": {
+        "role": "neutral",
+        "displayName": "Slate Rule (light)",
+        "canonical": "#d8dee4",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "input-bg-light": {
+        "role": "neutral",
+        "displayName": "Well Slate (light)",
+        "canonical": "#ffffff",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.006 255)",
+          "oklch(27% 0.015 255)",
+          "oklch(39% 0.015 255)",
+          "oklch(51% 0.015 255)",
+          "oklch(63% 0.015 255)",
+          "oklch(75% 0.015 255)",
+          "oklch(85% 0.015 255)",
+          "oklch(95% 0.006 255)"
+        ]
+      },
+      "primary-light": {
+        "role": "primary",
+        "displayName": "Primer Green (light)",
+        "canonical": "#1f883d",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.048 145)",
+          "oklch(27% 0.12 145)",
+          "oklch(39% 0.12 145)",
+          "oklch(51% 0.12 145)",
+          "oklch(63% 0.12 145)",
+          "oklch(75% 0.12 145)",
+          "oklch(85% 0.12 145)",
+          "oklch(95% 0.048 145)"
+        ]
+      },
+      "primary-hover-light": {
+        "role": "primary",
+        "displayName": "Primer Green Hover (light)",
+        "canonical": "#1a7f37",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.048 145)",
+          "oklch(27% 0.12 145)",
+          "oklch(39% 0.12 145)",
+          "oklch(51% 0.12 145)",
+          "oklch(63% 0.12 145)",
+          "oklch(75% 0.12 145)",
+          "oklch(85% 0.12 145)",
+          "oklch(95% 0.048 145)"
+        ]
+      },
+      "primary-muted-light": {
+        "role": "primary",
+        "displayName": "Green Wash (light)",
+        "canonical": "rgba(31, 136, 61, 0.1)",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.048 145)",
+          "oklch(27% 0.12 145)",
+          "oklch(39% 0.12 145)",
+          "oklch(51% 0.12 145)",
+          "oklch(63% 0.12 145)",
+          "oklch(75% 0.12 145)",
+          "oklch(85% 0.12 145)",
+          "oklch(95% 0.048 145)"
+        ]
+      },
+      "accent-light": {
+        "role": "secondary",
+        "displayName": "Link Blue (light)",
+        "canonical": "#0969da",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.060 255)",
+          "oklch(27% 0.15 255)",
+          "oklch(39% 0.15 255)",
+          "oklch(51% 0.15 255)",
+          "oklch(63% 0.15 255)",
+          "oklch(75% 0.15 255)",
+          "oklch(85% 0.15 255)",
+          "oklch(95% 0.060 255)"
+        ]
+      },
+      "accent-hover-light": {
+        "role": "secondary",
+        "displayName": "Link Blue Hover (light)",
+        "canonical": "#0550ae",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.060 255)",
+          "oklch(27% 0.15 255)",
+          "oklch(39% 0.15 255)",
+          "oklch(51% 0.15 255)",
+          "oklch(63% 0.15 255)",
+          "oklch(75% 0.15 255)",
+          "oklch(85% 0.15 255)",
+          "oklch(95% 0.060 255)"
+        ]
+      },
+      "accent-muted-light": {
+        "role": "secondary",
+        "displayName": "Blue Wash (light)",
+        "canonical": "rgba(9, 105, 218, 0.1)",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.060 255)",
+          "oklch(27% 0.15 255)",
+          "oklch(39% 0.15 255)",
+          "oklch(51% 0.15 255)",
+          "oklch(63% 0.15 255)",
+          "oklch(75% 0.15 255)",
+          "oklch(85% 0.15 255)",
+          "oklch(95% 0.060 255)"
+        ]
+      },
+      "warning-light": {
+        "role": "tertiary",
+        "displayName": "Trail Amber (light)",
+        "canonical": "#9a6700",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.048 75)",
+          "oklch(27% 0.12 75)",
+          "oklch(39% 0.12 75)",
+          "oklch(51% 0.12 75)",
+          "oklch(63% 0.12 75)",
+          "oklch(75% 0.12 75)",
+          "oklch(85% 0.12 75)",
+          "oklch(95% 0.048 75)"
+        ]
+      },
+      "warning-muted-light": {
+        "role": "tertiary",
+        "displayName": "Amber Wash (light)",
+        "canonical": "rgba(154, 103, 0, 0.1)",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.048 75)",
+          "oklch(27% 0.12 75)",
+          "oklch(39% 0.12 75)",
+          "oklch(51% 0.12 75)",
+          "oklch(63% 0.12 75)",
+          "oklch(75% 0.12 75)",
+          "oklch(85% 0.12 75)",
+          "oklch(95% 0.048 75)"
+        ]
+      },
+      "danger-light": {
+        "role": "tertiary",
+        "displayName": "Signal Red (light)",
+        "canonical": "#cf222e",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.068 25)",
+          "oklch(27% 0.17 25)",
+          "oklch(39% 0.17 25)",
+          "oklch(51% 0.17 25)",
+          "oklch(63% 0.17 25)",
+          "oklch(75% 0.17 25)",
+          "oklch(85% 0.17 25)",
+          "oklch(95% 0.068 25)"
+        ]
+      },
+      "danger-muted-light": {
+        "role": "tertiary",
+        "displayName": "Red Wash (light)",
+        "canonical": "rgba(207, 34, 46, 0.1)",
+        "theme": "light",
+        "tonalRamp": [
+          "oklch(15% 0.068 25)",
+          "oklch(27% 0.17 25)",
+          "oklch(39% 0.17 25)",
+          "oklch(51% 0.17 25)",
+          "oklch(63% 0.17 25)",
+          "oklch(75% 0.17 25)",
+          "oklch(85% 0.17 25)",
+          "oklch(95% 0.068 25)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The single landing headline."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Next-climb month and day; tabular figures."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section h2s."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h3 inside sections and boxes; legal h2."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Base 15px body copy."
+      },
+      "body-sm": {
+        "displayName": "Body small",
+        "purpose": "Section descriptions, box copy, FAQ answers."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Box header titles, nav, form labels, slot-meter wording."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Spec-strip labels and pills, sentence case."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lead-box-dark",
+        "value": "0 1px 0 rgba(0, 0, 0, 0.2), 0 8px 24px -8px rgba(28, 33, 40, 0.6)",
+        "purpose": "Hero Next-climb box and open phone menu, dark theme."
+      },
+      {
+        "name": "lead-box-light",
+        "value": "0 1px 0 rgba(31, 35, 40, 0.04), 0 3px 8px -2px rgba(31, 35, 40, 0.08)",
+        "purpose": "Same uses, light theme."
+      },
+      {
+        "name": "hollow-segment",
+        "value": "inset 0 0 0 1.5px var(--border)",
+        "purpose": "Taken slot segments; an outline, not elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "seg-in",
+        "value": "700ms cubic-bezier(0.16, 1, 0.3, 1) both; delay calc(var(--i) * 55ms + 250ms)",
+        "purpose": "Open slot segments press in once on first paint (scaleY 0.25 to 1, opacity 0.35 to 1); hero meter only; disabled under reduced motion."
+      },
+      {
+        "name": "state-transition",
+        "value": "color transitions, Tailwind default duration",
+        "purpose": "Buttons, links, nav and list hovers change colour only."
+      },
+      {
+        "name": "sticky-bar-slide",
+        "value": "transform 300ms ease-out",
+        "purpose": "Phone booking bar slides in and out."
+      },
+      {
+        "name": "anchor-scroll",
+        "value": "smooth; auto under reduced motion",
+        "purpose": "Anchor scrolling with a 4.5rem header offset."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "pointer-coarse",
+        "value": "(pointer: coarse)",
+        "purpose": "44px minimum tap targets"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action: book, send, confirm.",
+      "html": "<a class=\"ds-btn-cta\" href=\"#\">Book this date <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 20px;border-radius:6px;background:var(--primary);color:var(--primary-foreground);font-family:var(--font-sans);font-size:14px;font-weight:600;text-decoration:none;transition:background-color .15s}.ds-btn-cta:hover{background:var(--primary-hover)}.ds-btn-cta:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Small Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary-sm",
+      "description": "Header and sticky-bar Book button.",
+      "html": "<a class=\"ds-btn-cta-sm\" href=\"#\">Book a climb</a>",
+      "css": ".ds-btn-cta-sm{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:6px 14px;border-radius:6px;background:var(--primary);color:var(--primary-foreground);font-family:var(--font-sans);font-size:14px;font-weight:600;text-decoration:none;transition:background-color .15s}.ds-btn-cta-sm:hover{background:var(--primary-hover)}.ds-btn-cta-sm:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Alternative action such as requesting a private climb.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Request a private climb</a>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 20px;border-radius:6px;border:1px solid var(--border);background:var(--surface-elevated);color:var(--foreground);font-family:var(--font-sans);font-size:14px;font-weight:600;text-decoration:none;transition:border-color .15s}.ds-btn-secondary:hover{border-color:var(--muted)}.ds-btn-secondary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Box with Header",
+      "kind": "card",
+      "refersTo": "box",
+      "description": "GitHub-style bordered box with a tinted header row.",
+      "html": "<div class=\"ds-box\"><div class=\"ds-box-header\"><span class=\"ds-box-title\">Next climb</span><span class=\"ds-box-meta\">Mt. Apo Summit</span></div><div class=\"ds-box-body\">Box content sits here at 14px.</div></div>",
+      "css": ".ds-box{overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--surface-elevated);color:var(--foreground);font-family:var(--font-sans);max-width:400px}.ds-box-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface)}.ds-box-title{font-size:13px;font-weight:600}.ds-box-meta{font-size:12px;color:var(--muted)}.ds-box-body{padding:16px 20px;font-size:14px;color:var(--muted)}"
+    },
+    {
+      "name": "Slot Meter",
+      "kind": "custom",
+      "refersTo": "slot-segment",
+      "description": "One segment per slot: open filled, taken hollow, words always shown.",
+      "html": "<div><div class=\"ds-meter\"><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-taken\"></span><span class=\"ds-seg ds-taken\"></span><span class=\"ds-seg ds-taken\"></span></div><p class=\"ds-meter-label\">5 of 8 slots left</p></div>",
+      "css": ".ds-meter{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px;width:280px}.ds-seg{height:10px;border-radius:2px}.ds-open{background:var(--primary)}.ds-taken{box-shadow:inset 0 0 0 1.5px var(--border)}.ds-meter-label{margin:6px 0 0;font-family:var(--font-sans);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--foreground)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field-input",
+      "description": "Form field with its label above.",
+      "html": "<label class=\"ds-label\">Your name<input class=\"ds-input\" placeholder=\"Juan Dela Cruz\"></label>",
+      "css": ".ds-label{display:block;font-family:var(--font-sans);font-size:13px;font-weight:500;color:var(--foreground);max-width:320px}.ds-input{display:block;width:100%;margin-top:4px;padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--input-bg);color:var(--foreground);font-size:14px;caret-color:var(--primary);transition:border-color .15s,box-shadow .15s}.ds-input::placeholder{color:var(--muted)}.ds-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 25%,transparent)}"
+    },
+    {
+      "name": "Label Pills",
+      "kind": "chip",
+      "refersTo": "label-pill",
+      "description": "Informational difficulty and status pills; never clickable.",
+      "html": "<span class=\"ds-pill ds-easy\">Easy</span> <span class=\"ds-pill ds-hard\">Hard</span> <span class=\"ds-pill ds-outline\">Private group</span> <span class=\"ds-pill ds-low\">Only 2 slots left</span>",
+      "css": ".ds-pill{display:inline-flex;border-radius:9999px;padding:2px 8px;font-family:var(--font-sans);font-size:11px;font-weight:600}.ds-easy{background:var(--primary-muted);color:var(--primary)}.ds-hard{background:var(--danger-muted);color:var(--danger)}.ds-outline{border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent);font-size:12px;font-weight:500}.ds-low{border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);background:var(--warning-muted);color:var(--warning);font-size:12px}"
+    },
+    {
+      "name": "Desktop Nav",
+      "kind": "nav",
+      "refersTo": "nav-link-active",
+      "description": "Pill nav links with the scroll-tracked current section.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-link ds-current\">Dates</a><a href=\"#\" class=\"ds-nav-link\">Inclusions</a><a href=\"#\" class=\"ds-nav-link\">FAQ</a></nav>",
+      "css": ".ds-nav{display:flex;gap:2px;font-family:var(--font-sans)}.ds-nav-link{padding:6px 10px;border-radius:6px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .15s}.ds-nav-link:hover{color:var(--foreground)}.ds-current{background:var(--surface);color:var(--foreground)}.ds-nav-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Trail Repo",
+    "overview": "The site borrows GitHub Primer's vocabulary wholesale and softens it: bordered boxes with tinted header rows, 6px corners, small label pills, green for the action you take and blue for the link you follow. The owner pinned this theme. The redesign changed the palette's temperature and the page layout, not the world. Dark mode is the default and uses GitHub \"dark dimmed\" tones. Light mode is GitHub light with gentler grounds (a near-white page, a cool grey surface, softened ink).\n\nDensity is compact and phone-first. Body text is 15px, labels are 13px, and the Next-climb box carries date numerals, a slot meter, the price and a Book button above the fold at 390x844. Information sits in boxes and divided lists rather than in floating cards. Photos sit in plain 6px-cornered frames with no scrims or overlays. Depth comes from tonal layering (page, surface, elevated surface) plus a single soft shadow kept for the boxes that lead a page.\n\nThe one signature is the segmented slot meter: one segment per slot, open slots filled and taken slots hollow, with the count always spelled out in words beside it. It is the only moving element. Open segments press in once on first paint.",
+    "keyCharacteristics": [
+      "GitHub Primer vocabulary, softened: green primary buttons, blue links, bordered boxes, label pills.",
+      "Dark \"dimmed\" default, softened light alternative; every colour is a CSS custom property that swaps per theme.",
+      "One radius (6px) for everything rectangular; pills are fully round; slot segments are 2px.",
+      "Outfit for headings and numerals, DM Sans for everything else.",
+      "Tonal layering first, one soft shadow second.",
+      "One motion moment (the slot meter), and it respects reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The Green Acts, Blue Goes Rule",
+        "body": "Green means \"do this\" (book, send, confirm) and blue means \"go there\" (links, focus). Never use a blue button for the main action or a green text link.",
+        "section": "colors"
+      },
+      {
+        "name": "The Scarcity Colour Rule",
+        "body": "Amber appears only when something is running out or being rated, and red only when something is full or wrong. Neither is decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Theme Token Rule",
+        "body": "Never hardcode a hex in a component. Every colour is a custom property with a dark and a light value, and alpha tints use `/opacity` on the token (for example border-accent/40).",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Every date, slot count, price and booking reference uses tabular figures so the numbers don't jitter as they change.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence-Case Label Rule",
+        "body": "Small labels are sentence case, xs to 13px, semibold, muted. No tracked uppercase labels, and no label sits above a heading as an eyebrow.",
+        "section": "typography"
+      },
+      {
+        "name": "The Band-and-Rule Rule",
+        "body": "Sections are separated by a 1px Slate Rule and a ground change, never by decorative dividers or large empty gaps.",
+        "section": "layout"
+      },
+      {
+        "name": "The One Lifted Box Rule",
+        "body": "At most one box per view carries the shadow, and it is the one holding the primary action. Hover never adds shadow; hover changes border or ground.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** put the main action in a Primer Green button and every navigational link in Link Blue.",
+      "**Do** group related content in a Box with a tinted header row, and divide items inside it with 1px rules.",
+      "**Do** use 6px corners on every rectangle and full rounding only for pills, step numbers and toggles.",
+      "**Do** spell out slot counts in words beside every slot meter, and use tabular figures for dates, slots and prices.",
+      "**Do** keep 44px minimum tap targets on coarse pointers only, and 16px inputs on phones.",
+      "**Do** define every new colour as a custom property with both a dark-dimmed and a softened-light value.",
+      "**Do** draw icons from the single 24px, 1.75-stroke inline SVG set.",
+      "**Do** label built-in sample albums \"Sample album · stock photos\" and keep them out of featured slots.",
+      "**Do** gate any new motion behind `prefers-reduced-motion: no-preference`; the slot-meter entrance is the only signature motion."
+    ],
+    "donts": [
+      "**Don't** put eyebrow or kicker labels above headings, and don't use tracked uppercase micro-labels.",
+      "**Don't** nest a bordered box or callout inside another box; use plain text, a divider or a header row instead.",
+      "**Don't** lay gradient scrims or text over photos.",
+      "**Don't** use unicode glyphs (check marks, stars, arrows, bullets) as icons; use the SVG set.",
+      "**Don't** add a second shadowed box to a view, and don't add shadow on hover.",
+      "**Don't** use amber or red for anything other than scarcity, ratings, full dates or errors.",
+      "**Don't** introduce a radius other than 6px, full, or the 2px slot segment."
+    ]
+  }
+}
