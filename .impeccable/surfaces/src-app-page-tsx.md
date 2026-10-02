@@ -12,13 +12,13 @@ Mode: Persuade.
 Audience: first-time Mt. Apo climbers (barkadas, solo joiners) arriving from Facebook links on phones.
 Action: book a scheduled date; secondary, request a private trek.
 Proof on hand: live session dates and slot counts, trip specs, guide credentials, permit list, FAQ policies, approved reviews, owner hike albums.
-Constraints: keep the GitHub theme (user-pinned), softer palette, compact sizing, phone-first, dark default, no invented claims, no online payment implied.
+Constraints: keep the GitHub theme and its standard palette (user-pinned; extra GitHub accents allowed), easy navigation, compact sizing, fully responsive, dark default, no invented claims, no online payment implied.
 
 ## Direction contract
 
-THESIS: Keep the incumbent GitHub-style theme and soften it; win on layout. The next bookable date, its slots, and its price lead the page instead of a photo hero with stats.
+THESIS: Keep the GitHub theme with its own palette; win on layout and navigation. The next bookable date, its slots, and its price lead the page instead of a photo hero with stats.
 
-OWN-WORLD: GitHub Primer vocabulary — bordered boxes with tinted header rows, 6px corners, label pills, green primary buttons, blue links. Dark default uses GitHub "dark dimmed" tones; light uses softened GitHub light. DM Sans for text, Outfit for headings and date numerals. Per-slot segmented meter (open = filled, taken = hollow, words always shown).
+OWN-WORLD: GitHub Primer vocabulary — bordered boxes with tinted header rows, 6px corners, label pills, green primary buttons, blue links. Standard GitHub dark (default) and light palettes, plus GitHub purple for private groups and coral for the active tab. Sticky underline section tabs under the header. DM Sans for text, Outfit for headings and date numerals. Per-slot segmented meter (open = filled, taken = hollow, words always shown).
 
 STORY: The visitor sees the next climb box with date, slots left, and price and can book in one tap. Scrolling: all dates, private-group option, how booking works, inclusions and pack list, guide and licenses, latest album, reviews, FAQ, contact. They believe it is organized and licensed; they book.
 
