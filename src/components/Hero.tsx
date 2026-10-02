@@ -137,6 +137,7 @@ function NextClimbTag({
         </div>
 
         <Link
+          id="hero-book"
           href={`/book?trip=${trip.id}&session=${session.id}`}
           className="btn-cta mt-4 w-full !py-3 text-[15px]"
         >
@@ -167,7 +168,7 @@ function NoDatesTag() {
         </p>
         <div className="my-4 border-t border-border" />
         <div className="flex flex-col gap-2">
-          <Link href="/book?trip=private-custom" className="btn-cta w-full">
+          <Link id="hero-book" href="/book?trip=private-custom" className="btn-cta w-full">
             Request a private climb
           </Link>
           <a href="#contact" className="btn-secondary w-full">

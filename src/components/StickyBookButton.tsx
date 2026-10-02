@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Phone-only booking bar. Appears once the hero tag scrolls away and hides
+ * Phone-only booking bar. Appears once the hero Book button scrolls away and hides
  * while the contact form is on screen so it never covers inputs.
  */
 export function StickyBookButton({
@@ -17,23 +17,29 @@ export function StickyBookButton({
   const [atContact, setAtContact] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setPastHero(window.scrollY > 560);
-    const raf = requestAnimationFrame(onScroll);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const observers: IntersectionObserver[] = [];
+
+    // Show the bar only after the hero's own Book button has scrolled away.
+    const heroBook = document.getElementById("hero-book");
+    if (heroBook) {
+      const heroObserver = new IntersectionObserver(([entry]) =>
+        setPastHero(!entry.isIntersecting && entry.boundingClientRect.top < 0)
+      );
+      heroObserver.observe(heroBook);
+      observers.push(heroObserver);
+    }
 
     const contact = document.getElementById("contact");
-    const observer = contact
-      ? new IntersectionObserver(([entry]) => setAtContact(entry.isIntersecting), {
-          rootMargin: "0px 0px -20% 0px",
-        })
-      : null;
-    if (contact && observer) observer.observe(contact);
+    if (contact) {
+      const contactObserver = new IntersectionObserver(
+        ([entry]) => setAtContact(entry.isIntersecting),
+        { rootMargin: "0px 0px -20% 0px" }
+      );
+      contactObserver.observe(contact);
+      observers.push(contactObserver);
+    }
 
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      observer?.disconnect();
-    };
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   const visible = pastHero && !atContact;
