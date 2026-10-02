@@ -26,8 +26,7 @@ export default async function BookingSuccessPage({
             </h1>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            Thank you for booking with {org.name}. Your request is in the queue — we&apos;ll
-            review it and email a confirmation to the address you gave once your slot is
+            Thanks for booking with {org.name}. We&apos;ll email you once your slot is
             approved.
           </p>
 
@@ -44,9 +43,9 @@ export default async function BookingSuccessPage({
               <p className="spec-label">What happens next</p>
               <ol className="mt-2.5 space-y-2">
                 {[
-                  "We review your booking, usually within 24–48 hours.",
-                  "You get an email with your trek date and meet-up details once approved.",
-                  "Pay in person on trek day — cash or GCash.",
+                  "We review it within 24–48 hours.",
+                  "You get an email with meet-up details.",
+                  "Pay cash or GCash on trek day.",
                 ].map((step, i) => (
                   <li key={step} className="flex gap-3 text-sm text-foreground">
                     <span className="tabular w-4 shrink-0 text-right font-bold text-muted">

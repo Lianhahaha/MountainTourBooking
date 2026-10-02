@@ -25,8 +25,7 @@ export default function BookPage() {
               Book a climb
             </h1>
             <p className="mt-1 text-sm text-muted">
-              Four short steps. We confirm within 24–48 hours, and you pay in person on trek
-              day — cash or GCash.
+              4 quick steps. Confirmed in 24–48 hrs. Pay cash or GCash on trek day.
             </p>
           </div>
           <Suspense fallback={<BookingFormFallback />}>
