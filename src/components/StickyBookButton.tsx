@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Phone-only booking bar. Appears once the hero Book button scrolls away and hides
- * while the contact form is on screen so it never covers inputs.
+ * while the contact section or footer is on screen.
  */
 export function StickyBookButton({
   next,
@@ -29,14 +29,25 @@ export function StickyBookButton({
       observers.push(heroObserver);
     }
 
-    const contact = document.getElementById("contact");
-    if (contact) {
-      const contactObserver = new IntersectionObserver(
-        ([entry]) => setAtContact(entry.isIntersecting),
+    // Hide while the contact section or footer is on screen so the bar never
+    // covers form fields or footer links (e.g. Owner login).
+    const endZones = [document.getElementById("contact"), document.querySelector("footer")].filter(
+      (el): el is HTMLElement => el !== null
+    );
+    if (endZones.length > 0) {
+      const inView = new Set<Element>();
+      const endObserver = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) inView.add(entry.target);
+            else inView.delete(entry.target);
+          }
+          setAtContact(inView.size > 0);
+        },
         { rootMargin: "0px 0px -20% 0px" }
       );
-      contactObserver.observe(contact);
-      observers.push(contactObserver);
+      endZones.forEach((el) => endObserver.observe(el));
+      observers.push(endObserver);
     }
 
     return () => observers.forEach((o) => o.disconnect());
