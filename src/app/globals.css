@@ -246,7 +246,7 @@ html {
 }
 
 .booking-required-badge {
-  @apply ml-2 inline-flex rounded-full border border-warning/40 bg-warning-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-warning;
+  @apply ml-2 inline-flex rounded-full border border-warning/40 bg-warning-muted px-2 py-0.5 text-[11px] font-semibold text-warning;
 }
 
 .booking-option-card {
