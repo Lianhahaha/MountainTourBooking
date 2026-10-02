@@ -155,47 +155,80 @@ function DateRow({
   const { month, day, weekday, year } = dateParts(session.date);
   const remaining = getSessionSlotsRemaining(session);
   const price = session.price ?? trip.price;
+  const full = remaining === 0;
 
   return (
-    <li className="grid gap-x-5 gap-y-2.5 px-4 py-3.5 sm:grid-cols-2 sm:items-center lg:grid-cols-[8rem_minmax(0,1fr)_minmax(0,14rem)_auto]">
-      <div className="flex items-baseline gap-2.5 lg:block">
-        <p className="tabular font-display text-[1.75rem] font-extrabold leading-none tracking-tight text-foreground">
-          {month} <span className="text-success">{day}</span>
+    <li
+      className={cn(
+        "grid grid-cols-[3.25rem_minmax(0,1fr)_auto] gap-x-3 gap-y-3 px-4 py-4 [grid-template-areas:'tile_info_price'_'tile_avail_book']",
+        "sm:gap-x-4 lg:grid-cols-[3.25rem_minmax(0,1fr)_13rem_6.5rem_auto] lg:items-center lg:gap-x-6 lg:[grid-template-areas:'tile_info_avail_price_book']",
+        isNext && "bg-accent-muted/40"
+      )}
+    >
+      <div
+        className="self-start overflow-hidden rounded-md border border-border bg-background text-center [grid-area:tile] lg:self-center"
+        aria-hidden
+      >
+        <p className="bg-accent-muted py-0.5 text-[11px] font-bold tracking-wide text-accent">
+          {month}
         </p>
-        <p className="text-xs text-muted lg:mt-1">
-          {weekday}, {year}
+        <p className="tabular py-1.5 font-display text-xl font-bold leading-none text-foreground">
+          {day}
         </p>
       </div>
 
-      <div className="min-w-0 text-[13px]">
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-foreground">
-          <span className="tabular flex items-center gap-1.5">
-            <Icon name="clock" className="h-3.5 w-3.5 text-muted" />
-            {session.time} meet-up
+      <div className="min-w-0 [grid-area:info]">
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="text-[15px] font-semibold text-foreground">
+            {weekday}, {month} {day}
           </span>
           {isNext && (
-            <span className="rounded-full border border-primary/40 px-1.5 py-px text-[11px] font-medium text-success">
-              Next
+            <span className="rounded-full border border-accent/40 bg-accent-muted px-2 py-px text-[11px] font-semibold text-accent">
+              Next climb
             </span>
           )}
         </p>
-        {session.notes && <p className="mt-0.5 line-clamp-2 text-muted">{session.notes}</p>}
+        <p className="tabular mt-0.5 flex items-center gap-1.5 text-[13px] text-muted">
+          <Icon name="clock" className="h-3.5 w-3.5 shrink-0" />
+          {session.time} meet-up · {year}
+        </p>
+        {session.notes && (
+          <p className="mt-1 flex items-start gap-1.5 text-[13px] text-muted">
+            <Icon name="pin" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+            <span className="line-clamp-2">{session.notes}</span>
+          </p>
+        )}
       </div>
 
-      <SlotMeter maxSlots={session.maxSlots} remaining={remaining} compact />
-
-      <div className="flex items-center justify-between gap-3 lg:justify-end">
-        <p className="tabular text-sm font-semibold text-foreground">
+      <p className="tabular text-right [grid-area:price] lg:text-left">
+        <span className="block text-base font-bold leading-tight text-foreground">
           {formatPrice(price)}
-          <span className="ml-1 text-xs font-normal text-muted">/ person</span>
-        </p>
-        <Link
-          href={`/book?trip=${trip.id}&session=${session.id}`}
-          className="btn-cta-sm"
-          aria-label={`Book ${weekday}, ${month} ${day}`}
-        >
-          Book
-        </Link>
+        </span>
+        <span className="text-xs text-muted">per person</span>
+      </p>
+
+      <div className="min-w-0 self-center [grid-area:avail]">
+        <SlotMeter maxSlots={session.maxSlots} remaining={remaining} compact />
+      </div>
+
+      <div className="self-center [grid-area:book]">
+        {full ? (
+          <span className="btn-secondary !min-h-[36px] cursor-not-allowed !px-3.5 !py-1.5 opacity-60">
+            Full
+          </span>
+        ) : (
+          <Link
+            href={`/book?trip=${trip.id}&session=${session.id}`}
+            className={cn(
+              isNext ? "btn-cta-sm" : "btn-secondary !min-h-[36px] !px-3.5 !py-1.5",
+              "whitespace-nowrap"
+            )}
+            aria-label={`Book ${weekday}, ${month} ${day}`}
+          >
+            Book
+            <Icon name="arrowRight" className="h-3.5 w-3.5" />
+          </Link>
+        )}
       </div>
     </li>
   );
