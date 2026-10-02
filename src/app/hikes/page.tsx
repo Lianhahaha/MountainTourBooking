@@ -86,7 +86,10 @@ export default async function HikesPage() {
                     </div>
 
                     {rest.length > 0 && (
-                      <div className="grid grid-cols-4 gap-px border-t border-border bg-border">
+                      <div
+                        className="grid gap-px border-t border-border bg-border"
+                        style={{ gridTemplateColumns: `repeat(${rest.length}, minmax(0, 1fr))` }}
+                      >
                         {rest.map((photo) => (
                           <div key={photo.id} className="relative aspect-[4/3] bg-surface">
                             <Image
