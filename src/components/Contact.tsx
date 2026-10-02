@@ -66,7 +66,7 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="bg-surface py-10 sm:py-14">
+    <section id="contact" className="py-10 sm:py-14">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-12">
         <div>
           <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
@@ -82,9 +82,9 @@ export function Contact() {
                 <a
                   href={c.href}
                   {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-elevated"
+                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface"
                 >
-                  <Icon name={c.icon} className="h-[18px] w-[18px] shrink-0 text-primary" />
+                  <Icon name={c.icon} className="h-[18px] w-[18px] shrink-0 text-success" />
                   <span className="min-w-0 flex-1">
                     <span className="block text-[11px] font-medium text-muted">{c.label}</span>
                     <span className="block truncate text-sm font-semibold text-foreground">
@@ -103,7 +103,7 @@ export function Contact() {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-md border border-border bg-surface-elevated p-4 sm:p-5"
+          className="rounded-md border border-border bg-surface p-4 sm:p-5"
         >
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -173,7 +173,7 @@ export function Contact() {
 
           <div role="status" aria-live="polite">
             {status === "success" && (
-              <p className="mt-3 flex items-center justify-center gap-1.5 text-sm text-primary">
+              <p className="mt-3 flex items-center justify-center gap-1.5 text-sm text-success">
                 <Icon name="check" className="h-4 w-4" />
                 Message sent. We&apos;ll get back to you soon.
               </p>

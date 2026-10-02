@@ -33,7 +33,7 @@ export function About() {
                   key={cred}
                   className="flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-[13px] text-foreground"
                 >
-                  <Icon name="check" className="h-3.5 w-3.5 text-primary" />
+                  <Icon name="check" className="h-3.5 w-3.5 text-success" />
                   {cred}
                 </li>
               ))}
@@ -78,7 +78,7 @@ export function About() {
           <Box className="mt-5">
             <BoxHeader>
               <span className="flex items-center gap-2 text-[13px] font-semibold text-foreground">
-                <Icon name="shield" className="h-4 w-4 text-primary" />
+                <Icon name="shield" className="h-4 w-4 text-success" />
                 Licenses &amp; permits
               </span>
               <span className="text-xs text-muted">{licenses.length} on file</span>
@@ -97,7 +97,7 @@ export function About() {
                     </p>
                   </div>
                   {doc.validUntil && (
-                    <span className="tabular shrink-0 self-start whitespace-nowrap rounded-full border border-primary/40 px-2 py-0.5 text-xs font-medium text-primary">
+                    <span className="tabular shrink-0 self-start whitespace-nowrap rounded-full border border-primary/40 px-2 py-0.5 text-xs font-medium text-success">
                       Valid until {doc.validUntil}
                     </span>
                   )}

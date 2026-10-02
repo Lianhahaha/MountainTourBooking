@@ -15,7 +15,7 @@ export function ReviewCard({ rating, comment, leadName, tripTitle, createdAt }: 
     : date.toLocaleDateString("en-PH", { month: "short", year: "numeric" });
 
   return (
-    <figure className="flex h-full flex-col rounded-md border border-border bg-surface-elevated p-4">
+    <figure className="flex h-full flex-col rounded-md border border-border bg-background p-4">
       <div className="flex gap-0.5 text-warning" role="img" aria-label={`${rating} out of 5 stars`}>
         {[1, 2, 3, 4, 5].map((star) => (
           <Icon

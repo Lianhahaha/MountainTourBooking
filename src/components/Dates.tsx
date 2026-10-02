@@ -160,7 +160,7 @@ function DateRow({
     <li className="grid gap-x-5 gap-y-2.5 px-4 py-3.5 md:grid-cols-[8rem_minmax(0,1fr)_minmax(0,14rem)_auto] md:items-center">
       <div className="flex items-baseline gap-2.5 md:block">
         <p className="tabular font-display text-[1.75rem] font-extrabold leading-none tracking-tight text-foreground">
-          {month} <span className="text-primary">{day}</span>
+          {month} <span className="text-success">{day}</span>
         </p>
         <p className="text-xs text-muted md:mt-1">
           {weekday}, {year}
@@ -174,7 +174,7 @@ function DateRow({
             {session.time} meet-up
           </span>
           {isNext && (
-            <span className="rounded-full border border-primary/40 px-1.5 py-px text-[11px] font-medium text-primary">
+            <span className="rounded-full border border-primary/40 px-1.5 py-px text-[11px] font-medium text-success">
               Next
             </span>
           )}

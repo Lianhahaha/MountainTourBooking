@@ -86,7 +86,7 @@ export function LegalPage({
                   <ul className="space-y-1.5">
                     {summary.map((point) => (
                       <li key={point} className="flex items-start gap-2.5 text-sm text-foreground">
-                        <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                         {point}
                       </li>
                     ))}

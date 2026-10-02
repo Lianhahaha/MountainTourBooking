@@ -21,10 +21,10 @@ export function FAQ() {
           </a>
         </div>
 
-        <div className="divide-y divide-border overflow-hidden rounded-md border border-border bg-surface">
+        <div className="divide-y divide-border overflow-hidden rounded-md border border-border bg-background">
           {faq.map((item, index) => (
             <details key={item.question} name="faq" open={index === 0} className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-surface-elevated [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-surface [&::-webkit-details-marker]:hidden">
                 <span className="text-sm font-semibold text-foreground">{item.question}</span>
                 <Icon
                   name="chevronDown"

@@ -63,7 +63,7 @@ export function Hero({
           <ul className="mt-5 flex flex-col gap-2 text-[13px] text-muted sm:flex-row sm:flex-wrap sm:gap-x-5">
             {reassurances.map((r) => (
               <li key={r.text} className="flex items-center gap-2">
-                <Icon name={r.icon} className="h-4 w-4 shrink-0 text-primary" />
+                <Icon name={r.icon} className="h-4 w-4 shrink-0 text-success" />
                 {r.text}
               </li>
             ))}
@@ -99,7 +99,7 @@ function NextClimbTag({
       <div className="p-4 sm:p-5">
         <p className="tabular font-display text-[3.5rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-6xl">
           {month}
-          <span className="ml-2 text-primary">{day}</span>
+          <span className="ml-2 text-success">{day}</span>
         </p>
         <p className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
           <span className="font-semibold text-foreground">

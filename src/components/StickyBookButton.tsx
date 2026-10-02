@@ -48,7 +48,7 @@ export function StickyBookButton({
     <div
       aria-hidden={!visible}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface-elevated/95 px-4 pt-2.5 backdrop-blur-md transition-transform duration-300 ease-out md:hidden",
+        "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 px-4 pt-2.5 backdrop-blur-md transition-transform duration-300 ease-out md:hidden",
         "pb-[max(0.625rem,env(safe-area-inset-bottom))]",
         visible ? "translate-y-0" : "pointer-events-none translate-y-full"
       )}

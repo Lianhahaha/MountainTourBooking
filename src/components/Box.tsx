@@ -11,7 +11,7 @@ export function Box({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-md border border-border bg-surface-elevated",
+        "overflow-hidden rounded-md border border-border bg-background",
         className
       )}
     >

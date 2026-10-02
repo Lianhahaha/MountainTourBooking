@@ -8,7 +8,7 @@ import type { Trip } from "@/types";
 type ListKey = "included" | "notIncluded" | "whatToBring";
 
 const lists: { key: ListKey; label: string; icon: IconName; tone: string }[] = [
-  { key: "included", label: "Included", icon: "check", tone: "text-primary" },
+  { key: "included", label: "Included", icon: "check", tone: "text-success" },
   { key: "notIncluded", label: "Not included", icon: "minus", tone: "text-muted" },
   { key: "whatToBring", label: "Pack list", icon: "backpack", tone: "text-accent" },
 ];
@@ -17,7 +17,7 @@ export function Inclusions({ trip }: { trip: Trip }) {
   const [active, setActive] = useState<ListKey>("included");
 
   return (
-    <section id="included" className="border-b border-border bg-surface py-10 sm:py-14">
+    <section id="included" className="border-b border-border py-10 sm:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
           What your {formatPrice(trip.price)} covers
@@ -29,7 +29,7 @@ export function Inclusions({ trip }: { trip: Trip }) {
         <div
           role="tablist"
           aria-label="Trek inclusions"
-          className="mt-5 grid grid-cols-3 gap-1 rounded-md border border-border bg-background p-1 md:hidden"
+          className="mt-5 grid grid-cols-3 gap-1 rounded-md border border-border bg-surface p-1 md:hidden"
         >
           {lists.map((list) => (
             <button
@@ -60,7 +60,7 @@ export function Inclusions({ trip }: { trip: Trip }) {
               role="tabpanel"
               aria-labelledby={`tab-${list.key}`}
               className={cn(
-                "overflow-hidden rounded-md border border-border bg-surface-elevated",
+                "overflow-hidden rounded-md border border-border bg-background",
                 active === list.key ? "block" : "hidden md:block"
               )}
             >

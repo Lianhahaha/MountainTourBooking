@@ -3,63 +3,71 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * GitHub-inspired design system, softened.
- * Dark follows GitHub "dark dimmed"; light follows GitHub light with gentler
- * grounds. Green = primary actions, blue = links, amber = few slots left.
+ * GitHub design system — dark canvas, green actions, blue links.
+ * Extra GitHub accents: purple (private groups), coral (active tab),
+ * amber (few slots, stars), red (full, errors).
  */
 
-/* Light — GitHub light, softened */
+/* Light — GitHub light */
 :root {
-  --background: #fafbfc;
-  --foreground: #2c333a;
-  --surface: #f3f5f7;
+  --background: #ffffff;
+  --foreground: #1f2328;
+  --surface: #f6f8fa;
   --surface-elevated: #ffffff;
-  --muted: #59636e;
-  --border: #d8dee4;
-  --primary: #1f883d;
-  --primary-hover: #1a7f37;
+  --muted: #656d76;
+  --border: #d0d7de;
+  --primary: #1a7f37;
+  --primary-hover: #2da44e;
   --primary-foreground: #ffffff;
-  --primary-muted: rgba(31, 136, 61, 0.1);
-  --secondary: #2c333a;
+  --primary-muted: rgba(26, 127, 55, 0.12);
+  --success: #1a7f37;
+  --secondary: #24292f;
   --secondary-hover: #424a53;
-  --secondary-foreground: #2c333a;
-  --secondary-muted: rgba(44, 51, 58, 0.06);
+  --secondary-foreground: #24292f;
+  --secondary-muted: rgba(31, 35, 40, 0.06);
   --accent: #0969da;
   --accent-hover: #0550ae;
-  --accent-muted: rgba(9, 105, 218, 0.1);
+  --accent-muted: rgba(9, 105, 218, 0.12);
+  --done: #8250df;
+  --done-muted: rgba(130, 80, 223, 0.12);
+  --tab-active: #fd8c73;
   --danger: #cf222e;
-  --danger-muted: rgba(207, 34, 46, 0.1);
+  --danger-muted: rgba(207, 34, 46, 0.12);
   --warning: #9a6700;
-  --warning-muted: rgba(154, 103, 0, 0.1);
+  --warning-muted: rgba(154, 103, 0, 0.12);
   --input-bg: #ffffff;
-  --shadow: 0 1px 0 rgba(31, 35, 40, 0.04), 0 3px 8px -2px rgba(31, 35, 40, 0.08);
+  --shadow: 0 1px 0 rgba(31, 35, 40, 0.04), 0 3px 6px rgba(140, 149, 159, 0.15);
 }
 
-/* Dark — GitHub dark dimmed */
+/* Dark — GitHub dark */
 .dark {
-  --background: #22272e;
-  --foreground: #adbac7;
-  --surface: #262c34;
-  --surface-elevated: #2d333b;
-  --muted: #909dab;
-  --border: #444c56;
-  --primary: #3b8640;
-  --primary-hover: #46954a;
+  --background: #0d1117;
+  --foreground: #e6edf3;
+  --surface: #161b22;
+  --surface-elevated: #21262d;
+  --muted: #8b949e;
+  --border: #30363d;
+  --primary: #238636;
+  --primary-hover: #2ea043;
   --primary-foreground: #ffffff;
-  --primary-muted: rgba(70, 149, 74, 0.15);
-  --secondary: #adbac7;
-  --secondary-hover: #cdd9e5;
-  --secondary-foreground: #adbac7;
-  --secondary-muted: rgba(173, 186, 199, 0.06);
-  --accent: #539bf5;
-  --accent-hover: #6cb6ff;
-  --accent-muted: rgba(83, 155, 245, 0.15);
-  --danger: #e5534b;
-  --danger-muted: rgba(229, 83, 75, 0.15);
-  --warning: #c69026;
-  --warning-muted: rgba(198, 144, 38, 0.15);
-  --input-bg: #1c2128;
-  --shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 8px 24px -8px rgba(28, 33, 40, 0.6);
+  --primary-muted: rgba(46, 160, 67, 0.15);
+  --success: #3fb950;
+  --secondary: #e6edf3;
+  --secondary-hover: #ffffff;
+  --secondary-foreground: #e6edf3;
+  --secondary-muted: rgba(230, 237, 243, 0.06);
+  --accent: #4493f8;
+  --accent-hover: #58a6ff;
+  --accent-muted: rgba(56, 139, 253, 0.15);
+  --done: #a371f7;
+  --done-muted: rgba(163, 113, 247, 0.15);
+  --tab-active: #f78166;
+  --danger: #f85149;
+  --danger-muted: rgba(248, 81, 73, 0.15);
+  --warning: #d29922;
+  --warning-muted: rgba(187, 128, 9, 0.15);
+  --input-bg: #0d1117;
+  --shadow: 0 0 0 1px #30363d, 0 8px 24px rgba(1, 4, 9, 0.6);
 }
 
 @theme inline {
@@ -79,6 +87,10 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-muted: var(--accent-muted);
+  --color-success: var(--success);
+  --color-done: var(--done);
+  --color-done-muted: var(--done-muted);
+  --color-tab-active: var(--tab-active);
   --color-danger: var(--danger);
   --color-danger-muted: var(--danger-muted);
   --color-warning: var(--warning);
@@ -91,7 +103,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 4.5rem;
+  scroll-padding-top: 6.75rem;
   -webkit-text-size-adjust: 100%;
 }
 
