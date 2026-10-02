@@ -12,7 +12,7 @@ export function ReviewCard({ rating, comment, leadName, tripTitle, createdAt }: 
   const date = new Date(createdAt);
   const when = Number.isNaN(date.getTime())
     ? ""
-    : date.toLocaleDateString("en-PH", { month: "short", year: "numeric" });
+    : date.toLocaleDateString("en-PH", { month: "short", year: "numeric", timeZone: "Asia/Manila" });
 
   return (
     <figure className="flex h-full flex-col rounded-md border border-border bg-background p-4">
