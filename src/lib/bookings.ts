@@ -1,6 +1,8 @@
 import type { BookingRequest, BookingStatus } from "@/types";
 import { getSupabase } from "@/lib/supabase";
-import { getBookingsFromFile, updateBookingInFile } from "@/lib/bookings-file";
+import { getBookingsFromFileStrict, updateBookingStatusInFile } from "@/lib/bookings-file";
+
+const PAGE_SIZE = 1000;
 
 function rowToBooking(row: Record<string, unknown>): BookingRequest {
   return {
@@ -29,82 +31,113 @@ function rowToBooking(row: Record<string, unknown>): BookingRequest {
   };
 }
 
-export async function getAllBookings(): Promise<BookingRequest[]> {
+/** Every Supabase booking, paging past Supabase's 1,000-row default limit. */
+async function getSupabaseBookings(): Promise<BookingRequest[]> {
   const client = getSupabase();
-  if (client) {
+  if (!client) return [];
+  const all: BookingRequest[] = [];
+  for (let from = 0; ; from += PAGE_SIZE) {
     const { data, error } = await client
       .from("booking_requests")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, from + PAGE_SIZE - 1);
+    if (error) throw new Error(error.message);
+    all.push(...(data ?? []).map(rowToBooking));
+    if (!data || data.length < PAGE_SIZE) break;
+  }
+  return all;
+}
 
-    // An empty table is a valid result — only fall back on actual errors.
-    if (!error && data) {
-      return data.map(rowToBooking);
-    }
+export interface BookingsResult {
+  bookings: BookingRequest[];
+  /** Set when a store could not be read; the list may be incomplete. */
+  error: string | null;
+}
+
+/**
+ * Reads bookings from every store. New bookings go to Supabase and fall back
+ * to Firestore when Supabase is down, so both stores are read and merged
+ * (Supabase wins on duplicate ids). A failed read is reported, never hidden.
+ */
+export async function getAllBookingsResult(): Promise<BookingsResult> {
+  const errors: string[] = [];
+  const byId = new Map<string, BookingRequest>();
+
+  const [firestore, supabase] = await Promise.allSettled([
+    getBookingsFromFileStrict(),
+    getSupabase() ? getSupabaseBookings() : Promise.resolve([] as BookingRequest[]),
+  ]);
+
+  if (firestore.status === "fulfilled") {
+    for (const b of firestore.value) byId.set(b.id, b);
+  } else {
+    console.error("Firestore bookings read failed:", firestore.reason);
+    errors.push("Firestore");
+  }
+  if (supabase.status === "fulfilled") {
+    for (const b of supabase.value) byId.set(b.id, b);
+  } else {
+    console.error("Supabase bookings read failed:", supabase.reason);
+    errors.push("Supabase");
   }
 
-  return getBookingsFromFile();
+  const bookings = [...byId.values()].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+  return {
+    bookings,
+    error: errors.length ? `Could not read bookings from ${errors.join(" and ")}. The list may be incomplete.` : null,
+  };
+}
+
+export async function getAllBookings(): Promise<BookingRequest[]> {
+  return (await getAllBookingsResult()).bookings;
 }
 
 export async function getBookingById(id: string): Promise<BookingRequest | undefined> {
   const client = getSupabase();
   if (client) {
-    const { data, error } = await client
-      .from("booking_requests")
-      .select("*")
-      .eq("id", id)
-      .single();
-
+    const { data, error } = await client.from("booking_requests").select("*").eq("id", id).maybeSingle();
     if (!error && data) return rowToBooking(data);
   }
 
-  const bookings = await getBookingsFromFile();
-  return bookings.find((b) => b.id === id);
+  try {
+    return (await getBookingsFromFileStrict()).find((b) => b.id === id);
+  } catch {
+    return undefined;
+  }
 }
 
+/**
+ * Moves a booking to `status` only if it is still in `expectedStatus`.
+ * Works on whichever store holds the booking.
+ */
 export async function updateBookingStatus(
   id: string,
   status: BookingStatus,
   expectedStatus?: BookingStatus
-): Promise<{ ok: boolean; booking?: BookingRequest; error?: string }> {
+): Promise<{ ok: boolean; booking?: BookingRequest; error?: string; conflict?: boolean }> {
   const client = getSupabase();
   if (client) {
-    let query = client
-      .from("booking_requests")
-      .update({ status })
-      .eq("id", id);
-    if (expectedStatus) {
-      query = query.eq("status", expectedStatus);
-    }
+    let query = client.from("booking_requests").update({ status }).eq("id", id);
+    if (expectedStatus) query = query.eq("status", expectedStatus);
     const { data, error } = await query.select("*").maybeSingle();
 
-    if (error) {
-      return { ok: false, error: error.message };
-    }
-    if (!data) {
+    if (error) return { ok: false, error: error.message };
+    if (data) return { ok: true, booking: rowToBooking(data) };
+
+    // No row updated: either the status moved on, or the booking lives in Firestore.
+    const { data: existing } = await client.from("booking_requests").select("id").eq("id", id).maybeSingle();
+    if (existing) {
       return {
         ok: false,
-        error: expectedStatus
-          ? "Booking status changed by another request"
-          : "Booking not found",
+        conflict: true,
+        error: "This booking was already updated. Refresh to see its current status.",
       };
     }
-    return { ok: true, booking: rowToBooking(data) };
   }
 
-  if (expectedStatus) {
-    const current = (await getBookingsFromFile()).find((b) => b.id === id);
-    if (!current) {
-      return { ok: false, error: "Booking not found" };
-    }
-    if (current.status !== expectedStatus) {
-      return { ok: false, error: "Booking status changed by another request" };
-    }
-  }
-
-  const result = await updateBookingInFile(id, { status });
-  if (!result.ok || !result.booking) {
-    return { ok: false, error: result.error ?? "Booking not found" };
-  }
-  return { ok: true, booking: result.booking };
+  const result = await updateBookingStatusInFile(id, status, expectedStatus);
+  return { ok: result.ok, booking: result.booking, error: result.error, conflict: result.conflict };
 }
