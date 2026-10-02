@@ -258,7 +258,7 @@ html {
 }
 
 .booking-option-card--selected {
-  @apply border-primary/60 bg-primary-muted ring-1 ring-primary/25;
+  @apply border-accent/60 bg-accent-muted ring-1 ring-accent/25;
 }
 
 .booking-date-badge {
