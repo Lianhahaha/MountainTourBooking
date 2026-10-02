@@ -1,3 +1,4 @@
+import { todayInManila } from "@/lib/utils";
 import { Resend } from "resend";
 import type { BookingRequest } from "@/types";
 import { org } from "@/data/org";
@@ -184,7 +185,7 @@ export async function sendContactEmail(data: {
 }
 
 export function generateBookingId(): string {
-  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const date = todayInManila().replace(/-/g, "");
   const bytes = new Uint8Array(6);
   crypto.getRandomValues(bytes);
   const rand = Array.from(bytes, (b) => b.toString(36).padStart(2, "0"))
