@@ -24,7 +24,7 @@ export function Hero({
   moreDates: number;
 }) {
   return (
-    <section className="relative border-b border-border">
+    <section id="overview" className="relative border-b border-border">
       <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-5 px-4 pb-8 pt-6 [grid-template-areas:'title'_'tag'_'body'] sm:px-6 sm:pt-10 md:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] md:pb-14 md:pt-14 md:[grid-template-areas:'title_tag'_'body_tag'] lg:gap-x-16">
         <h1 className="font-display text-[2rem] font-extrabold leading-[1.02] tracking-tight text-foreground [grid-area:title] sm:text-5xl md:self-end lg:text-[3.5rem]">
           {org.tagline}

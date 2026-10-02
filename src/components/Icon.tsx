@@ -27,6 +27,8 @@ const paths = {
   external: "M14 5h5v5M19 5l-8 8M17 14v5H5V7h5",
   backpack: "M8 7V5.5A2.5 2.5 0 0110.5 3h3A2.5 2.5 0 0116 5.5V7M6 9a2 2 0 012-2h8a2 2 0 012 2v11H6zM9 13h6M9 16.5h6",
   doc: "M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 15.5h5",
+  question: "M12 21a9 9 0 100-18 9 9 0 000 18zM9.6 9.4a2.5 2.5 0 014.8 1c0 1.6-2.4 2.1-2.4 3.6M12 17.2v.3",
+  home: "M4 11l8-7 8 7M6 9.5V20h12V9.5M10 20v-5h4v5",
 } as const;
 
 export type IconName = keyof typeof paths;

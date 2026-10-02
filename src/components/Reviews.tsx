@@ -1,8 +1,7 @@
-import { getApprovedReviews } from "@/lib/reviews";
+import type { Review } from "@/lib/reviews";
 import { ReviewCard } from "@/components/ReviewCard";
 
-export async function Reviews() {
-  const reviews = await getApprovedReviews();
+export function Reviews({ reviews }: { reviews: Review[] }) {
   if (reviews.length === 0) return null;
 
   const top = reviews.slice(0, 6);
