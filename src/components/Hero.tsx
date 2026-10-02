@@ -97,23 +97,21 @@ function NextClimbTag({
         <span className="truncate text-xs text-muted">{trip.title}</span>
       </BoxHeader>
       <div className="p-4 sm:p-5">
-        <div className="flex items-end gap-4">
-          <p className="tabular font-display text-[3.5rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-6xl">
-            {month}
-            <span className="ml-2 text-primary">{day}</span>
-          </p>
-          <div className="whitespace-nowrap pb-1 text-[13px] leading-snug">
-            <p className="font-semibold text-foreground">
-              {weekday}, {year}
-            </p>
-            <p className="mt-0.5 flex items-center gap-1.5 text-muted">
-              <Icon name="clock" className="h-3.5 w-3.5" />
-              {session.time} meet-up
-            </p>
-          </div>
-        </div>
+        <p className="tabular font-display text-[3.5rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-6xl">
+          {month}
+          <span className="ml-2 text-primary">{day}</span>
+        </p>
+        <p className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
+          <span className="font-semibold text-foreground">
+            {weekday}, {year}
+          </span>
+          <span className="flex items-center gap-1.5 text-muted">
+            <Icon name="clock" className="h-3.5 w-3.5" />
+            {session.time} meet-up
+          </span>
+        </p>
 
-        <div className="mt-5">
+        <div className="mt-4">
           <SlotMeter maxSlots={session.maxSlots} remaining={remaining} animate />
         </div>
 
