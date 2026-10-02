@@ -1,42 +1,40 @@
-"use client";
-
-import { useState } from "react";
 import { faq } from "@/data/faq";
+import { Icon } from "@/components/Icon";
 
 export function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
   return (
-    <section id="faq" className="bg-background py-10 sm:py-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted">
-            FAQ & Policies
-          </p>
-          <h2 className="mt-2 text-2xl font-bold text-foreground sm:text-4xl">
+    <section id="faq" className="border-b border-border py-10 sm:py-14">
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
+        <div>
+          <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
             Good to know before you go
           </h2>
+          <p className="mt-1 text-sm text-muted">
+            Payment, cancellations, weather, and fitness — answered.
+          </p>
+          <a
+            href="#contact"
+            className="mt-3 hidden items-center gap-1.5 text-[13px] font-medium text-accent hover:underline lg:inline-flex"
+          >
+            Ask something else
+            <Icon name="arrowRight" className="h-3.5 w-3.5" />
+          </a>
         </div>
 
-        <div className="mt-8 divide-y divide-border rounded-md border border-border bg-surface sm:mt-10">
+        <div className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface">
           {faq.map((item, index) => (
-            <div key={item.question}>
-              <button
-                type="button"
-                className="flex w-full items-center justify-between px-4 py-3 text-left sm:px-5 sm:py-4"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              >
-                <span className="pr-4 text-sm font-medium text-foreground sm:text-base">{item.question}</span>
-                <span className="shrink-0 text-muted">
-                  {openIndex === index ? "−" : "+"}
-                </span>
-              </button>
-              {openIndex === index && (
-                <div className="px-4 pb-3 text-sm leading-relaxed text-muted sm:px-5 sm:pb-4">
-                  {item.answer}
-                </div>
-              )}
-            </div>
+            <details key={item.question} name="faq" open={index === 0} className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-surface-elevated [&::-webkit-details-marker]:hidden">
+                <span className="text-sm font-semibold text-foreground">{item.question}</span>
+                <Icon
+                  name="chevronDown"
+                  className="h-4 w-4 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
+                />
+              </summary>
+              <p className="max-w-[68ch] px-4 pb-4 text-sm leading-relaxed text-muted">
+                {item.answer}
+              </p>
+            </details>
           ))}
         </div>
       </div>
