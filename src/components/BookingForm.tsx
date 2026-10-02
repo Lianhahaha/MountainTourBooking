@@ -267,15 +267,8 @@ export function BookingForm() {
         {step === 0 && (
           <div>
             <h2 className="text-lg font-bold text-foreground sm:text-xl">Select your trek</h2>
-            <div className="booking-callout mt-3">
-              <p className="text-sm font-medium text-foreground">
-                Pick one option below to continue.
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                Mt. Apo group trek or a private group booking on your schedule.
-              </p>
-            </div>
-            <div className="mt-6 space-y-3">
+            <p className="mt-1 text-sm text-muted">Join a group date or plan a private climb.</p>
+            <div className="mt-4 space-y-3">
               {trips.map((trip) => {
                 const noDates = trip.type === "scheduled" && !sessionsLoading && sessions.length === 0;
                 const selected = form.tripId === trip.id;
@@ -346,15 +339,8 @@ export function BookingForm() {
                   <p className="booking-section-label">Choose your hiking day</p>
                   <span className="booking-required-badge">Required</span>
                 </div>
-                <div className="booking-callout mt-2">
-                  <p className="text-sm font-semibold text-foreground">
-                    These are the only dates available for group treks.
-                  </p>
-                  <p className="mt-0.5 text-sm text-muted">
-                    Tap a date below — you cannot book without selecting one.
-                  </p>
-                </div>
-                <div className="mt-4 space-y-3">
+                <p className="mt-1 text-sm text-muted">Only these dates are open. Tap one.</p>
+                <div className="mt-3 space-y-3">
                   {sessions.map((session) => {
                     const remaining = sessionSlotsRemaining(session);
                     const selected = form.sessionId === session.id;
@@ -416,7 +402,7 @@ export function BookingForm() {
                 </div>
                 {!form.sessionId && (
                   <p className="mt-3 text-sm font-semibold text-foreground/80">
-                    ↑ Select a date above to set your group size
+                    Pick a date first to set your group size.
                   </p>
                 )}
               </div>
@@ -501,15 +487,8 @@ export function BookingForm() {
         {step === 2 && (
           <div>
             <h2 className="text-lg font-bold text-foreground sm:text-xl">Contact information</h2>
-            <div className="booking-callout mt-3">
-              <p className="text-sm font-semibold text-foreground">
-                We will email you when your booking is approved.
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                Double-check your email and phone — these are how we reach you about your trek.
-              </p>
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <p className="mt-1 text-sm text-muted">We confirm by email and SMS. Double-check both.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <ImportantField label="Full name" required className="sm:col-span-2">
                 <input
                   required
@@ -539,14 +518,8 @@ export function BookingForm() {
                 />
               </ImportantField>
               <div className="sm:col-span-2">
-                <div className="booking-callout">
-                  <p className="text-xs font-semibold text-muted">
-                    Emergency contact
-                  </p>
-                  <p className="mt-1 text-sm text-muted">
-                    Required for all Mt. Apo treks — someone we can call if needed on trail day.
-                  </p>
-                </div>
+                <p className="mt-2 text-sm font-semibold text-foreground">Emergency contact</p>
+                <p className="text-xs text-muted">Someone we can call on trek day.</p>
               </div>
               <ImportantField label="Emergency contact name" required>
                 <input
@@ -571,7 +544,7 @@ export function BookingForm() {
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   className="field-input"
-                  placeholder="Experience level, gear rental, dietary needs..."
+                  placeholder="Experience, gear rental, diet…"
                 />
               </Field>
             </div>
@@ -581,16 +554,9 @@ export function BookingForm() {
         {step === 3 && selectedTrip && (
           <div>
             <h2 className="text-lg font-bold text-foreground sm:text-xl">Review & confirm</h2>
-            <div className="booking-callout mt-3">
-              <p className="text-sm font-semibold text-foreground">
-                Check these details carefully before submitting.
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                The owner will review and email you once approved.
-              </p>
-            </div>
+            <p className="mt-1 text-sm text-muted">Check your details. We email you once approved.</p>
 
-            <div className="mt-6 space-y-3 rounded-md border border-border bg-surface-elevated p-4 text-sm">
+            <div className="mt-4 space-y-3 rounded-md border border-border bg-surface-elevated p-4 text-sm">
               <ReviewRow label="Trek" value={selectedTrip.title} />
               <div className="booking-review-highlight space-y-2">
                 <ReviewRow
@@ -626,42 +592,40 @@ export function BookingForm() {
               </div>
             </div>
 
-            <p className="mt-6 text-sm font-bold text-foreground">
-              Required confirmations before you submit:
-            </p>
+            <p className="mt-6 text-sm font-bold text-foreground">Tick all four to submit</p>
             <div className="mt-3 space-y-3">
               <ImportantCheckbox
                 checked={form.fitnessConfirmed}
                 onChange={(v) => setForm({ ...form, fitnessConfirmed: v })}
-                label="I confirm all participants are physically fit for this Hard-rated Mt. Apo trek."
+                label="Everyone is fit for a Hard-rated, multi-day trek."
               />
               <ImportantCheckbox
                 checked={form.ageConfirmed}
                 onChange={(v) => setForm({ ...form, ageConfirmed: v })}
-                label="All participants are 16+ (with guardian for 16–17), or I am a guardian booking for a minor."
+                label="Everyone is 16+, or 16–17 with a guardian."
               />
               <ImportantCheckbox
                 checked={form.waiverAccepted}
                 onChange={(v) => setForm({ ...form, waiverAccepted: v })}
-                label="I agree to follow the guide's instructions and practice leave-no-trace on the trail."
+                label="We'll follow the guide and leave no trace."
               />
               <ImportantCheckbox
                 checked={form.paymentAcknowledged}
                 onChange={(v) => setForm({ ...form, paymentAcknowledged: v })}
-                label="I understand payment is collected in person on trek day (cash or GCash) — no online payment on this site."
+                label="We pay cash or GCash on trek day. Nothing is charged online."
                 emphasized
               />
             </div>
             <p className="mt-4 text-xs leading-relaxed text-muted">
               By submitting, you agree to our{" "}
               <a href="/terms" target="_blank" rel="noopener" className="link-accent">
-                Terms of Use
+                Terms
               </a>{" "}
-              and confirm you have read our{" "}
+              and{" "}
               <a href="/privacy" target="_blank" rel="noopener" className="link-accent">
                 Privacy Policy
-              </a>
-              . Both open in a new tab, so your form stays filled in.
+              </a>{" "}
+              (open in a new tab).
             </p>
           </div>
         )}
