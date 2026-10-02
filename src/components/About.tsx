@@ -40,11 +40,13 @@ export function About() {
             </ul>
           </div>
 
-          <div className="rounded-md border border-border bg-surface p-5">
-            <h3 className="font-display text-lg font-bold text-foreground">
-              What to expect on the trail
-            </h3>
-            <ol className="mt-3 space-y-2.5">
+          <Box className="self-start">
+            <BoxHeader>
+              <h3 className="text-[13px] font-semibold text-foreground">
+                What to expect on the trail
+              </h3>
+            </BoxHeader>
+            <ol className="space-y-2.5 p-4">
               {org.whatToExpect.map((item, i) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-foreground">
                   <span className="tabular mt-px w-4 shrink-0 text-right text-[13px] font-bold text-muted">
@@ -54,7 +56,7 @@ export function About() {
                 </li>
               ))}
             </ol>
-          </div>
+          </Box>
         </div>
 
         <div id="permits" className="mt-10 scroll-mt-20">

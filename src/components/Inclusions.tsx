@@ -60,12 +60,15 @@ export function Inclusions({ trip }: { trip: Trip }) {
               role="tabpanel"
               aria-labelledby={`tab-${list.key}`}
               className={cn(
-                "rounded-md border border-border bg-surface-elevated p-4 sm:p-5",
+                "overflow-hidden rounded-md border border-border bg-surface-elevated",
                 active === list.key ? "block" : "hidden md:block"
               )}
             >
-              <h3 className="spec-label hidden md:block">{list.label}</h3>
-              <ul className="space-y-2 md:mt-3">
+              <h3 className="hidden items-center gap-2 border-b border-border bg-surface px-4 py-2.5 text-[13px] font-semibold text-foreground md:flex">
+                <Icon name={list.icon} className={cn("h-4 w-4", list.tone)} />
+                {list.label}
+              </h3>
+              <ul className="space-y-2 p-4">
                 {trip[list.key].map((item) => (
                   <li key={item} className="flex items-start gap-2.5 text-sm text-foreground">
                     <Icon name={list.icon} className={cn("mt-0.5 h-4 w-4 shrink-0", list.tone)} />
