@@ -9,7 +9,6 @@ import {
   runTransaction,
 } from "firebase/firestore";
 import type { TrekSession } from "@/types";
-import { seedTrekSessions } from "@/data/trek-sessions";
 import { todayInManila } from "@/lib/utils";
 
 const COLLECTION = "trek_sessions";
@@ -25,25 +24,32 @@ export function isSessionBookable(session: TrekSession): boolean {
   return getSessionSlotsRemaining(session) > 0;
 }
 
+function sortSessions(sessions: TrekSession[]): TrekSession[] {
+  return sessions.sort((a, b) =>
+    a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date)
+  );
+}
+
+/** Every hiking day. Throws when Firestore is unavailable so admin screens can say so. */
+export async function getAllTrekSessionsStrict(): Promise<TrekSession[]> {
+  const snapshot = await getDocs(collection(db, COLLECTION));
+  const sessions: TrekSession[] = [];
+  snapshot.forEach((d) => {
+    sessions.push(d.data() as TrekSession);
+  });
+  return sortSessions(sessions);
+}
+
+/**
+ * Every hiking day, or none when Firestore is unavailable. Never invents
+ * sample dates: a fake bookable date is worse than an honest empty list.
+ */
 export async function getAllTrekSessions(): Promise<TrekSession[]> {
   try {
-    const snapshot = await getDocs(collection(db, COLLECTION));
-    const sessions: TrekSession[] = [];
-    snapshot.forEach((doc) => {
-      sessions.push(doc.data() as TrekSession);
-    });
-
-    if (sessions.length === 0) {
-      for (const s of seedTrekSessions) {
-        await setDoc(doc(db, COLLECTION, s.id), s);
-      }
-      return seedTrekSessions;
-    }
-
-    return sessions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return await getAllTrekSessionsStrict();
   } catch (err) {
-    console.error("Firestore unavailable, serving seed trek sessions:", err);
-    return seedTrekSessions;
+    console.error("Firestore unavailable, returning no trek sessions:", err);
+    return [];
   }
 }
 
@@ -57,8 +63,8 @@ export async function getTrekSessionById(id: string): Promise<TrekSession | unde
     const snap = await getDoc(doc(db, COLLECTION, id));
     return snap.exists() ? (snap.data() as TrekSession) : undefined;
   } catch (err) {
-    console.error("Firestore unavailable, looking up seed trek session:", err);
-    return seedTrekSessions.find((s) => s.id === id);
+    console.error("Firestore unavailable, could not look up trek session:", err);
+    return undefined;
   }
 }
 
@@ -80,6 +86,31 @@ export async function saveTrekSession(session: TrekSession): Promise<{ ok: boole
     return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Failed" };
+  }
+}
+
+/**
+ * Read-modify-write a hiking day inside a transaction so an edit can never
+ * overwrite a booking count that changed in the meantime. `apply` receives
+ * the current document and returns the next one, or an error message.
+ */
+export async function updateTrekSession(
+  id: string,
+  apply: (current: TrekSession) => TrekSession | { error: string }
+): Promise<{ ok: boolean; session?: TrekSession; error?: string }> {
+  try {
+    const session = await runTransaction(db, async (tx) => {
+      const ref = doc(db, COLLECTION, id);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error("Hiking day not found");
+      const next = apply(snap.data() as TrekSession);
+      if ("error" in next) throw new Error(next.error);
+      tx.set(ref, next);
+      return next;
+    });
+    return { ok: true, session };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Failed to update hiking day" };
   }
 }
 
