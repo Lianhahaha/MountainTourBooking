@@ -224,8 +224,9 @@ html {
 }
 
 /* Booking form */
+/* Step hint text inside the booking form — plain text, not a nested box */
 .booking-callout {
-  @apply rounded-md border border-border bg-surface px-4 py-3;
+  @apply text-sm;
 }
 
 .booking-section-label {
