@@ -149,7 +149,8 @@ function MenuGroup({
       <p className="px-2 pb-1 text-xs font-semibold text-muted">{title}</p>
       <ul className="grid grid-cols-2 gap-x-1">
         {links.map((link) => {
-          const current = pathname !== undefined && pathname === link.href.split("?")[0];
+          // Links with a query (e.g. the private-climb booking link) never count as current.
+          const current = pathname !== undefined && pathname === link.href;
           return (
             <li key={link.href}>
               <Link
