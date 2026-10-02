@@ -48,7 +48,7 @@ export const trips: Trip[] = [
     type: "private",
     title: "Private Mt. Apo Group Trek",
     description:
-      "Planning a team-building event, school outing, or barkada climb on your own schedule? Book a private Mt. Apo group trek — we'll handle permits, itinerary, and guide coordination for your group.",
+      "Your group, your date. Team outings, school trips, or barkada climbs — we handle permits, itinerary, and guides.",
     location: "Mt. Apo, Davao del Sur",
     date: null,
     time: "Flexible",
