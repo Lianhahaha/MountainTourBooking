@@ -38,6 +38,7 @@ A registered, licensed local operator with scheduled group dates and live slot c
 ## Brand Commitments
 
 - Name: Tikling Apo Tours. Tagline: "Guided Mt. Apo treks from Davao del Sur".
+- Visual theme: GitHub-inspired (green primary buttons, blue links, bordered boxes, DM Sans + Outfit). Redesigns soften colours and re-layout; they do not replace the theme (confirmed by the user).
 - Legal contact email for Terms of Use and Privacy Policy: projectneodevscoe@gmail.com (legal pages only; confirmed).
 
 ## Evidence on Hand
