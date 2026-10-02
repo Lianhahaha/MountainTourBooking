@@ -70,7 +70,7 @@ export default async function HikesPage() {
                             {day.title}
                           </Link>
                         </h2>
-                        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                        <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted">
                           {day.summary}
                         </p>
                         {photos.length > 0 && (
