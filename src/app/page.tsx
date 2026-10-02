@@ -10,8 +10,9 @@ import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
 import { StickyBookButton } from "@/components/StickyBookButton";
 import { getPrivateTrip, getScheduledTrips } from "@/data/trips";
-import { getAvailableTrekSessions } from "@/lib/trek-sessions-file";
+import { getAvailableTrekSessions, getSessionSlotsRemaining } from "@/lib/trek-sessions-file";
 import { getAllHikingDays } from "@/lib/hiking-days-file";
+import { dateParts } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Home() {
     getAllHikingDays(),
   ]);
   const [next] = sessions;
+  const nextParts = next ? dateParts(next.date) : null;
 
   return (
     <>
@@ -37,7 +39,17 @@ export default async function Home() {
         <Contact />
       </main>
       <Footer />
-      <StickyBookButton />
+      <StickyBookButton
+        next={
+          trip && next && nextParts
+            ? {
+                label: `${nextParts.weekday.slice(0, 3)} ${nextParts.month} ${nextParts.day}`,
+                slotsLeft: getSessionSlotsRemaining(next),
+                href: `/book?trip=${trip.id}&session=${next.id}`,
+              }
+            : undefined
+        }
+      />
     </>
   );
 }
