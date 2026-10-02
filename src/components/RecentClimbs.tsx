@@ -16,7 +16,7 @@ export function RecentClimbs({ days }: { days: HikingDay[] }) {
     <section id="photos" className="border-b border-border bg-surface py-10 sm:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex items-end justify-between gap-4">
-          <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
+          <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
             From our last climb
           </h2>
           <Link
@@ -31,7 +31,7 @@ export function RecentClimbs({ days }: { days: HikingDay[] }) {
         <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:items-start lg:gap-8">
           <div>
             <p className="tabular text-[13px] font-medium text-muted">{formatDate(latest.date)}</p>
-            <h3 className="mt-1 font-condensed text-lg font-bold text-foreground sm:text-xl">
+            <h3 className="mt-1 font-display text-lg font-bold text-foreground sm:text-xl">
               {latest.title}
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted">{latest.summary}</p>

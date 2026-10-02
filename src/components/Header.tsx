@@ -75,7 +75,7 @@ export function Header() {
           <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Icon name="peak" className="h-4 w-4" />
           </span>
-          <span className="font-condensed text-[17px] font-bold leading-none tracking-tight">
+          <span className="font-display text-[17px] font-bold leading-none tracking-tight">
             {org.name}
           </span>
         </Link>

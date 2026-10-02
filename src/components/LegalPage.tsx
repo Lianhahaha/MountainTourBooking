@@ -40,7 +40,7 @@ export function LegalPage({
             <span className="text-foreground">{title}</span>
           </nav>
 
-          <h1 className="mt-3 font-condensed text-3xl font-extrabold text-foreground sm:text-4xl">
+          <h1 className="mt-3 font-display text-3xl font-extrabold text-foreground sm:text-4xl">
             {title}
           </h1>
           <p className="tabular mt-1.5 text-[13px] text-muted">

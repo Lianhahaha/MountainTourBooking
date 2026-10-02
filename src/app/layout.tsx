@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo } from "next/font/google";
+import { DM_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 import { org } from "@/data/org";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -7,12 +7,16 @@ import { themeInitScript } from "@/lib/theme-script";
 import { Analytics } from "@vercel/analytics/react";
 import PWAInstaller from "@/components/PWAInstaller";
 
-// One variable family across widths: condensed for tag numerals and headings,
-// normal width for reading.
-const archivo = Archivo({
-  variable: "--font-archivo",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  axes: ["wdth"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
 });
 
 export const viewport: Viewport = {
@@ -21,7 +25,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   viewportFit: "cover",
-  themeColor: "#131915",
+  themeColor: "#22272e",
 };
 
 export const metadata: Metadata = {
@@ -40,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={archivo.variable} suppressHydrationWarning>
+    <html lang="en" className={`${dmSans.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

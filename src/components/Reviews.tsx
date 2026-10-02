@@ -10,7 +10,7 @@ export async function Reviews() {
   return (
     <section id="reviews" className="border-b border-border py-10 sm:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
+        <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
           What climbers say
         </h2>
         <p className="mt-1 text-sm text-muted">Reviews from guests after their trek.</p>

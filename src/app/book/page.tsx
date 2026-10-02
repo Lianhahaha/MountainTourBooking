@@ -21,7 +21,7 @@ export default function BookPage() {
       <main className="min-h-screen bg-background py-6 sm:py-10">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto mb-5 max-w-2xl">
-            <h1 className="font-condensed text-3xl font-extrabold text-foreground sm:text-4xl">
+            <h1 className="font-display text-3xl font-extrabold text-foreground sm:text-4xl">
               Book a climb
             </h1>
             <p className="mt-1 text-sm text-muted">

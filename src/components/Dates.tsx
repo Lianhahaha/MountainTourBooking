@@ -35,7 +35,7 @@ export function Dates({
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
           <div>
-            <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
+            <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
               Upcoming climbs
             </h2>
             <p className="mt-1 max-w-xl text-sm text-muted">
@@ -82,7 +82,7 @@ export function Dates({
           <div className="grid gap-4 px-5 pb-5 pt-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-8">
             <div>
               <p className="spec-label pl-8 pt-0.5">Private group</p>
-              <h3 className="mt-3 font-condensed text-xl font-bold text-foreground sm:text-2xl">
+              <h3 className="mt-3 font-display text-xl font-bold text-foreground sm:text-2xl">
                 {privateTrip.title}
               </h3>
               <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted">
@@ -111,7 +111,7 @@ export function Dates({
         </HangTag>
 
         <div className="mt-10">
-          <h3 className="font-condensed text-lg font-bold text-foreground">How booking works</h3>
+          <h3 className="font-display text-lg font-bold text-foreground">How booking works</h3>
           <ol className="mt-4 grid gap-4 md:grid-cols-3 md:gap-6">
             {bookingSteps.map((step, i) => (
               <li key={step.title} className="relative flex gap-3 md:flex-col md:gap-2.5">
@@ -169,7 +169,7 @@ function DateTag({
         <div className="mt-2 flex items-end justify-between gap-3">
           <p
             className={cn(
-              "tabular font-condensed font-extrabold leading-none tracking-tight text-foreground",
+              "tabular font-display font-extrabold leading-none tracking-tight text-foreground",
               rank === 0 ? "text-[2.75rem]" : "text-[2.125rem]"
             )}
           >

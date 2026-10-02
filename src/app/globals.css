@@ -3,67 +3,67 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Tikling Apo Tours — gear-tag system.
- * Night-moss ground (dark, default) and fog ground (light).
- * Lichen = action, sulfur = scarce slots, clay = full / errors.
+ * GitHub-inspired design system, softened.
+ * Dark follows GitHub "dark dimmed"; light follows GitHub light with gentler
+ * grounds. Green = primary actions, blue = links, amber = few slots left.
  */
 
-/* Light — fog */
+/* Light — GitHub light, softened */
 :root {
-  --background: #eef1ec;
-  --foreground: #1b231e;
-  --surface: #e4e9e2;
-  --surface-elevated: #fbfcfa;
-  --muted: #56625a;
-  --border: #cdd5cb;
-  --primary: #2f6b45;
-  --primary-hover: #26593a;
+  --background: #fafbfc;
+  --foreground: #2c333a;
+  --surface: #f3f5f7;
+  --surface-elevated: #ffffff;
+  --muted: #59636e;
+  --border: #d8dee4;
+  --primary: #1f883d;
+  --primary-hover: #1a7f37;
   --primary-foreground: #ffffff;
-  --primary-muted: rgba(47, 107, 69, 0.1);
-  --secondary: #1b231e;
-  --secondary-hover: #34403a;
-  --secondary-foreground: #1b231e;
-  --secondary-muted: rgba(27, 35, 30, 0.06);
-  --accent: #2b6874;
-  --accent-hover: #1f525c;
-  --accent-muted: rgba(43, 104, 116, 0.1);
-  --danger: #a4472f;
-  --danger-muted: rgba(164, 71, 47, 0.1);
-  --warning: #7f6210;
-  --warning-muted: rgba(160, 128, 30, 0.14);
-  --input-bg: #fbfcfa;
-  --sulfur: #b8922a;
-  --stitch: rgba(27, 35, 30, 0.22);
-  --shadow: 0 1px 2px rgba(27, 35, 30, 0.06), 0 6px 18px -8px rgba(27, 35, 30, 0.18);
+  --primary-muted: rgba(31, 136, 61, 0.1);
+  --secondary: #2c333a;
+  --secondary-hover: #424a53;
+  --secondary-foreground: #2c333a;
+  --secondary-muted: rgba(44, 51, 58, 0.06);
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+  --accent-muted: rgba(9, 105, 218, 0.1);
+  --danger: #cf222e;
+  --danger-muted: rgba(207, 34, 46, 0.1);
+  --warning: #9a6700;
+  --warning-muted: rgba(154, 103, 0, 0.1);
+  --input-bg: #ffffff;
+  --sulfur: #bf8700;
+  --stitch: #d8dee4;
+  --shadow: 0 1px 0 rgba(31, 35, 40, 0.04), 0 3px 8px -2px rgba(31, 35, 40, 0.08);
 }
 
-/* Dark — night moss */
+/* Dark — GitHub dark dimmed */
 .dark {
-  --background: #131915;
-  --foreground: #e3e8e2;
-  --surface: #18201b;
-  --surface-elevated: #1f2823;
-  --muted: #9ba79f;
-  --border: #2d3832;
-  --primary: #93c49e;
-  --primary-hover: #a8d2b1;
-  --primary-foreground: #102016;
-  --primary-muted: rgba(147, 196, 158, 0.12);
-  --secondary: #e3e8e2;
-  --secondary-hover: #ffffff;
-  --secondary-foreground: #e3e8e2;
-  --secondary-muted: rgba(227, 232, 226, 0.06);
-  --accent: #8cc3c8;
-  --accent-hover: #a7d4d8;
-  --accent-muted: rgba(140, 195, 200, 0.12);
-  --danger: #e3a08a;
-  --danger-muted: rgba(227, 160, 138, 0.12);
-  --warning: #e4cb72;
-  --warning-muted: rgba(228, 203, 114, 0.12);
-  --input-bg: #141a16;
-  --sulfur: #e4cb72;
-  --stitch: rgba(227, 232, 226, 0.18);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -12px rgba(0, 0, 0, 0.55);
+  --background: #22272e;
+  --foreground: #adbac7;
+  --surface: #262c34;
+  --surface-elevated: #2d333b;
+  --muted: #909dab;
+  --border: #444c56;
+  --primary: #3b8640;
+  --primary-hover: #46954a;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(70, 149, 74, 0.15);
+  --secondary: #adbac7;
+  --secondary-hover: #cdd9e5;
+  --secondary-foreground: #adbac7;
+  --secondary-muted: rgba(173, 186, 199, 0.06);
+  --accent: #539bf5;
+  --accent-hover: #6cb6ff;
+  --accent-muted: rgba(83, 155, 245, 0.15);
+  --danger: #e5534b;
+  --danger-muted: rgba(229, 83, 75, 0.15);
+  --warning: #c69026;
+  --warning-muted: rgba(198, 144, 38, 0.15);
+  --input-bg: #1c2128;
+  --sulfur: #c69026;
+  --stitch: #444c56;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 8px 24px -8px rgba(28, 33, 40, 0.6);
 }
 
 @theme inline {
@@ -90,8 +90,8 @@
   --color-sulfur: var(--sulfur);
   --color-border: var(--border);
   --color-input-bg: var(--input-bg);
-  --font-sans: var(--font-archivo), system-ui, sans-serif;
-  --font-display: var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-outfit), system-ui, sans-serif;
 }
 
 html {
@@ -123,9 +123,8 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  font-stretch: 84%;
   letter-spacing: -0.01em;
-  line-height: 1.1;
+  line-height: 1.15;
   text-wrap: balance;
 }
 
@@ -140,7 +139,6 @@ p {
 .admin-panel h5,
 .admin-panel h6 {
   font-family: var(--font-sans);
-  font-stretch: 100%;
   letter-spacing: 0;
 }
 
@@ -171,10 +169,6 @@ html {
 
 .tabular {
   font-variant-numeric: tabular-nums;
-}
-
-.font-condensed {
-  font-stretch: 78%;
 }
 
 /* Touch tap targets — 44px on coarse pointers only, so desktop stays compact */

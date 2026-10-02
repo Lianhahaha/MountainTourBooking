@@ -9,7 +9,7 @@ export function About() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12">
           <div>
-            <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
+            <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
               Who leads your climb
             </h2>
             <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-muted">
@@ -20,7 +20,7 @@ export function About() {
               {org.stats.map((stat) => (
                 <div key={stat.label} className="bg-background px-3 py-2">
                   <dt className="text-[11px] font-medium text-muted">{stat.label}</dt>
-                  <dd className="tabular font-condensed text-lg font-bold text-foreground">
+                  <dd className="tabular font-display text-lg font-bold text-foreground">
                     {stat.value}
                   </dd>
                 </div>
@@ -41,7 +41,7 @@ export function About() {
           </div>
 
           <div className="woven rounded-lg border border-border bg-surface p-5">
-            <h3 className="font-condensed text-lg font-bold text-foreground">
+            <h3 className="font-display text-lg font-bold text-foreground">
               What to expect on the trail
             </h3>
             <ol className="mt-3 space-y-2.5">
@@ -60,7 +60,7 @@ export function About() {
         <div id="permits" className="mt-10 scroll-mt-20">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <div>
-              <h3 className="font-condensed text-xl font-bold text-foreground sm:text-2xl">
+              <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl">
                 Licensed to operate
               </h3>
               <p className="mt-1 max-w-xl text-sm text-muted">
@@ -79,7 +79,7 @@ export function About() {
                 <HangTag size="sm" centerHole className="h-full" faceClassName="flex flex-col">
                   <div className="flex flex-1 flex-col px-4 pb-4 pt-8">
                     <p className="spec-label leading-snug">{doc.issuer}</p>
-                    <p className="mt-1 font-condensed text-[17px] font-bold leading-tight text-foreground">
+                    <p className="mt-1 font-display text-[17px] font-bold leading-tight text-foreground">
                       {doc.title}
                     </p>
                     <p className="mt-1.5 text-[13px] leading-relaxed text-muted">

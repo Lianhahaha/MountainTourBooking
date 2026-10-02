@@ -21,7 +21,7 @@ export default async function BookingSuccessPage({
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
               <Icon name="check" className="h-5 w-5" />
             </span>
-            <h1 className="font-condensed text-3xl font-extrabold text-foreground">
+            <h1 className="font-display text-3xl font-extrabold text-foreground">
               Request sent
             </h1>
           </div>
@@ -37,7 +37,7 @@ export default async function BookingSuccessPage({
                 <p className="spec-label">Booking reference</p>
                 <p className="text-xs text-muted">Keep this for your records</p>
               </div>
-              <p className="tabular mt-2 break-all font-condensed text-2xl font-bold text-foreground">
+              <p className="tabular mt-2 break-all font-display text-2xl font-bold text-foreground">
                 {id ?? "Sent — check your email"}
               </p>
               <div className="stitch my-4" />

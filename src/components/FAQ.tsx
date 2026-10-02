@@ -6,7 +6,7 @@ export function FAQ() {
     <section id="faq" className="border-b border-border py-10 sm:py-14">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
         <div>
-          <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
+          <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
             Good to know before you go
           </h2>
           <p className="mt-1 text-sm text-muted">

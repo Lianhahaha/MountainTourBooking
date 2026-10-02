@@ -26,7 +26,7 @@ export function Hero({
   return (
     <section className="relative border-b border-border">
       <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-5 px-4 pb-8 pt-6 [grid-template-areas:'title'_'tag'_'body'] sm:px-6 sm:pt-10 md:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] md:pb-14 md:pt-14 md:[grid-template-areas:'title_tag'_'body_tag'] lg:gap-x-16">
-        <h1 className="font-condensed text-[2rem] font-extrabold leading-[1.02] tracking-tight text-foreground [grid-area:title] sm:text-5xl md:self-end lg:text-[3.5rem]">
+        <h1 className="font-display text-[2rem] font-extrabold leading-[1.02] tracking-tight text-foreground [grid-area:title] sm:text-5xl md:self-end lg:text-[3.5rem]">
           {org.tagline}
         </h1>
 
@@ -53,7 +53,7 @@ export function Hero({
                   <Icon name={spec.icon} className="h-3.5 w-3.5 shrink-0" />
                   <span className="truncate text-[11px] font-medium">{spec.label}</span>
                 </span>
-                <span className="tabular font-condensed text-[15px] font-bold text-foreground sm:text-base">
+                <span className="tabular font-display text-[15px] font-bold text-foreground sm:text-base">
                   {spec.value}
                 </span>
               </li>
@@ -96,7 +96,7 @@ function NextClimbTag({
         </div>
 
         <div className="mt-4 flex items-end gap-4">
-          <p className="tabular font-condensed text-[4.25rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-[5rem]">
+          <p className="tabular font-display text-[4.25rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-[5rem]">
             {month}
             <span className="ml-2 text-primary">{day}</span>
           </p>
@@ -125,7 +125,7 @@ function NextClimbTag({
         <div className="stitch my-4" />
 
         <div className="flex items-end justify-between gap-3">
-          <p className="tabular font-condensed text-3xl font-bold leading-none text-foreground">
+          <p className="tabular font-display text-3xl font-bold leading-none text-foreground">
             {formatPrice(price)}
             <span className="ml-1.5 font-sans text-[13px] font-normal text-muted">/ person</span>
           </p>
@@ -153,7 +153,7 @@ function NoDatesTag() {
     <HangTag size="lg" string>
       <div className="px-5 pb-5 pt-4 sm:px-6">
         <p className="spec-label pl-9 pt-1">Next climb</p>
-        <p className="mt-5 font-condensed text-3xl font-bold leading-tight text-foreground">
+        <p className="mt-5 font-display text-3xl font-bold leading-tight text-foreground">
           New group dates coming soon
         </p>
         <p className="mt-2 text-sm text-muted">
