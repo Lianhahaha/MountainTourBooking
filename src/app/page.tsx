@@ -5,7 +5,6 @@ import { About } from "@/components/About";
 import { Dates } from "@/components/Dates";
 import { Inclusions } from "@/components/Inclusions";
 import { Reviews } from "@/components/Reviews";
-import { Trust } from "@/components/Trust";
 import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
 import { StickyBookButton } from "@/components/StickyBookButton";
@@ -28,7 +27,6 @@ export default async function Home() {
         {trip && <Inclusions trip={trip} />}
         <About />
         <Reviews />
-        <Trust />
         <FAQ />
         <Contact />
       </main>
