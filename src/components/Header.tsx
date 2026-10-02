@@ -4,51 +4,32 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { org } from "@/data/org";
-import { Icon } from "@/components/Icon";
+import { Icon, type IconName } from "@/components/Icon";
 import { ThemeToggle, ThemeSegmented } from "@/components/ThemeToggle";
 import { OwnerNavLink } from "@/components/OwnerNavLink";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { id: "dates", href: "/#dates", label: "Dates" },
-  { id: "included", href: "/#included", label: "Inclusions" },
-  { id: "about", href: "/#about", label: "About" },
-  { id: "photos", href: "/hikes", label: "Photos" },
-  { id: "faq", href: "/#faq", label: "FAQ" },
-  { id: "contact", href: "/#contact", label: "Contact" },
+type NavLink = { href: string; label: string; icon: IconName };
+
+const sectionLinks: NavLink[] = [
+  { href: "/#dates", label: "Dates", icon: "calendar" },
+  { href: "/#included", label: "Inclusions", icon: "backpack" },
+  { href: "/#about", label: "About", icon: "shield" },
+  { href: "/#faq", label: "FAQ", icon: "question" },
+  { href: "/#contact", label: "Contact", icon: "mail" },
 ];
 
-/** Highlights the landing-page section currently in view. */
-function useActiveSection(enabled: boolean) {
-  const [active, setActive] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!enabled) return;
-    const sections = navLinks
-      .map((l) => document.getElementById(l.id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        }
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, [enabled]);
-
-  return enabled ? active : null;
-}
+const pageLinks: NavLink[] = [
+  { href: "/hikes", label: "Photo albums", icon: "camera" },
+  { href: "/book?trip=private-custom", label: "Private group climb", icon: "users" },
+  { href: "/terms", label: "Terms of Use", icon: "doc" },
+  { href: "/privacy", label: "Privacy Policy", icon: "shield" },
+];
 
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isHome = pathname === "/";
-  const active = useActiveSection(isHome);
 
   useEffect(() => {
     if (!open) return;
@@ -59,43 +40,45 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  function isCurrent(link: (typeof navLinks)[number]) {
-    if (link.href.startsWith("/#")) return active === link.id;
-    return pathname.startsWith(link.href);
-  }
+  // On the landing page the section tabs carry in-page navigation, so the
+  // header keeps only cross-page links there.
+  const desktopLinks: NavLink[] = isHome
+    ? [{ href: "/hikes", label: "Photos", icon: "camera" }]
+    : [...sectionLinks.slice(0, 3), { href: "/hikes", label: "Photos", icon: "camera" }, ...sectionLinks.slice(3)];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-50 border-b border-border bg-surface">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 text-foreground"
+          className="flex min-w-0 items-center gap-2 text-foreground"
           onClick={() => setOpen(false)}
         >
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Icon name="peak" className="h-4 w-4" />
           </span>
-          <span className="font-display text-[17px] font-bold leading-none tracking-tight">
+          <span className="truncate font-display text-[17px] font-bold leading-none tracking-tight">
             {org.name}
           </span>
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-0.5 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={link.href}
-              aria-current={isCurrent(link) ? "true" : undefined}
-              className={cn(
-                "rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors",
-                isCurrent(link)
-                  ? "bg-surface text-foreground"
-                  : "text-muted hover:text-foreground"
-              )}
-            >
-              {link.label}
-            </a>
-          ))}
+          {desktopLinks.map((link) => {
+            const current = !link.href.includes("#") && pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={current ? "page" : undefined}
+                className={cn(
+                  "rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-background",
+                  current ? "text-foreground" : "text-muted hover:text-foreground"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <span className="mx-1.5 h-5 w-px bg-border" aria-hidden />
           <OwnerNavLink />
           <ThemeToggle />
@@ -104,13 +87,13 @@ export function Header() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-1.5 md:hidden">
+        <div className="flex shrink-0 items-center gap-1.5 md:hidden">
           <Link href="/book" className="btn-cta-sm !min-h-[36px] !px-3 !text-[13px]">
             Book
           </Link>
           <button
             type="button"
-            className="flex h-9 w-9 items-center justify-center rounded-md text-foreground hover:bg-surface"
+            className="flex h-9 w-9 items-center justify-center rounded-md border border-border text-foreground hover:bg-background"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -127,34 +110,17 @@ export function Header() {
             type="button"
             aria-label="Close menu"
             tabIndex={-1}
-            className="fixed inset-0 top-14 z-40 bg-black/30 md:hidden"
+            className="fixed inset-0 top-14 z-40 bg-black/40 md:hidden"
             onClick={() => setOpen(false)}
           />
           <nav
             id="mobile-menu"
             aria-label="Main"
-            className="absolute inset-x-0 top-full z-50 border-b border-border bg-background px-4 pb-4 pt-2 shadow-[var(--shadow)] md:hidden"
+            className="absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-border bg-surface px-4 pb-4 pt-3 shadow-[var(--shadow)] md:hidden"
           >
-            <ul className="grid grid-cols-2 gap-1">
-              {navLinks.map((link) => (
-                <li key={link.id}>
-                  <a
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={isCurrent(link) ? "true" : undefined}
-                    className={cn(
-                      "flex items-center rounded-md px-3 py-2.5 text-[15px] font-medium transition-colors",
-                      isCurrent(link)
-                        ? "bg-surface text-foreground"
-                        : "text-foreground/85 hover:bg-surface"
-                    )}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-2">
+            <MenuGroup title="On the home page" links={sectionLinks} onPick={() => setOpen(false)} />
+            <MenuGroup title="More" links={pageLinks} onPick={() => setOpen(false)} pathname={pathname} />
+            <div className="mt-1">
               <OwnerNavLink mobile />
             </div>
             <div className="mt-3 border-t border-border pt-3">
@@ -164,5 +130,44 @@ export function Header() {
         </>
       )}
     </header>
+  );
+}
+
+function MenuGroup({
+  title,
+  links,
+  onPick,
+  pathname,
+}: {
+  title: string;
+  links: NavLink[];
+  onPick: () => void;
+  pathname?: string;
+}) {
+  return (
+    <div className="mb-2">
+      <p className="px-2 pb-1 text-xs font-semibold text-muted">{title}</p>
+      <ul className="grid grid-cols-2 gap-x-1">
+        {links.map((link) => {
+          const current = pathname !== undefined && pathname === link.href.split("?")[0];
+          return (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                onClick={onPick}
+                aria-current={current ? "page" : undefined}
+                className={cn(
+                  "flex items-center gap-2.5 rounded-md px-2 py-2.5 text-[15px] transition-colors hover:bg-background",
+                  current ? "font-semibold text-foreground" : "text-foreground"
+                )}
+              >
+                <Icon name={link.icon} className="h-4 w-4 shrink-0 text-muted" />
+                <span className="truncate">{link.label}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
