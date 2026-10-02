@@ -300,7 +300,7 @@ export function BookingForm() {
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-lg font-bold text-foreground">{trip.title}</span>
                           {trip.type === "private" && (
-                            <span className="rounded-full border border-border bg-surface-elevated px-2.5 py-0.5 text-xs font-semibold text-muted">
+                            <span className="rounded-full border border-done/40 bg-done-muted px-2.5 py-0.5 text-xs font-semibold text-done">
                               Private
                             </span>
                           )}
