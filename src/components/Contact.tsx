@@ -46,7 +46,7 @@ export function Contact() {
   const channels = [
     {
       icon: "phone" as const,
-      label: "Call or text",
+      label: "Call",
       value: org.contact.phone,
       href: `tel:${org.contact.phone.replace(/\s/g, "")}`,
     },
@@ -59,7 +59,7 @@ export function Contact() {
     {
       icon: "chat" as const,
       label: "Facebook",
-      value: "Message us on Facebook",
+      value: "Messenger",
       href: org.contact.facebook,
       external: true,
     },
@@ -67,44 +67,40 @@ export function Contact() {
 
   return (
     <section id="contact" className="py-8 sm:py-12">
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-12">
+      <div className="mx-auto grid max-w-6xl gap-5 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-12">
         <div>
-          <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
-            Questions? Message us
-          </h2>
-          <p className="mt-1 text-sm text-muted">
-            For anything that isn&apos;t a booking. We usually reply within a day.
-          </p>
+          <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">Questions?</h2>
+          <p className="mt-1 text-sm text-muted">Tap to call, email, or message us.</p>
 
-          <ul className="mt-5 divide-y divide-border overflow-hidden rounded-md border border-border bg-background">
+          <ul className="mt-4 grid grid-cols-3 gap-2">
             {channels.map((c) => (
               <li key={c.label}>
                 <a
                   href={c.href}
                   {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface"
+                  className="flex h-full flex-col items-center gap-1 rounded-md border border-border bg-surface px-2 py-3 text-center transition-colors hover:border-accent/50 hover:bg-accent-muted"
                 >
-                  <Icon name={c.icon} className="h-[18px] w-[18px] shrink-0 text-success" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[11px] font-medium text-muted">{c.label}</span>
-                    <span className="block truncate text-sm font-semibold text-foreground">
-                      {c.value}
-                    </span>
-                  </span>
-                  <Icon
-                    name={c.external ? "external" : "arrowRight"}
-                    className="h-4 w-4 shrink-0 text-muted"
-                  />
+                  <Icon name={c.icon} className="h-5 w-5 text-accent" />
+                  <span className="text-[13px] font-semibold text-foreground">{c.label}</span>
+                  <span className="w-full truncate text-[11px] text-muted">{c.value}</span>
                 </a>
               </li>
             ))}
           </ul>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="rounded-md border border-border bg-surface p-4 sm:p-5"
-        >
+        <details className="group rounded-md border border-border bg-surface lg:self-start">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center gap-2">
+              <Icon name="chat" className="h-4 w-4 text-muted" />
+              Or send a message
+            </span>
+            <Icon
+              name="chevronDown"
+              className="h-4 w-4 text-muted transition-transform group-open:rotate-180"
+            />
+          </summary>
+        <form onSubmit={handleSubmit} className="border-t border-border p-4 sm:p-5">
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="contact-name" className="block text-[13px] font-medium text-foreground">
@@ -193,6 +189,7 @@ export function Contact() {
             .
           </p>
         </form>
+        </details>
       </div>
     </section>
   );
