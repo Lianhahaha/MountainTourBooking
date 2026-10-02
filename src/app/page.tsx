@@ -8,15 +8,21 @@ import { Trust } from "@/components/Trust";
 import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
 import { StickyBookButton } from "@/components/StickyBookButton";
+import { getScheduledTrips } from "@/data/trips";
+import { getAvailableTrekSessions } from "@/lib/trek-sessions-file";
 
 export const dynamic = "force-dynamic";
 
-export default function Home() {
+export default async function Home() {
+  const trip = getScheduledTrips()[0];
+  const sessions = await getAvailableTrekSessions();
+  const [next] = sessions;
+
   return (
     <>
       <Header />
       <main className="has-sticky-bar">
-        <Hero />
+        <Hero trip={trip} next={next} moreDates={Math.max(0, sessions.length - 1)} />
         <About />
         <Trips />
         <Reviews />

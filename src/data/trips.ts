@@ -99,3 +99,12 @@ export function getPrivateTrip(): Trip {
 export function getSlotsRemaining(trip: Trip): number {
   return Math.max(0, trip.maxSlots - trip.bookedCount);
 }
+
+/** Trek specs printed on the landing page spec strip (summit trek). */
+export const summitSpecs = [
+  { icon: "peak", value: "2,954 m", label: "Summit" },
+  { icon: "route", value: "~24 km", label: "Round trip" },
+  { icon: "clock", value: "2–3 days", label: "On trail" },
+  { icon: "gauge", value: "Hard", label: "Difficulty" },
+  { icon: "thermo", value: "5–15°C", label: "Summit camp" },
+] as const;

@@ -294,3 +294,145 @@ html {
 .booking-slots-low {
   @apply inline-flex rounded-full border border-warning/40 bg-warning-muted px-2.5 py-1 text-xs font-semibold text-warning;
 }
+
+/*
+ * Hang tag — the page's core object. Card stock with chamfered top corners,
+ * a real punched hole (masked through to the ground), an eyelet ring, and a
+ * 1px edge drawn by the outer layer showing around the face.
+ */
+.tag-wrap {
+  position: relative;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.08)) drop-shadow(0 10px 18px rgb(0 0 0 / 0.14));
+}
+
+.dark .tag-wrap {
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35)) drop-shadow(0 14px 22px rgb(0 0 0 / 0.4));
+}
+
+.tag {
+  --cut: 14px;
+  --hole-x: 22px;
+  --hole-y: 22px;
+  --hole-r: 6px;
+  position: relative;
+  height: 100%;
+  padding: 1px;
+  background: var(--tag-edge, var(--border));
+  clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%, 0 var(--cut));
+  -webkit-mask: radial-gradient(circle var(--hole-r) at var(--hole-x) var(--hole-y), transparent 96%, #000 100%);
+  mask: radial-gradient(circle var(--hole-r) at var(--hole-x) var(--hole-y), transparent 96%, #000 100%);
+}
+
+.tag-face {
+  position: relative;
+  height: 100%;
+  background: var(--tag-bg, var(--surface-elevated));
+  clip-path: polygon(
+    calc(var(--cut) - 0.4px) 0,
+    calc(100% - var(--cut) + 0.4px) 0,
+    100% calc(var(--cut) - 0.4px),
+    100% 100%,
+    0 100%,
+    0 calc(var(--cut) - 0.4px)
+  );
+}
+
+/* Eyelet ring around the hole */
+.tag-face::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--hole-x) - 1px - var(--hole-r) - 3px);
+  top: calc(var(--hole-y) - 1px - var(--hole-r) - 3px);
+  width: calc((var(--hole-r) + 3px) * 2);
+  height: calc((var(--hole-r) + 3px) * 2);
+  border-radius: 9999px;
+  border: 1.5px solid var(--stitch);
+  pointer-events: none;
+}
+
+.tag--lg {
+  --cut: 20px;
+  --hole-x: 28px;
+  --hole-y: 28px;
+  --hole-r: 7px;
+}
+
+.tag--sm {
+  --cut: 10px;
+  --hole-x: 16px;
+  --hole-y: 16px;
+  --hole-r: 4.5px;
+}
+
+.tag--center {
+  --hole-x: 50%;
+}
+
+.tag--center .tag-face::before {
+  left: calc(50% - 1px - var(--hole-r) - 3px);
+}
+
+.tag--private {
+  --tag-bg: var(--surface);
+  --tag-edge: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+/* Stitched rule, like the seam on a woven label */
+.stitch {
+  height: 1.5px;
+  background: repeating-linear-gradient(90deg, var(--stitch) 0 6px, transparent 6px 10px);
+}
+
+.stitch-v {
+  width: 1.5px;
+  background: repeating-linear-gradient(180deg, var(--stitch) 0 6px, transparent 6px 10px);
+}
+
+/* Slot meter: one segment per slot. Open = solid, taken = hollow. */
+.meter {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: 3px;
+}
+
+.seg {
+  height: 10px;
+  border-radius: 2px;
+}
+
+.seg--open {
+  background: var(--primary);
+}
+
+.meter--low .seg--open {
+  background: var(--sulfur);
+}
+
+.seg--taken {
+  box-shadow: inset 0 0 0 1.5px var(--border);
+}
+
+/* Signature moment: open slots press into the meter once, on first paint. */
+@media (prefers-reduced-motion: no-preference) {
+  .meter--animate .seg--open {
+    animation: seg-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 55ms + 250ms);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes seg-in {
+  from {
+    transform: scaleY(0.25);
+    opacity: 0.35;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Spec label — field label inside a tag */
+.spec-label {
+  @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-muted;
+}

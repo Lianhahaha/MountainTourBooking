@@ -41,3 +41,17 @@ export function difficultyColor(difficulty: string): string {
 export function cn(...classes: (string | false | undefined | null)[]): string {
   return classes.filter(Boolean).join(" ");
 }
+
+/** Date pieces for tag display, e.g. { month: "NOV", day: "01", weekday: "Sunday", year: "2026" }. */
+export function dateParts(dateStr: string) {
+  const d = new Date(dateStr + "T00:00:00");
+  if (Number.isNaN(d.getTime())) {
+    return { month: "", day: dateStr, weekday: "", year: "" };
+  }
+  return {
+    month: d.toLocaleDateString("en-PH", { month: "short" }).toUpperCase(),
+    day: String(d.getDate()).padStart(2, "0"),
+    weekday: d.toLocaleDateString("en-PH", { weekday: "long" }),
+    year: String(d.getFullYear()),
+  };
+}
