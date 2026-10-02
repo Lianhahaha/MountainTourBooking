@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  getAllTrekSessions,
+  getAllTrekSessionsStrict,
   getAvailableTrekSessions,
   getTrekSessionById,
   saveTrekSession,
@@ -21,9 +21,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Admin list says when the store is unreadable, so the owner never mistakes
+  // an outage for "no hiking days".
   if (admin && !availableOnly) {
-    const sessions = await getAllTrekSessions();
-    return NextResponse.json(sessions);
+    try {
+      const sessions = await getAllTrekSessionsStrict();
+      return NextResponse.json({ sessions, error: null });
+    } catch (err) {
+      console.error("Trek sessions admin GET error:", err);
+      return NextResponse.json({
+        sessions: [],
+        error: "Couldn't load hiking days. The database may be unavailable.",
+      });
+    }
   }
 
   const sessions = await getAvailableTrekSessions();
