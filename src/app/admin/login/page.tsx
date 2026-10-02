@@ -46,9 +46,9 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm rounded-md border border-border bg-surface p-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-accent">Owner login</p>
-        <h1 className="mt-2 text-xl font-bold text-foreground">{org.name}</h1>
+        <h1 className="text-xl font-bold text-foreground">Owner sign in</h1>
         <p className="mt-1 text-sm text-muted">
+          {org.name}.{" "}
           Manage bookings and hiking days. You can still browse the public site anytime while logged in.
         </p>
 
