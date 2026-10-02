@@ -52,6 +52,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.remove("light", "dark");
     root.classList.add(resolvedTheme);
     root.style.colorScheme = resolvedTheme;
+    // Keep the mobile browser bar in step with the page canvas.
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", resolvedTheme === "dark" ? "#0d1117" : "#ffffff");
   }, [resolvedTheme]);
 
   const setTheme = useCallback((next: Theme) => {
