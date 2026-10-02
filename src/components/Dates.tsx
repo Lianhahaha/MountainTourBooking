@@ -72,9 +72,7 @@ export function Dates({
               <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl">
                 {privateTrip.title}
               </h3>
-              <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted">
-                {privateTrip.description}
-              </p>
+              <p className="mt-1 max-w-2xl text-sm text-muted">{privateTrip.description}</p>
               <p className="tabular mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-foreground">
                 <span className="rounded-full border border-done/40 bg-done-muted px-2 py-0.5 text-xs font-medium text-done">
                   Private group
@@ -86,10 +84,6 @@ export function Dates({
                 <span className="flex items-center gap-1.5">
                   <Icon name="users" className="h-3.5 w-3.5 text-muted" />
                   Groups up to {privateTrip.maxSlots}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Icon name="calendar" className="h-3.5 w-3.5 text-muted" />
-                  Your choice of date
                 </span>
               </p>
             </div>
