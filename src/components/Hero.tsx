@@ -98,7 +98,7 @@ function NextClimbTag({
       </BoxHeader>
       <div className="p-4 sm:p-5">
         <p className="tabular font-display text-[3.5rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-6xl">
-          <span className="text-accent">{month}</span>
+          <span className="text-muted">{month}</span>
           <span className="ml-2">{day}</span>
         </p>
         <p className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">

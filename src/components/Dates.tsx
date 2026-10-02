@@ -190,7 +190,8 @@ function DateRow({
         </p>
         <p className="tabular mt-0.5 flex items-center gap-1.5 text-[13px] text-muted">
           <Icon name="clock" className="h-3.5 w-3.5 shrink-0" />
-          {session.time} meet-up · {year}
+          {session.time} meet-up
+          <span className="hidden lg:inline">· {year}</span>
         </p>
         {session.notes && (
           <p className="mt-1 flex items-start gap-1.5 text-[13px] text-muted">
