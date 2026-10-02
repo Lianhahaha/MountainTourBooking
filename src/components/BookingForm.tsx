@@ -346,8 +346,12 @@ export function BookingForm() {
             {isScheduled && (
               <div className="mt-6">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="booking-section-label">Choose your hiking day</p>
-                  <span className="booking-required-badge">Required</span>
+                  <p className="booking-section-label">
+                    Choose your hiking day
+                    <span className="ml-0.5 text-danger" aria-label="required">
+                      *
+                    </span>
+                  </p>
                 </div>
                 <p className="mt-1 text-sm text-muted">Only these dates are open. Tap one.</p>
                 <div className="mt-3 space-y-3">
@@ -551,7 +555,7 @@ export function BookingForm() {
                   className="field-input"
                 />
               </ImportantField>
-              <Field label="Notes or special requests" className="sm:col-span-2">
+              <Field label="Notes (optional)" className="sm:col-span-2">
                 <textarea
                   rows={3}
                   value={form.notes}
@@ -697,25 +701,12 @@ function TripSummary({
   session?: TrekSession;
 }) {
   return (
-    <div className="booking-callout mt-4">
-      <p className="font-bold text-foreground">{trip.title}</p>
-      <p className="mt-1 text-sm text-muted">{trip.location} · {trip.difficulty} · {trip.duration}</p>
-      {trip.type === "scheduled" && session && (
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="booking-date-badge">{formatDate(session.date)}</span>
-          <span className="booking-time-badge">{session.time}</span>
-        </div>
-      )}
-      {trip.type === "scheduled" && session && (
-        <p className="mt-2 text-sm font-medium text-foreground">{trip.meetupPoint}</p>
-      )}
-      {trip.type === "scheduled" && session?.notes && (
-        <div className="booking-note-callout">
-          <p className="text-xs font-semibold text-muted">Meet-up info</p>
-          <p className="mt-1 font-medium">{session.notes}</p>
-        </div>
-      )}
-    </div>
+    <p className="mt-1 text-sm text-muted">
+      <span className="font-semibold text-foreground">{trip.title}</span>
+      {" · "}
+      {trip.difficulty} · {trip.duration}
+      {trip.type === "scheduled" && session && ` · ${trip.meetupPoint}`}
+    </p>
   );
 }
 
@@ -726,7 +717,7 @@ function SelectionIndicator({ selected, large }: { selected: boolean; large?: bo
         "flex shrink-0 items-center justify-center rounded-full border-2 font-bold transition",
         large ? "h-7 w-7 text-sm" : "mt-1 h-6 w-6 text-xs",
         selected
-          ? "border-primary/60 bg-primary-muted text-primary"
+          ? "border-accent/60 bg-accent-muted text-accent"
           : "border-border bg-surface text-transparent"
       )}
       aria-hidden
@@ -751,10 +742,14 @@ function ImportantField({
 }) {
   return (
     <div className={className}>
-      <div className="flex flex-wrap items-center gap-2">
-        <label className="text-sm font-bold text-foreground">{label}</label>
-        {required && <span className="booking-required-badge">Required</span>}
-      </div>
+      <label className="text-sm font-semibold text-foreground">
+        {label}
+        {required && (
+          <span className="ml-0.5 text-danger" aria-label="required">
+            *
+          </span>
+        )}
+      </label>
       {hint && <p className="mt-1 text-xs font-medium text-muted">{hint}</p>}
       <div className="mt-1.5">{children}</div>
     </div>
