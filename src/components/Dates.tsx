@@ -79,16 +79,16 @@ export function Dates({
         <Box className="mt-6 border-accent/40">
           <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-8">
             <div>
-              <span className="inline-flex rounded-full border border-accent/40 px-2 py-0.5 text-xs font-medium text-accent">
-                Private group
-              </span>
-              <h3 className="mt-2 font-display text-xl font-bold text-foreground sm:text-2xl">
+              <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl">
                 {privateTrip.title}
               </h3>
               <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted">
                 {privateTrip.description}
               </p>
-              <p className="tabular mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-foreground">
+              <p className="tabular mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-foreground">
+                <span className="rounded-full border border-accent/40 px-2 py-0.5 text-xs font-medium text-accent">
+                  Private group
+                </span>
                 <span>
                   From <strong className="font-semibold">{formatPrice(privateTrip.price)}</strong>{" "}
                   / person
