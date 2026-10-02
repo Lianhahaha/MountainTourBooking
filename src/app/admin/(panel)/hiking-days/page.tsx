@@ -196,7 +196,7 @@ export default function AdminHikingDaysPage() {
   }
 
   async function handleCancel(id: string) {
-    if (!confirm("Cancel this hiking day? Existing bookings will keep their date.")) return;
+    if (!confirm("Cancel this hiking day? Every booking on it will be cancelled and emailed.")) return;
     setError("");
     const res = await fetch(`/api/trek-sessions/${id}`, {
       method: "PATCH",
