@@ -157,12 +157,12 @@ function DateRow({
   const price = session.price ?? trip.price;
 
   return (
-    <li className="grid gap-x-5 gap-y-2.5 px-4 py-3.5 md:grid-cols-[8rem_minmax(0,1fr)_minmax(0,14rem)_auto] md:items-center">
-      <div className="flex items-baseline gap-2.5 md:block">
+    <li className="grid gap-x-5 gap-y-2.5 px-4 py-3.5 sm:grid-cols-2 sm:items-center lg:grid-cols-[8rem_minmax(0,1fr)_minmax(0,14rem)_auto]">
+      <div className="flex items-baseline gap-2.5 lg:block">
         <p className="tabular font-display text-[1.75rem] font-extrabold leading-none tracking-tight text-foreground">
           {month} <span className="text-success">{day}</span>
         </p>
-        <p className="text-xs text-muted md:mt-1">
+        <p className="text-xs text-muted lg:mt-1">
           {weekday}, {year}
         </p>
       </div>
@@ -184,7 +184,7 @@ function DateRow({
 
       <SlotMeter maxSlots={session.maxSlots} remaining={remaining} compact />
 
-      <div className="flex items-center justify-between gap-3 md:justify-end">
+      <div className="flex items-center justify-between gap-3 lg:justify-end">
         <p className="tabular text-sm font-semibold text-foreground">
           {formatPrice(price)}
           <span className="ml-1 text-xs font-normal text-muted">/ person</span>

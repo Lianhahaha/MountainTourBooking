@@ -26,7 +26,7 @@ export function Hero({
   return (
     <section id="overview" className="relative border-b border-border">
       <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-5 px-4 pb-8 pt-6 [grid-template-areas:'title'_'tag'_'body'] sm:px-6 sm:pt-10 md:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] md:pb-14 md:pt-14 md:[grid-template-areas:'title_tag'_'body_tag'] lg:gap-x-16">
-        <h1 className="font-display text-[2rem] font-extrabold leading-[1.02] tracking-tight text-foreground [grid-area:title] sm:text-5xl md:self-end lg:text-[3.5rem]">
+        <h1 className="font-display text-[2rem] font-extrabold leading-[1.02] tracking-tight text-foreground [grid-area:title] sm:text-5xl md:self-end md:text-[2.75rem] lg:text-[3.5rem]">
           {org.tagline}
         </h1>
 
@@ -43,11 +43,11 @@ export function Hero({
             {org.shortDescription}
           </p>
 
-          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5">
+          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-5">
             {summitSpecs.map((spec) => (
               <li
                 key={spec.label}
-                className="flex flex-col gap-0.5 bg-background px-2.5 py-2 max-sm:last:col-span-2 sm:px-3"
+                className="flex flex-col gap-0.5 bg-background px-2.5 py-2 last:col-span-2 sm:px-3 sm:last:col-span-1 md:last:col-span-2 lg:last:col-span-1"
               >
                 <span className="flex items-center gap-1.5 text-muted">
                   <Icon name={spec.icon} className="h-3.5 w-3.5 shrink-0" />
