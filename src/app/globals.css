@@ -279,7 +279,7 @@ html {
 }
 
 .booking-total-box {
-  @apply rounded-md border border-primary/30 bg-primary-muted p-5;
+  @apply rounded-md border border-border bg-background p-4;
 }
 
 .booking-review-highlight {
