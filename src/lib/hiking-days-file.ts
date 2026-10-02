@@ -1,29 +1,29 @@
 import { db } from "@/lib/firebase";
 import { collection, doc, getDocs, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import type { HikingDay } from "@/data/hiking-days";
-import { seedHikingDays } from "@/data/hiking-days";
 
 const COLLECTION = "hiking_days";
 
+/** Every album. Throws when Firestore is unavailable so admin screens can say so. */
+export async function getAllHikingDaysStrict(): Promise<HikingDay[]> {
+  const snapshot = await getDocs(collection(db, COLLECTION));
+  const days: HikingDay[] = [];
+  snapshot.forEach((d) => {
+    days.push(d.data() as HikingDay);
+  });
+  return days.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+/**
+ * Every album, or none when Firestore is unavailable. Sample albums are not
+ * written back when the owner deletes the last one.
+ */
 export async function getAllHikingDays(): Promise<HikingDay[]> {
   try {
-    const snapshot = await getDocs(collection(db, COLLECTION));
-    const days: HikingDay[] = [];
-    snapshot.forEach((doc) => {
-      days.push(doc.data() as HikingDay);
-    });
-
-    if (days.length === 0) {
-      for (const day of seedHikingDays) {
-        await setDoc(doc(db, COLLECTION, day.id), day);
-      }
-      return seedHikingDays;
-    }
-
-    return days.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return await getAllHikingDaysStrict();
   } catch (err) {
-    console.error("Firestore unavailable, serving seed hiking days:", err);
-    return seedHikingDays;
+    console.error("Firestore unavailable, returning no hike albums:", err);
+    return [];
   }
 }
 
@@ -32,8 +32,8 @@ export async function getHikingDayById(id: string): Promise<HikingDay | undefine
     const snap = await getDoc(doc(db, COLLECTION, id));
     return snap.exists() ? (snap.data() as HikingDay) : undefined;
   } catch (err) {
-    console.error("Firestore unavailable, looking up seed hiking day:", err);
-    return seedHikingDays.find((d) => d.id === id);
+    console.error("Firestore unavailable, could not look up hike album:", err);
+    return undefined;
   }
 }
 
