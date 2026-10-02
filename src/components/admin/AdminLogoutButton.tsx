@@ -1,23 +1,30 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function AdminLogoutButton() {
   const router = useRouter();
+  const [busy, setBusy] = useState(false);
 
   async function handleLogout() {
-    await fetch("/api/admin/login", { method: "DELETE" });
-    router.push("/admin/login");
-    router.refresh();
+    setBusy(true);
+    try {
+      await fetch("/api/admin/login", { method: "DELETE" });
+    } finally {
+      router.push("/admin/login");
+      router.refresh();
+    }
   }
 
   return (
     <button
       type="button"
       onClick={handleLogout}
-      className="rounded-md border border-border px-3 py-1.5 text-sm text-muted transition hover:border-muted hover:bg-surface-elevated hover:text-foreground"
+      disabled={busy}
+      className="rounded-md border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:bg-background hover:text-foreground disabled:opacity-60"
     >
-      Log out
+      {busy ? "Logging out…" : "Log out"}
     </button>
   );
 }
