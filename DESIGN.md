@@ -92,7 +92,6 @@ typography:
     fontWeight: 600
     lineHeight: 1.4
 rounded:
-  seg: "2px"
   md: "6px"
   full: "9999px"
 spacing:
@@ -146,10 +145,49 @@ components:
     textColor: "{colors.done}"
     rounded: "{rounded.full}"
     padding: "2px 8px"
-  slot-segment:
-    backgroundColor: "{colors.primary}"
-    rounded: "{rounded.seg}"
-    height: "10px"
+  button-secondary-sm:
+    backgroundColor: "{colors.surface-elevated}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.md}"
+    padding: "6px 14px"
+    height: "36px"
+  slot-meter-pill:
+    backgroundColor: "{colors.accent-muted}"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.full}"
+    padding: "2px 8px"
+  slot-meter-pill-low:
+    backgroundColor: "{colors.warning-muted}"
+    textColor: "{colors.warning}"
+    rounded: "{rounded.full}"
+    padding: "2px 8px"
+  slot-meter-pill-full:
+    backgroundColor: "{colors.danger-muted}"
+    textColor: "{colors.danger}"
+    rounded: "{rounded.full}"
+    padding: "2px 8px"
+  slot-meter-track:
+    backgroundColor: "{colors.border}"
+    rounded: "{rounded.full}"
+    height: "6px"
+  slot-meter-fill:
+    backgroundColor: "{colors.accent}"
+    rounded: "{rounded.full}"
+    height: "6px"
+  slot-meter-fill-low:
+    backgroundColor: "{colors.warning}"
+  date-tile:
+    backgroundColor: "{colors.background}"
+    rounded: "{rounded.md}"
+    width: "3.25rem"
+  date-tile-month:
+    backgroundColor: "{colors.accent-muted}"
+    textColor: "{colors.accent}"
+  next-date-pill:
+    backgroundColor: "{colors.accent-muted}"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.full}"
+    padding: "1px 8px"
   header-bar:
     backgroundColor: "{colors.surface}"
     height: "56px"
@@ -177,36 +215,36 @@ components:
 
 **Creative North Star: "The Trail Repo"**
 
-The site uses GitHub's own Primer theme, unaltered: the standard GitHub dark palette by default, the standard GitHub light palette as the alternative, bordered boxes with surface-tinted header rows, 6px corners, small label pills, underline tabs with a coral marker, green for the action you take and blue for the link you follow. The owner pinned this theme and asked for GitHub's palette itself. New colours are welcome only when they are GitHub colours doing a GitHub job: the purple "done" hue marks private group climbs and the coral tab hue marks the active section tab.
+The site uses GitHub's own Primer theme, unaltered: the standard GitHub dark palette by default, the standard GitHub light palette as the alternative, bordered boxes with surface-tinted header rows, 6px corners, small label pills, underline tabs with a coral marker, green for the action you take, blue for the link you follow and the facts you read (dates and slots left). The owner pinned this theme and asked for GitHub's palette itself. New colours are welcome only when they are GitHub colours doing a GitHub job: the purple "done" hue marks private group climbs and the coral tab hue marks the active section tab.
 
 Density is compact and phone-first. Body text is 15px, labels are 13px, and the Next-climb box carries date numerals, a slot meter, the price and a Book button above the fold at 390x844. The landing page reads like a repository page: a surface-coloured header bar, a sticky row of section tabs with counters, then sections that share one canvas and are separated by 1px rules. Information sits in boxes and divided lists rather than in floating cards. Photos sit in plain 6px-cornered frames with no scrims or overlays. Depth comes from the canvas-and-surface pairing plus a single shadow kept for the box that leads a page.
 
-The one signature is the segmented slot meter: one segment per slot, open slots filled and taken slots hollow, with the count always spelled out in words beside it. It is the only moving element. Open segments press in once on first paint.
+The one signature is the slot meter: a status pill that says the count in words, above one thin rounded bar showing the share of slots still open. It reads blue while slots are plentiful, amber when 3 or fewer remain and red when full. It is the only moving element: on the hero, the bar grows in once on first paint. Upcoming dates sit in a divided list where each row opens with a small calendar tile.
 
 **Key Characteristics:**
-- Standard GitHub Primer palette and vocabulary: green primary buttons, blue links, bordered boxes, label pills, underline tabs.
+- Standard GitHub Primer palette and vocabulary: green primary buttons, blue links and information, bordered boxes, label pills, underline tabs.
 - GitHub dark is the default, GitHub light the alternative; every colour is a CSS custom property that swaps per theme.
 - Boxes follow GitHub: canvas body, surface header row. Sections share one canvas, divided by 1px rules.
-- One radius (6px) for everything rectangular; pills are fully round; slot segments are 2px.
+- One radius (6px) for everything rectangular; pills and the slot-meter bar are fully round.
 - Outfit for headings and numerals, DM Sans for everything else.
 - One motion moment (the slot meter), and it respects reduced motion.
 
 ## Colors
 
-GitHub's own neutral canvas with one green action colour, a brighter green for success text, one blue link colour, GitHub's purple and coral for two narrow jobs, and amber and red kept for slot scarcity and errors. Dark values are canonical; each has a `-light` sibling in the frontmatter, and the CSS swaps them on the `.dark` class.
+GitHub's own neutral canvas with one green action colour, a brighter green for success marks, one blue for links and information, GitHub's purple and coral for two narrow jobs, and amber and red kept for slot scarcity and errors. Dark values are canonical; each has a `-light` sibling in the frontmatter, and the CSS swaps them on the `.dark` class.
 
 ### Primary
-- **GitHub Green** (primary / primary-light): primary buttons, the brand mark tile, open slot segments, the "Easy" difficulty pill text. Hover shifts to **GitHub Green Hover** (primary-hover). **Green Wash** (primary-muted) tints selected booking options, the estimated-total box and the "Easy" pill.
-- **Success Green** (success / success-light): green as text and icon rather than fill. The day numeral in the Next-climb date and in every date row, "Next" date pill text, reassurance and credential check icons, the Included list icons, contact channel icons, success messages.
+- **GitHub Green** (primary / primary-light): primary buttons (on the dates list, only the next date's Book), the brand mark tile, booking-form step markers, the "Easy" difficulty pill text. Hover shifts to **GitHub Green Hover** (primary-hover). **Green Wash** (primary-muted) tints selected booking options, the estimated-total box and the "Easy" pill.
+- **Success Green** (success / success-light): green as text and icon rather than fill. Reassurance and credential check icons, credential chips, the Included list icons, contact channel icons, success messages. It never colours dates or slot counts.
 
 ### Secondary
-- **Link Blue** (accent / accent-light): text links, "+N more dates" and "Ask something else" links, the focus ring (2px outline, 2px offset), focused field borders, Pack list icons, the selected date badge. Hover shifts to **Link Blue Hover**. **Blue Wash** (accent-muted) marks checked safety confirmations.
+- **Link Blue** (accent / accent-light): links and information. As links: text links, "+N more dates" and "Ask something else" links, the focus ring (2px outline, 2px offset), focused field borders. As information: the slot-meter pill text and bar while more than 3 slots are open, the month band of each date tile, the "Next climb" pill, the selected date badge in the booking form, Pack list icons. Hover shifts to **Link Blue Hover**. **Blue Wash** (accent-muted) fills the slot-meter pill, the date-tile month band and the "Next climb" pill, marks checked safety confirmations, and at 40% grounds the next date's row.
 
 ### Tertiary
 - **Done Purple** (done / done-light): private group climbs only. The private-group box border (at 40%), the "Private group" pill (Purple Wash fill, done-muted, with a 40% purple border) on the landing page and in the booking form.
 - **Tab Coral** (tab-active / tab-active-light): only the 2px underline beneath the active section tab.
-- **Trail Amber** (warning / warning-light): scarcity and ratings. Slot meters at 3 or fewer open slots turn amber, as do "Only N slots left" labels, "Moderate" pills, required badges and review stars.
-- **Signal Red** (danger / danger-light): "Full" slot labels, "Hard" difficulty pills, form errors.
+- **Trail Amber** (warning / warning-light): scarcity and ratings. Slot meters (pill and bar) at 3 or fewer open slots turn amber, as do "Only N slots left" labels, "Moderate" pills, required badges and review stars.
+- **Signal Red** (danger / danger-light): full slot meters, "Hard" difficulty pills, form errors.
 
 ### Neutral
 - **Canvas** (background): the page, every box body, review cards, the FAQ and contact lists, spec-strip cells. Light: **Canvas White** (background-light).
@@ -215,10 +253,10 @@ GitHub's own neutral canvas with one green action colour, a brighter green for s
 - **Field Well** (input-bg): form field wells; matches the canvas in both themes.
 - **Ink** (foreground): headings and body.
 - **Quiet Ink** (muted): descriptions, meta text, inactive nav and tabs, icons in tabs and menus, spec-strip labels.
-- **Rule** (border): every box edge, section divider, hollow slot segment and the scrollbar thumb.
+- **Rule** (border): every box edge, section divider, date tile, the slot-meter track and the scrollbar thumb.
 
 ### Named Rules
-**The Green Acts, Blue Goes Rule.** Green fill means "do this" (book, send, confirm) and blue means "go there" (links, focus). Never use a blue button for the main action or a green text link. Success Green marks confirmation and the date numeral, never a link.
+**The Green Acts, Blue Informs Rule.** Green means "do this" (book, send, confirm) or "done" (success checks and messages). Blue means "go there" (links, focus) or "here is the fact" (dates, availability, the next climb). Never use a blue button for the main action, a green text link, or green for a date or a slot count. Date numerals stay in Ink, with the hero month in Quiet Ink.
 
 **The One Job Per Accent Rule.** Purple marks private group climbs and coral marks the active tab; neither appears anywhere else. A new colour enters only as a GitHub palette hue with one named job.
 
@@ -235,17 +273,17 @@ GitHub's own neutral canvas with one green action colour, a brighter green for s
 
 ### Hierarchy
 - **Display** (Outfit 800, 2rem on phones, 3rem at sm, 2.75rem at md where the hero splits, 3.5rem at lg, 1.02): the single landing headline.
-- **Numeral** (Outfit 800, 3.5rem on phones to 3.75rem, 0.85, tabular): the Next-climb month and day. Date rows use the same treatment at 1.75rem. Prices use Outfit 700 at 1.875rem; spec-strip values use Outfit 700 at 15px to 16px.
+- **Numeral** (Outfit 800, 3.5rem on phones to 3.75rem, 0.85, tabular): the Next-climb month in Quiet Ink and day in Ink. Date-tile days use Outfit 700 at 1.25rem in Ink. The hero price uses Outfit 700 at 1.875rem; date-row prices are DM Sans 700 at 16px over a 12px muted "per person"; spec-strip values use Outfit 700 at 15px to 16px.
 - **Headline** (Outfit 700, 1.5rem on phones to 1.875rem, 1.15): section headings (h2). Legal pages use 1.875rem to 2.25rem at weight 800 for h1.
 - **Title** (Outfit 700, 1.125rem to 1.5rem, 1.15): h3 inside sections and boxes. Legal h2 is 1.1875rem at 700.
 - **Body** (DM Sans 400, 15px, 1.55): base body. Section descriptions and box copy run at 14px with 1.625 line-height; FAQ answers cap at 68ch; legal prose is 15px at 1.7.
-- **Label** (DM Sans 500 to 600, 13px to 14px): box header titles, header links and section tabs (14px), form labels, meta rows, slot-meter wording.
+- **Label** (DM Sans 500 to 600, 13px to 14px): box header titles, header links and section tabs (14px), form labels, meta rows, slot-meter pill wording (13px, 12px compact). Date-row headings (weekday and date) are 15px semibold.
 - **Caption** (DM Sans 500 to 600, 11px to 12px, sentence case): spec-strip labels, pill text, tab counters, contact channel labels, menu group labels.
 
 ### Named Rules
 **The Tabular Numbers Rule.** Every date, slot count, price, tab counter and booking reference uses tabular figures so the numbers don't jitter as they change.
 
-**The Sentence-Case Label Rule.** Small labels are sentence case, 11px to 13px, semibold, muted. No tracked uppercase labels, and no label sits above a heading as an eyebrow.
+**The Sentence-Case Label Rule.** Small labels are sentence case, 11px to 13px, semibold, muted. No tracked uppercase labels, and no label sits above a heading as an eyebrow. The abbreviated month on dates (NOV) is uppercase because it is calendar data, not a label.
 
 ## Layout
 
@@ -253,7 +291,7 @@ All sections share the page canvas. Each is closed by a 1px bottom rule; there a
 
 Layouts are phone-first single columns that split at md or lg into asymmetric two-column grids (about 1fr to 2fr or 1fr to 1.6fr). The hero uses named grid areas: title, Next-climb box and body stack on phones, and from md the box moves to a fixed 25rem column right of the headline. Inclusion lists become a segmented tab control on phones and three boxes from md.
 
-**Responsive grids.** The hero spec strip is a 1px gap-on-border grid inside a rounded frame: 3 columns on phones, 5 at sm, back to 3 from md (where the hero splits and the text column narrows) and 5 again from xl. Whenever it runs 3 columns, the last cell spans 2 so the grid closes without a hole. Date rows stack on phones, form a 2x2 grid from sm (date and meet-up, slot meter and price with Book), and run as 4 columns from lg (8rem date, flexible details, 14rem meter, auto price and Book).
+**Responsive grids.** The hero spec strip is a 1px gap-on-border grid inside a rounded frame: 3 columns on phones, 5 at sm, back to 3 from md (where the hero splits and the text column narrows) and 5 again from xl. Whenever it runs 3 columns, the last cell spans 2 so the grid closes without a hole. Date rows are a named-area grid. Below lg a 3.25rem calendar tile spans both rows on the left; the first row holds the info (weekday and date, meet-up time, notes) with the price top-right, and the second row holds availability and Book. From lg each row is one line of five areas: tile, flexible info, 13rem availability, 6.5rem price and Book, vertically centred with 24px column gaps. Rows pad 16px with 12px gaps.
 
 **Tap targets.** Buttons get a 44px minimum height on coarse pointers only (`pointer: coarse`), so desktop stays compact at 36px to 40px. Inputs drop to 16px font below 640px to stop iOS focus zoom.
 
@@ -269,14 +307,13 @@ Depth comes from GitHub's pairing of canvas and surface: canvas for content, sur
 ### Shadow Vocabulary
 - **Lead, dark** (`box-shadow: 0 0 0 1px #30363d, 0 8px 24px rgba(1,4,9,0.6)`): the hero Next-climb box, the open phone menu and the selected segment, dark mode. This is GitHub's dark overlay shadow, a 1px ring plus a deep drop.
 - **Lead, light** (`box-shadow: 0 1px 0 rgba(31,35,40,0.04), 0 3px 6px rgba(140,149,159,0.15)`): same uses in light mode.
-- **Hollow segment** (`box-shadow: inset 0 0 0 1.5px var(--border)`): taken slot segments only. This draws an outline; it does not add elevation.
 
 ### Named Rules
 **The One Lifted Box Rule.** At most one box per view carries the shadow, and it is the one holding the primary action. The selected segment of a segmented control may carry it as a state marker. Hover never adds shadow; hover changes border or ground.
 
 ## Shapes
 
-One radius governs every rectangle: buttons, boxes, fields, badges, photo frames, nav links, tabs, segmented controls (6px). Status and difficulty labels, tab counters, step numbers and the active-tab underline are fully round. Slot segments are 2px. Borders are always 1px Rule, tinted with the role colour at 30% to 60% when a box carries meaning (private-group box in purple, total box in green). Boxes clip their children (overflow hidden) so header rows and divided lists meet the corners cleanly. Empty states use a dashed 1px border.
+One radius governs every rectangle: buttons, boxes, fields, badges, photo frames, nav links, tabs, segmented controls (6px). Status and difficulty labels, tab counters, step numbers, the active-tab underline and the slot-meter track and fill are fully round. Date tiles take the 6px corner and clip their month band. Borders are always 1px Rule, tinted with the role colour at 30% to 60% when a box carries meaning (private-group box in purple, total box in green). Boxes clip their children (overflow hidden) so header rows and divided lists meet the corners cleanly. Empty states use a dashed 1px border.
 
 ## Components
 
@@ -284,13 +321,13 @@ One radius governs every rectangle: buttons, boxes, fields, badges, photo frames
 Compact and confident, GitHub-sized.
 - **Shape:** gently rounded (6px).
 - **Primary:** GitHub Green fill, white semibold 14px text, 10px by 20px padding, 40px minimum height, 8px icon gap. Full-width at 15px with 12px vertical padding for the hero Book button.
-- **Primary small:** same fill at 6px by 14px, 36px minimum height; header "Book a climb", phone header "Book" (13px), date-row "Book", sticky-bar "Book now".
+- **Primary small:** same fill at 6px by 14px, 36px minimum height; header "Book a climb", phone header "Book" (13px), the next date's "Book", sticky-bar "Book now".
 - **Hover / Focus:** fill shifts to GitHub Green Hover (colour transition only); focus shows the 2px Link Blue outline at 2px offset. Disabled drops to 40% (60% for the small variant) opacity.
-- **Secondary:** Raised Surface fill, 1px Rule border, foreground text; hover darkens the border to Quiet Ink. Used for "Request a private climb" and "Ask about dates".
+- **Secondary:** Raised Surface fill, 1px Rule border, foreground text; hover darkens the border to Quiet Ink. Used for "Request a private climb" and "Ask about dates". At the small size (6px by 14px, 36px) it is the "Book" on every date row after the first; full dates show it disabled as "Full" at 60% opacity.
 - **Text links:** Link Blue, 13px medium, underline on hover with a 3px offset and 1px thickness, often trailed by a 14px arrow icon.
 
 ### Label pills
-- **Style:** fully round, 11px to 12px semibold, 2px by 8px padding. Difficulty pills use a wash plus role text (Easy green, Moderate amber, Hard red). Outline pills use a 1px role border at 30% to 40% with role text ("Private group" in purple on Purple Wash, "Next" in success green, slots-left in green, low slots in amber).
+- **Style:** fully round, 11px to 12px semibold, 2px by 8px padding. Difficulty pills use a wash plus role text (Easy green, Moderate amber, Hard red). Outline pills use a 1px role border at 30% to 40% with role text ("Private group" in purple on Purple Wash, "Next climb" in blue on Blue Wash, low slots in amber).
 - **State:** pills are informational and are never clickable.
 
 ### Box and box header
@@ -303,10 +340,17 @@ The core container, GitHub's "Box".
 - **Shadow Strategy:** flat, apart from the lead box (see Elevation).
 
 ### Slot meter (signature)
-- **Structure:** a grid with one column per slot, 3px gaps, 10px tall segments (8px compact) with 2px corners.
-- **States:** open segments are filled GitHub Green; taken segments are hollow with a 1.5px inset Rule. With 3 or fewer open, the open segments turn Trail Amber and the label reads "Only N slots left" in amber. At zero the label reads "Full" in red.
-- **Words always:** a 13px (12px compact) semibold tabular label sits under the bar: "N of M slots left". The segments are aria-hidden; the words carry the meaning.
-- **Motion:** on the hero meter only, open segments scale up from 25% height and fade in from 35% opacity, once on first paint (700ms, cubic-bezier(0.16, 1, 0.3, 1), staggered 55ms per segment after a 250ms delay). Under reduced motion they render settled.
+- **Structure:** a fully round status pill (2px by 8px, 6px gap) holding a 14px icon and the count in words, semibold and tabular at 13px (12px compact). Below it, 8px down (6px compact), a 6px (4px compact) fully round Rule-coloured track holds one fill bar whose width is the share of slots still open.
+- **States:** more than 3 open: Blue Wash pill, Link Blue text, a people icon, "N of M slots left", blue bar. 3 or fewer: Amber Wash pill, "Only N slots left", amber bar. None: Red Wash pill, a close icon, "Full", an empty track.
+- **Words always:** the pill carries the meaning. The bar is a progressbar labelled "Slots left" with min 0, max the slot total and the current open count.
+- **Motion:** on the hero meter only, the bar grows from 8% (scaleX from the left edge) once on first paint (900ms, cubic-bezier(0.16, 1, 0.3, 1), 200ms delay). Under reduced motion it renders settled.
+
+### Date row
+Each upcoming date is a row in the dates Box's divided list.
+- **Calendar tile:** 3.25rem wide, 6px corners, 1px Rule, Canvas ground, clipped. A Blue Wash band holds the uppercase month (11px bold, Link Blue); the day sits below in Outfit 700 at 1.25rem in Ink. The tile is aria-hidden; the row heading says the date in words.
+- **Info:** weekday and date at 15px semibold Ink, the "Next climb" pill on the first row, then 13px muted meta with 14px icons: a clock with the meet-up time (the year added only at lg), and a pin with notes clamped to 2 lines.
+- **Price:** 16px bold tabular Ink over a 12px muted "per person"; right-aligned on phones, left-aligned in its lg column.
+- **Next date:** only the first row gets Blue Wash at 40% as its ground, the "Next climb" pill and the green small primary Book. Other rows use the small secondary Book; full dates show a disabled "Full".
 
 ### Inputs / Fields
 - **Style:** Field Well background, 1px Rule border, 6px corners, 8px by 12px padding, 14px text, muted placeholder, primary-green caret. Labels sit above in 13px medium foreground with a 4px gap.
@@ -342,12 +386,12 @@ Album photos sit in 4:3, 6px-cornered frames on Raised Surface with object-fit c
 - **Do** group related content in a Box with a Canvas body and a Surface header row, and divide items inside it with 1px rules.
 - **Do** separate landing sections with a single 1px Rule on the shared canvas.
 - **Do** use 6px corners on every rectangle and full rounding only for pills, counters, step numbers and the tab underline.
-- **Do** spell out slot counts in words beside every slot meter, and use tabular figures for dates, slots, prices and counters.
+- **Do** spell out slot counts in words in the pill of every slot meter, and use tabular figures for dates, slots, prices and counters.
 - **Do** keep 44px minimum tap targets on coarse pointers only, and 16px inputs on phones.
 - **Do** define every new colour as a custom property with both a GitHub dark and a GitHub light value, taken from GitHub's palette and given one named job.
 - **Do** draw icons from the single 24px, 1.75-stroke inline SVG set.
 - **Do** label built-in sample albums "Sample album · stock photos" and keep them out of featured slots.
-- **Do** gate any new motion behind `prefers-reduced-motion: no-preference`; the slot-meter entrance is the only signature motion.
+- **Do** gate any new motion behind `prefers-reduced-motion: no-preference`; the slot-meter bar growth is the only signature motion.
 
 ### Don't:
 - **Don't** put eyebrow or kicker labels above headings, and don't use tracked uppercase micro-labels.
@@ -358,4 +402,5 @@ Album photos sit in 4:3, 6px-cornered frames on Raised Surface with object-fit c
 - **Don't** use unicode glyphs (check marks, stars, arrows, bullets) as icons; use the SVG set.
 - **Don't** add a second shadowed box to a view, and don't add shadow on hover.
 - **Don't** use purple for anything but private group climbs, coral for anything but the active tab, or amber and red for anything but scarcity, ratings, full dates and errors.
-- **Don't** introduce a radius other than 6px, full, or the 2px slot segment.
+- **Don't** introduce a radius other than 6px or full.
+- **Don't** colour dates or slot counts green, and don't give more than one date row the green Book button.

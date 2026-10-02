@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-02T06:30:05.165Z",
+  "generatedAt": "2026-10-02T07:07:12.000Z",
   "title": "Design System: Tikling Apo Tours",
   "extensions": {
     "colorMeta": {
@@ -700,7 +700,7 @@
       },
       "numeral": {
         "displayName": "Numeral",
-        "purpose": "Next-climb month and day (date rows at 1.75rem); tabular figures."
+        "purpose": "Next-climb month (Quiet Ink) and day (Ink); date-tile days at 1.25rem Outfit 700; tabular figures."
       },
       "headline": {
         "displayName": "Headline",
@@ -720,7 +720,7 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Box header titles, header links and tabs (14px), form labels, slot-meter wording."
+        "purpose": "Box header titles, header links and tabs (14px), form labels, slot-meter pill wording (13px, 12px compact)."
       },
       "caption": {
         "displayName": "Caption",
@@ -737,18 +737,13 @@
         "name": "lead-light",
         "value": "0 1px 0 rgba(31, 35, 40, 0.04), 0 3px 6px rgba(140, 149, 159, 0.15)",
         "purpose": "Same uses, light theme."
-      },
-      {
-        "name": "hollow-segment",
-        "value": "inset 0 0 0 1.5px var(--border)",
-        "purpose": "Taken slot segments; an outline, not elevation."
       }
     ],
     "motion": [
       {
-        "name": "seg-in",
-        "value": "700ms cubic-bezier(0.16, 1, 0.3, 1) both; delay calc(var(--i) * 55ms + 250ms)",
-        "purpose": "Open slot segments press in once on first paint (scaleY 0.25 to 1, opacity 0.35 to 1); hero meter only; disabled under reduced motion."
+        "name": "meter-fill",
+        "value": "900ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both",
+        "purpose": "The hero slot-meter bar grows from scaleX(0.08), origin left, once on first paint; renders settled under reduced motion."
       },
       {
         "name": "state-transition",
@@ -808,7 +803,7 @@
       "name": "Small Primary Button",
       "kind": "button",
       "refersTo": "button-primary-sm",
-      "description": "Header, date-row and sticky-bar Book button.",
+      "description": "Header, next-date-row and sticky-bar Book button.",
       "html": "<a class=\"ds-btn-cta-sm\" href=\"#\">Book a climb</a>",
       "css": ".ds-btn-cta-sm{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:6px 14px;border-radius:6px;background:var(--primary);color:var(--primary-foreground);font-family:var(--font-sans);font-size:14px;font-weight:600;text-decoration:none;transition:background-color .15s}.ds-btn-cta-sm:hover{background:var(--primary-hover)}.ds-btn-cta-sm:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
     },
@@ -825,8 +820,8 @@
       "kind": "card",
       "refersTo": "box",
       "description": "GitHub Box: canvas body, surface header row.",
-      "html": "<div class=\"ds-box\"><div class=\"ds-box-header\"><span class=\"ds-box-title\">Next climb</span><span class=\"ds-box-meta\">Mt. Apo Summit</span></div><div class=\"ds-box-body\"><span class=\"ds-box-date\">Nov <span class=\"ds-success\">14</span></span>Box content sits here at 14px.</div></div>",
-      "css": ".ds-box{overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--background);color:var(--foreground);font-family:var(--font-sans);max-width:400px}.ds-box-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface)}.ds-box-title{font-size:13px;font-weight:600}.ds-box-meta{font-size:12px;color:var(--muted)}.ds-box-body{padding:16px 20px;font-size:14px;color:var(--muted)}.ds-box-date{display:block;margin-bottom:8px;font-family:var(--font-display);font-size:28px;font-weight:800;line-height:1;letter-spacing:-0.025em;font-variant-numeric:tabular-nums;color:var(--foreground)}.ds-success{color:var(--success)}"
+      "html": "<div class=\"ds-box\"><div class=\"ds-box-header\"><span class=\"ds-box-title\">Next climb</span><span class=\"ds-box-meta\">Mt. Apo Summit</span></div><div class=\"ds-box-body\"><span class=\"ds-box-date\"><span class=\"ds-month\">NOV</span> 14</span>Box content sits here at 14px.</div></div>",
+      "css": ".ds-box{overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--background);color:var(--foreground);font-family:var(--font-sans);max-width:400px}.ds-box-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface)}.ds-box-title{font-size:13px;font-weight:600}.ds-box-meta{font-size:12px;color:var(--muted)}.ds-box-body{padding:16px 20px;font-size:14px;color:var(--muted)}.ds-box-date{display:block;margin-bottom:8px;font-family:var(--font-display);font-size:28px;font-weight:800;line-height:1;letter-spacing:-0.025em;font-variant-numeric:tabular-nums;color:var(--foreground)}.ds-month{color:var(--muted)}"
     },
     {
       "name": "Section Tabs",
@@ -847,10 +842,18 @@
     {
       "name": "Slot Meter",
       "kind": "custom",
-      "refersTo": "slot-segment",
-      "description": "One segment per slot: open filled, taken hollow, words always shown.",
-      "html": "<div><div class=\"ds-meter\"><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-open\"></span><span class=\"ds-seg ds-taken\"></span><span class=\"ds-seg ds-taken\"></span><span class=\"ds-seg ds-taken\"></span></div><p class=\"ds-meter-label\">5 of 8 slots left</p></div>",
-      "css": ".ds-meter{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px;width:280px}.ds-seg{height:10px;border-radius:2px}.ds-open{background:var(--primary)}.ds-taken{box-shadow:inset 0 0 0 1.5px var(--border)}.ds-meter-label{margin:6px 0 0;font-family:var(--font-sans);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--foreground)}"
+      "refersTo": "slot-meter-pill",
+      "description": "Status pill with the count in words above one thin rounded bar; blue when plenty, amber at 3 or fewer, red when full.",
+      "html": "<div class=\"ds-meter\"><span class=\"ds-meter-pill\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5\"/></svg>5 of 8 slots left</span><div class=\"ds-meter-track\" role=\"progressbar\" aria-label=\"Slots left\" aria-valuemin=\"0\" aria-valuemax=\"8\" aria-valuenow=\"5\"><div class=\"ds-meter-fill\" style=\"width:62.5%\"></div></div></div><div class=\"ds-meter\"><span class=\"ds-meter-pill ds-low\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5\"/></svg>Only 2 slots left</span><div class=\"ds-meter-track\" role=\"progressbar\" aria-label=\"Slots left\" aria-valuemin=\"0\" aria-valuemax=\"8\" aria-valuenow=\"2\"><div class=\"ds-meter-fill ds-low\" style=\"width:25%\"></div></div></div>",
+      "css": ".ds-meter{width:240px;margin-bottom:16px;font-family:var(--font-sans)}.ds-meter-pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:9999px;background:var(--accent-muted);color:var(--accent);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}.ds-meter-pill.ds-low{background:var(--warning-muted);color:var(--warning)}.ds-meter-track{margin-top:8px;height:6px;overflow:hidden;border-radius:9999px;background:var(--border)}.ds-meter-fill{height:100%;border-radius:9999px;background:var(--accent);transform-origin:left}.ds-meter-fill.ds-low{background:var(--warning)}@media (prefers-reduced-motion: no-preference){.ds-meter-fill{animation:ds-meter-fill 900ms cubic-bezier(0.16,1,0.3,1) 200ms both}}@keyframes ds-meter-fill{from{transform:scaleX(0.08)}to{transform:none}}"
+    },
+    {
+      "name": "Date Row",
+      "kind": "custom",
+      "refersTo": "date-tile",
+      "description": "Upcoming-date row: calendar tile, info, price, availability and Book; only the next date gets the blue tint and green Book.",
+      "html": "<ul class=\"ds-dates\"><li class=\"ds-row ds-next\"><div class=\"ds-tile\" aria-hidden=\"true\"><p class=\"ds-tile-m\">NOV</p><p class=\"ds-tile-d\">14</p></div><div class=\"ds-info\"><p class=\"ds-head\"><span>Saturday, NOV 14</span><span class=\"ds-next-pill\">Next climb</span></p><p class=\"ds-meta\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/></svg>4:00 AM meet-up</p></div><p class=\"ds-price\"><span>&#8369;3,500</span><span class=\"ds-per\">per person</span></p><div class=\"ds-avail\"><span class=\"ds-mpill\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5\"/></svg>6 of 12 slots left</span><div class=\"ds-mtrack\"><div class=\"ds-mfill\" style=\"width:50%\"></div></div></div><div class=\"ds-book\"><a href=\"#\" class=\"ds-book-primary\">Book <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a></div></li><li class=\"ds-row\"><div class=\"ds-tile\" aria-hidden=\"true\"><p class=\"ds-tile-m\">NOV</p><p class=\"ds-tile-d\">28</p></div><div class=\"ds-info\"><p class=\"ds-head\"><span>Saturday, NOV 28</span></p><p class=\"ds-meta\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/></svg>4:00 AM meet-up</p></div><p class=\"ds-price\"><span>&#8369;3,500</span><span class=\"ds-per\">per person</span></p><div class=\"ds-avail\"><span class=\"ds-mpill\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5\"/></svg>10 of 12 slots left</span><div class=\"ds-mtrack\"><div class=\"ds-mfill\" style=\"width:83%\"></div></div></div><div class=\"ds-book\"><a href=\"#\" class=\"ds-book-secondary\">Book <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a></div></li></ul>",
+      "css": ".ds-dates{margin:0;padding:0;list-style:none;max-width:420px;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--background);font-family:var(--font-sans)}.ds-row{display:grid;grid-template-columns:3.25rem minmax(0,1fr) auto;grid-template-areas:'tile info price' 'tile avail book';gap:12px;padding:16px}.ds-row+.ds-row{border-top:1px solid var(--border)}.ds-next{background:color-mix(in srgb,var(--accent-muted) 40%,transparent)}.ds-tile{grid-area:tile;align-self:start;overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--background);text-align:center}.ds-tile p{margin:0}.ds-tile-m{padding:2px 0;background:var(--accent-muted);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:0.025em}.ds-tile-d{padding:6px 0;font-family:var(--font-display);font-size:20px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--foreground)}.ds-info{grid-area:info;min-width:0}.ds-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0;font-size:15px;font-weight:600;color:var(--foreground)}.ds-next-pill{padding:1px 8px;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:9999px;background:var(--accent-muted);color:var(--accent);font-size:11px;font-weight:600}.ds-meta{display:flex;align-items:center;gap:6px;margin:2px 0 0;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}.ds-price{grid-area:price;margin:0;text-align:right;font-variant-numeric:tabular-nums}.ds-price span:first-child{display:block;font-size:16px;font-weight:700;line-height:1.25;color:var(--foreground)}.ds-per{font-size:12px;color:var(--muted)}.ds-avail{grid-area:avail;align-self:center;min-width:0}.ds-mpill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:9999px;background:var(--accent-muted);color:var(--accent);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}.ds-mtrack{margin-top:6px;height:4px;overflow:hidden;border-radius:9999px;background:var(--border)}.ds-mfill{height:100%;border-radius:9999px;background:var(--accent)}.ds-book{grid-area:book;align-self:center}.ds-book a{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 14px;border-radius:6px;font-size:14px;font-weight:600;white-space:nowrap;text-decoration:none;transition:background-color .15s,border-color .15s}.ds-book-primary{background:var(--primary);color:var(--primary-foreground)}.ds-book-primary:hover{background:var(--primary-hover)}.ds-book-secondary{border:1px solid var(--border);background:var(--surface-elevated);color:var(--foreground)}.ds-book-secondary:hover{border-color:var(--muted)}.ds-book a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
     },
     {
       "name": "Text Field",
@@ -871,19 +874,19 @@
   ],
   "narrative": {
     "northStar": "The Trail Repo",
-    "overview": "The site uses GitHub's own Primer theme, unaltered: the standard GitHub dark palette by default, the standard GitHub light palette as the alternative, bordered boxes with surface-tinted header rows, 6px corners, small label pills, underline tabs with a coral marker, green for the action you take and blue for the link you follow. The owner pinned this theme and asked for GitHub's palette itself. New colours are welcome only when they are GitHub colours doing a GitHub job: the purple \"done\" hue marks private group climbs and the coral tab hue marks the active section tab.\n\nDensity is compact and phone-first. Body text is 15px, labels are 13px, and the Next-climb box carries date numerals, a slot meter, the price and a Book button above the fold at 390x844. The landing page reads like a repository page: a surface-coloured header bar, a sticky row of section tabs with counters, then sections that share one canvas and are separated by 1px rules. Information sits in boxes and divided lists rather than in floating cards. Photos sit in plain 6px-cornered frames with no scrims or overlays. Depth comes from the canvas-and-surface pairing plus a single shadow kept for the box that leads a page.\n\nThe one signature is the segmented slot meter: one segment per slot, open slots filled and taken slots hollow, with the count always spelled out in words beside it. It is the only moving element. Open segments press in once on first paint.",
+    "overview": "The site uses GitHub's own Primer theme, unaltered: the standard GitHub dark palette by default, the standard GitHub light palette as the alternative, bordered boxes with surface-tinted header rows, 6px corners, small label pills, underline tabs with a coral marker, green for the action you take, blue for the link you follow and the facts you read (dates and slots left). The owner pinned this theme and asked for GitHub's palette itself. New colours are welcome only when they are GitHub colours doing a GitHub job: the purple \"done\" hue marks private group climbs and the coral tab hue marks the active section tab.\n\nDensity is compact and phone-first. Body text is 15px, labels are 13px, and the Next-climb box carries date numerals, a slot meter, the price and a Book button above the fold at 390x844. The landing page reads like a repository page: a surface-coloured header bar, a sticky row of section tabs with counters, then sections that share one canvas and are separated by 1px rules. Information sits in boxes and divided lists rather than in floating cards. Photos sit in plain 6px-cornered frames with no scrims or overlays. Depth comes from the canvas-and-surface pairing plus a single shadow kept for the box that leads a page.\n\nThe one signature is the slot meter: a status pill that says the count in words, above one thin rounded bar showing the share of slots still open. It reads blue while slots are plentiful, amber when 3 or fewer remain and red when full. It is the only moving element: on the hero, the bar grows in once on first paint. Upcoming dates sit in a divided list where each row opens with a small calendar tile.",
     "keyCharacteristics": [
-      "Standard GitHub Primer palette and vocabulary: green primary buttons, blue links, bordered boxes, label pills, underline tabs.",
+      "Standard GitHub Primer palette and vocabulary: green primary buttons, blue links and information, bordered boxes, label pills, underline tabs.",
       "GitHub dark is the default, GitHub light the alternative; every colour is a CSS custom property that swaps per theme.",
       "Boxes follow GitHub: canvas body, surface header row. Sections share one canvas, divided by 1px rules.",
-      "One radius (6px) for everything rectangular; pills are fully round; slot segments are 2px.",
+      "One radius (6px) for everything rectangular; pills and the slot-meter bar are fully round.",
       "Outfit for headings and numerals, DM Sans for everything else.",
       "One motion moment (the slot meter), and it respects reduced motion."
     ],
     "rules": [
       {
-        "name": "The Green Acts, Blue Goes Rule",
-        "body": "Green fill means \"do this\" (book, send, confirm) and blue means \"go there\" (links, focus). Never use a blue button for the main action or a green text link. Success Green marks confirmation and the date numeral, never a link.",
+        "name": "The Green Acts, Blue Informs Rule",
+        "body": "Green means \"do this\" (book, send, confirm) or \"done\" (success checks and messages). Blue means \"go there\" (links, focus) or \"here is the fact\" (dates, availability, the next climb). Never use a blue button for the main action, a green text link, or green for a date or a slot count. Date numerals stay in Ink, with the hero month in Quiet Ink.",
         "section": "colors"
       },
       {
@@ -908,7 +911,7 @@
       },
       {
         "name": "The Sentence-Case Label Rule",
-        "body": "Small labels are sentence case, 11px to 13px, semibold, muted. No tracked uppercase labels, and no label sits above a heading as an eyebrow.",
+        "body": "Small labels are sentence case, 11px to 13px, semibold, muted. No tracked uppercase labels, and no label sits above a heading as an eyebrow. The abbreviated month on dates (NOV) is uppercase because it is calendar data, not a label.",
         "section": "typography"
       },
       {
@@ -927,12 +930,12 @@
       "**Do** group related content in a Box with a Canvas body and a Surface header row, and divide items inside it with 1px rules.",
       "**Do** separate landing sections with a single 1px Rule on the shared canvas.",
       "**Do** use 6px corners on every rectangle and full rounding only for pills, counters, step numbers and the tab underline.",
-      "**Do** spell out slot counts in words beside every slot meter, and use tabular figures for dates, slots, prices and counters.",
+      "**Do** spell out slot counts in words in the pill of every slot meter, and use tabular figures for dates, slots, prices and counters.",
       "**Do** keep 44px minimum tap targets on coarse pointers only, and 16px inputs on phones.",
       "**Do** define every new colour as a custom property with both a GitHub dark and a GitHub light value, taken from GitHub's palette and given one named job.",
       "**Do** draw icons from the single 24px, 1.75-stroke inline SVG set.",
       "**Do** label built-in sample albums \"Sample album · stock photos\" and keep them out of featured slots.",
-      "**Do** gate any new motion behind `prefers-reduced-motion: no-preference`; the slot-meter entrance is the only signature motion."
+      "**Do** gate any new motion behind `prefers-reduced-motion: no-preference`; the slot-meter bar growth is the only signature motion."
     ],
     "donts": [
       "**Don't** put eyebrow or kicker labels above headings, and don't use tracked uppercase micro-labels.",
@@ -943,7 +946,8 @@
       "**Don't** use unicode glyphs (check marks, stars, arrows, bullets) as icons; use the SVG set.",
       "**Don't** add a second shadowed box to a view, and don't add shadow on hover.",
       "**Don't** use purple for anything but private group climbs, coral for anything but the active tab, or amber and red for anything but scarcity, ratings, full dates and errors.",
-      "**Don't** introduce a radius other than 6px, full, or the 2px slot segment."
+      "**Don't** introduce a radius other than 6px or full.",
+      "**Don't** colour dates or slot counts green, and don't give more than one date row the green Book button."
     ]
   }
 }
