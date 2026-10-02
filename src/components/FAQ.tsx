@@ -10,7 +10,7 @@ export function FAQ() {
             Good to know before you go
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Payment, cancellations, weather, and fitness — answered.
+            Payment, cancellations, weather, fitness.
           </p>
           <a
             href="#contact"
@@ -22,8 +22,8 @@ export function FAQ() {
         </div>
 
         <div className="divide-y divide-border overflow-hidden rounded-md border border-border bg-background">
-          {faq.map((item, index) => (
-            <details key={item.question} name="faq" open={index === 0} className="group">
+          {faq.map((item) => (
+            <details key={item.question} name="faq" className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-surface [&::-webkit-details-marker]:hidden">
                 <span className="text-sm font-semibold text-foreground">{item.question}</span>
                 <Icon
