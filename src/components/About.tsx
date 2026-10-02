@@ -1,6 +1,6 @@
 import { org } from "@/data/org";
 import { licenses } from "@/data/licenses";
-import { Box } from "@/components/Box";
+import { Box, BoxHeader } from "@/components/Box";
 import { Icon } from "@/components/Icon";
 
 export function About() {
@@ -73,32 +73,36 @@ export function About() {
             </p>
           </div>
 
-          <ul className="mt-5 grid gap-x-4 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
-            {licenses.map((doc) => (
-              <li key={doc.id}>
-                <Box className="flex h-full flex-col">
-                  <div className="flex flex-1 flex-col p-4">
-                    <p className="spec-label leading-snug">{doc.issuer}</p>
-                    <p className="mt-1 font-display text-[17px] font-bold leading-tight text-foreground">
-                      {doc.title}
-                    </p>
-                    <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+          <Box className="mt-5">
+            <BoxHeader>
+              <span className="flex items-center gap-2 text-[13px] font-semibold text-foreground">
+                <Icon name="shield" className="h-4 w-4 text-primary" />
+                Licenses &amp; permits
+              </span>
+              <span className="text-xs text-muted">{licenses.length} on file</span>
+            </BoxHeader>
+            <ul className="divide-y divide-border">
+              {licenses.map((doc) => (
+                <li
+                  key={doc.id}
+                  className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">{doc.title}</p>
+                    <p className="text-xs text-muted">{doc.issuer}</p>
+                    <p className="mt-1 max-w-[68ch] text-[13px] leading-relaxed text-muted">
                       {doc.description}
                     </p>
-                    {doc.validUntil && (
-                      <div className="mt-auto pt-3">
-                        <div className="mb-2.5 border-t border-border" />
-                        <p className="tabular flex items-center gap-1.5 text-xs text-foreground">
-                          <Icon name="shield" className="h-3.5 w-3.5 text-primary" />
-                          Valid until {doc.validUntil}
-                        </p>
-                      </div>
-                    )}
                   </div>
-                </Box>
-              </li>
-            ))}
-          </ul>
+                  {doc.validUntil && (
+                    <span className="tabular shrink-0 self-start whitespace-nowrap rounded-full border border-primary/40 px-2 py-0.5 text-xs font-medium text-primary">
+                      Valid until {doc.validUntil}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Box>
         </div>
       </div>
     </section>
