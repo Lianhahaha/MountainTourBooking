@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { trips, getTripById } from "@/data/trips";
 import { formatDate, formatPrice, cn, todayInManila } from "@/lib/utils";
 import type { Trip, TripType, TrekSession } from "@/types";
+import { Icon } from "@/components/Icon";
 
 const STEPS = [
   { id: 0, label: "Trek", short: "1" },
@@ -238,7 +239,7 @@ export function BookingForm() {
                     step < s.id && "border border-border bg-surface text-muted"
                   )}
                 >
-                  {step > s.id ? "✓" : s.short}
+                  {step > s.id ? <Icon name="check" className="h-4 w-4" /> : s.short}
                 </span>
                 <span
                   className={cn(
@@ -400,7 +401,7 @@ export function BookingForm() {
                             )}
                             {session.notes && (
                               <div className="booking-note-callout">
-                                <p className="text-xs font-bold uppercase tracking-wide text-muted">
+                                <p className="text-xs font-semibold text-muted">
                                   Meet-up info
                                 </p>
                                 <p className="mt-1 font-medium">{session.notes}</p>
@@ -488,7 +489,7 @@ export function BookingForm() {
             )}
 
             <div className="booking-total-box mt-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+              <p className="text-xs font-semibold text-muted">
                 Estimated total
               </p>
               <p className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">{formatPrice(estimatedTotal)}</p>
@@ -539,7 +540,7 @@ export function BookingForm() {
               </ImportantField>
               <div className="sm:col-span-2">
                 <div className="booking-callout">
-                  <p className="text-xs font-bold uppercase tracking-wide text-muted">
+                  <p className="text-xs font-semibold text-muted">
                     Emergency contact
                   </p>
                   <p className="mt-1 text-sm text-muted">
@@ -611,7 +612,7 @@ export function BookingForm() {
                 )}
                 {isScheduled && selectedSession?.notes && (
                   <div className="border-t border-primary/15 pt-2">
-                    <p className="text-xs font-bold uppercase tracking-wide text-muted">Meet-up info</p>
+                    <p className="text-xs font-semibold text-muted">Meet-up info</p>
                     <p className="mt-1 font-semibold text-foreground">{selectedSession.notes}</p>
                   </div>
                 )}
@@ -733,7 +734,7 @@ function TripSummary({
       )}
       {trip.type === "scheduled" && session?.notes && (
         <div className="booking-note-callout">
-          <p className="text-xs font-bold uppercase tracking-wide text-muted">Meet-up info</p>
+          <p className="text-xs font-semibold text-muted">Meet-up info</p>
           <p className="mt-1 font-medium">{session.notes}</p>
         </div>
       )}
