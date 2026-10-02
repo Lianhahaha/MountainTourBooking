@@ -234,7 +234,7 @@ The one signature is the slot meter: a status pill that says the count in words,
 GitHub's own neutral canvas with one green action colour, a brighter green for success marks, one blue for links and information, GitHub's purple and coral for two narrow jobs, and amber and red kept for slot scarcity and errors. Dark values are canonical; each has a `-light` sibling in the frontmatter, and the CSS swaps them on the `.dark` class.
 
 ### Primary
-- **GitHub Green** (primary / primary-light): primary buttons (on the dates list, only the next date's Book), the brand mark tile, booking-form step markers, the "Easy" difficulty pill text. Hover shifts to **GitHub Green Hover** (primary-hover). **Green Wash** (primary-muted) tints selected booking options, the estimated-total box and the "Easy" pill.
+- **GitHub Green** (primary / primary-light): primary buttons (on the dates list, only the next date's Book), the brand mark tile, booking-form step markers, the "Easy" difficulty pill text. Hover shifts to **GitHub Green Hover** (primary-hover). **Green Wash** (primary-muted) tints the "Easy" pill. Selected booking options use Blue Wash (accent-muted) with an accent border, and the estimated-total box is neutral (canvas with a Rule border).
 - **Success Green** (success / success-light): green as text and icon rather than fill. Reassurance and credential check icons, credential chips, the Included list icons, contact channel icons, success messages. It never colours dates or slot counts.
 
 ### Secondary
@@ -243,7 +243,7 @@ GitHub's own neutral canvas with one green action colour, a brighter green for s
 ### Tertiary
 - **Done Purple** (done / done-light): private group climbs only. The private-group box border (at 40%), the "Private group" pill (Purple Wash fill, done-muted, with a 40% purple border) on the landing page and in the booking form.
 - **Tab Coral** (tab-active / tab-active-light): only the 2px underline beneath the active section tab.
-- **Trail Amber** (warning / warning-light): scarcity and ratings. Slot meters (pill and bar) at 3 or fewer open slots turn amber, as do "Only N slots left" labels, "Moderate" pills, required badges and review stars.
+- **Trail Amber** (warning / warning-light): scarcity and ratings. Slot meters (pill and bar) at 3 or fewer open slots turn amber, as do "Only N slots left" labels, "Moderate" pills and review stars. Required form fields are marked with a red asterisk after the label, not a badge.
 - **Signal Red** (danger / danger-light): full slot meters, "Hard" difficulty pills, form errors.
 
 ### Neutral
@@ -313,7 +313,7 @@ Depth comes from GitHub's pairing of canvas and surface: canvas for content, sur
 
 ## Shapes
 
-One radius governs every rectangle: buttons, boxes, fields, badges, photo frames, nav links, tabs, segmented controls (6px). Status and difficulty labels, tab counters, step numbers, the active-tab underline and the slot-meter track and fill are fully round. Date tiles take the 6px corner and clip their month band. Borders are always 1px Rule, tinted with the role colour at 30% to 60% when a box carries meaning (private-group box in purple, total box in green). Boxes clip their children (overflow hidden) so header rows and divided lists meet the corners cleanly. Empty states use a dashed 1px border.
+One radius governs every rectangle: buttons, boxes, fields, badges, photo frames, nav links, tabs, segmented controls (6px). Status and difficulty labels, tab counters, step numbers, the active-tab underline and the slot-meter track and fill are fully round. Date tiles take the 6px corner and clip their month band. Borders are always 1px Rule, tinted with the role colour at 30% to 60% when a box carries meaning (private-group box in purple, selected booking option in blue). Boxes clip their children (overflow hidden) so header rows and divided lists meet the corners cleanly. Empty states use a dashed 1px border.
 
 ## Components
 
