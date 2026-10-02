@@ -7,18 +7,9 @@ import { cn, dateParts, difficultyColor, formatPrice } from "@/lib/utils";
 import type { TrekSession, Trip } from "@/types";
 
 const bookingSteps = [
-  {
-    title: "Pick a date and send your request",
-    body: "Fill in your group's details and accept the safety confirmations. Takes about 3 minutes.",
-  },
-  {
-    title: "We confirm within 24–48 hours",
-    body: "You get a booking reference right away, then a confirmation by SMS or email.",
-  },
-  {
-    title: "Pay on trek day",
-    body: "Cash or GCash at the meet-up. Nothing is charged on this website.",
-  },
+  { title: "Request a date", body: "About 3 minutes online." },
+  { title: "Get confirmed", body: "By SMS or email in 24–48 hrs." },
+  { title: "Pay on trek day", body: "Cash or GCash. No online payment." },
 ];
 
 export function Dates({
@@ -31,14 +22,13 @@ export function Dates({
   sessions: TrekSession[];
 }) {
   return (
-    <section id="dates" className="border-b border-border py-10 sm:py-14">
+    <section id="dates" className="border-b border-border py-8 sm:py-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
           Upcoming climbs
         </h2>
         <p className="mt-1 max-w-xl text-sm text-muted">
-          Group treks with live slot counts. Pick a date, or plan a private climb for your own
-          group.
+          Live slot counts. Pick a date or go private.
         </p>
 
         {trip && sessions.length > 0 ? (
@@ -110,29 +100,25 @@ export function Dates({
           </div>
         </Box>
 
-        <div className="mt-10">
+        <div className="mt-7">
           <h3 className="font-display text-lg font-bold text-foreground">How booking works</h3>
-          <ol className="mt-4 grid gap-4 md:grid-cols-3 md:gap-6">
+          <ol className="mt-3 grid grid-cols-3 gap-3 sm:gap-6">
             {bookingSteps.map((step, i) => (
-              <li key={step.title} className="relative flex gap-3 md:flex-col md:gap-2.5">
+              <li key={step.title} className="relative flex flex-col gap-2">
                 {i < bookingSteps.length - 1 && (
-                  <>
-                    <span
-                      className="absolute -bottom-3 left-[13px] top-9 w-0.5 bg-border md:hidden"
-                      aria-hidden
-                    />
-                    <span
-                      className="absolute -right-4 left-10 top-[13px] hidden h-0.5 bg-border md:block"
-                      aria-hidden
-                    />
-                  </>
+                  <span
+                    className="absolute -right-3 left-9 top-[13px] h-0.5 bg-border sm:-right-6"
+                    aria-hidden
+                  />
                 )}
                 <span className="tabular relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background text-xs font-bold text-foreground">
                   {i + 1}
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-foreground">{step.title}</p>
-                  <p className="mt-0.5 text-[13px] leading-relaxed text-muted">{step.body}</p>
+                  <p className="text-[13px] font-semibold leading-snug text-foreground sm:text-sm">
+                    {step.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-snug text-muted sm:text-[13px]">{step.body}</p>
                 </div>
               </li>
             ))}

@@ -5,7 +5,7 @@ import { Icon } from "@/components/Icon";
 
 export function About() {
   return (
-    <section id="about" className="border-b border-border py-10 sm:py-14">
+    <section id="about" className="border-b border-border py-8 sm:py-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12">
           <div>

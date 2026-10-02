@@ -17,13 +17,13 @@ export function Inclusions({ trip }: { trip: Trip }) {
   const [active, setActive] = useState<ListKey>("included");
 
   return (
-    <section id="included" className="border-b border-border py-10 sm:py-14">
+    <section id="included" className="border-b border-border py-8 sm:py-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
           What your {formatPrice(trip.price)} covers
         </h2>
         <p className="mt-1 max-w-xl text-sm text-muted">
-          For the {trip.title}. Private climbs are quoted per group.
+          Per person, {trip.title}.
         </p>
 
         <div

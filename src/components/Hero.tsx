@@ -9,9 +9,9 @@ import { dateParts, formatPrice } from "@/lib/utils";
 import type { TrekSession, Trip } from "@/types";
 
 const reassurances = [
-  { icon: "shield", text: "Registered & licensed operator" },
-  { icon: "check", text: "Confirmed within 24–48 hours" },
-  { icon: "users", text: "Pay on trek day — cash or GCash" },
+  { icon: "shield", text: "Licensed operator" },
+  { icon: "check", text: "Confirmed in 24–48 hrs" },
+  { icon: "users", text: "Pay on trek day" },
 ] as const;
 
 export function Hero({
@@ -25,7 +25,7 @@ export function Hero({
 }) {
   return (
     <section id="overview" className="relative border-b border-border">
-      <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-5 px-4 pb-8 pt-6 [grid-template-areas:'title'_'tag'_'body'] sm:px-6 sm:pt-10 md:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] md:pb-14 md:pt-14 md:[grid-template-areas:'title_tag'_'body_tag'] lg:gap-x-16">
+      <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-4 px-4 pb-7 pt-5 [grid-template-areas:'title'_'tag'_'body'] sm:px-6 sm:pt-10 md:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] md:pb-14 md:pt-14 md:[grid-template-areas:'title_tag'_'body_tag'] lg:gap-x-16">
         <h1 className="font-display text-[2rem] font-extrabold leading-[1.02] tracking-tight text-foreground [grid-area:title] sm:text-5xl md:self-end md:text-[2.75rem] lg:text-[3.5rem]">
           {org.tagline}
         </h1>
@@ -43,7 +43,7 @@ export function Hero({
             {org.shortDescription}
           </p>
 
-          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5 md:grid-cols-3 xl:grid-cols-5">
+          <ul className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5 md:grid-cols-3 xl:grid-cols-5">
             {summitSpecs.map((spec) => (
               <li
                 key={spec.label}
@@ -60,7 +60,7 @@ export function Hero({
             ))}
           </ul>
 
-          <ul className="mt-5 flex flex-col gap-2 text-[13px] text-muted sm:flex-row sm:flex-wrap sm:gap-x-5">
+          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-[13px] text-muted">
             {reassurances.map((r) => (
               <li key={r.text} className="flex items-center gap-2">
                 <Icon name={r.icon} className="h-4 w-4 shrink-0 text-success" />

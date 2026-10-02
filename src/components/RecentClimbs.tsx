@@ -14,7 +14,7 @@ export function RecentClimbs({ days }: { days: HikingDay[] }) {
   const photos = latest.photos.slice(0, count);
 
   return (
-    <section id="photos" className="border-b border-border py-10 sm:py-14">
+    <section id="photos" className="border-b border-border py-8 sm:py-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex items-end justify-between gap-4">
           <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">

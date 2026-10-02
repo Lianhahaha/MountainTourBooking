@@ -66,7 +66,7 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-10 sm:py-14">
+    <section id="contact" className="py-8 sm:py-12">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-12">
         <div>
           <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">

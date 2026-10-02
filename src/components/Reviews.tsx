@@ -7,7 +7,7 @@ export function Reviews({ reviews }: { reviews: Review[] }) {
   const top = reviews.slice(0, 6);
 
   return (
-    <section id="reviews" className="border-b border-border py-10 sm:py-14">
+    <section id="reviews" className="border-b border-border py-8 sm:py-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
           What climbers say
