@@ -15,7 +15,7 @@ export async function Reviews() {
         </h2>
         <p className="mt-1 text-sm text-muted">Reviews from guests after their trek.</p>
 
-        <ul className="-mx-4 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+        <ul className="-mx-4 mt-5 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {top.map((review) => (
             <li key={review.id} className="w-[82%] shrink-0 snap-start sm:w-auto">
               <ReviewCard
