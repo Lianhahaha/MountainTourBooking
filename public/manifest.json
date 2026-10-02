@@ -4,8 +4,8 @@
   "description": "Book guided Mt. Apo treks from Davao del Sur",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1a7f37",
+  "background_color": "#131915",
+  "theme_color": "#131915",
   "orientation": "portrait",
   "icons": [
     {

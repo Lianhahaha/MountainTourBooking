@@ -3,59 +3,67 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * GitHub-inspired design system — dark canvas, green CTAs, blue links
+ * Tikling Apo Tours — gear-tag system.
+ * Night-moss ground (dark, default) and fog ground (light).
+ * Lichen = action, sulfur = scarce slots, clay = full / errors.
  */
 
-/* Light mode — GitHub light */
+/* Light — fog */
 :root {
-  --background: #ffffff;
-  --foreground: #1f2328;
-  --surface: #f6f8fa;
-  --surface-elevated: #ffffff;
-  --muted: #656d76;
-  --border: #d0d7de;
-  --primary: #1a7f37;
-  --primary-hover: #2da44e;
+  --background: #eef1ec;
+  --foreground: #1b231e;
+  --surface: #e4e9e2;
+  --surface-elevated: #fbfcfa;
+  --muted: #56625a;
+  --border: #cdd5cb;
+  --primary: #2f6b45;
+  --primary-hover: #26593a;
   --primary-foreground: #ffffff;
-  --primary-muted: rgba(26, 127, 55, 0.12);
-  --secondary: #24292f;
-  --secondary-hover: #424a53;
-  --secondary-foreground: #24292f;
-  --secondary-muted: rgba(31, 35, 40, 0.06);
-  --accent: #0969da;
-  --accent-hover: #0550ae;
-  --accent-muted: rgba(9, 105, 218, 0.12);
-  --danger: #cf222e;
-  --danger-muted: rgba(207, 34, 46, 0.12);
-  --warning: #9a6700;
-  --warning-muted: rgba(154, 103, 0, 0.12);
-  --input-bg: #ffffff;
+  --primary-muted: rgba(47, 107, 69, 0.1);
+  --secondary: #1b231e;
+  --secondary-hover: #34403a;
+  --secondary-foreground: #1b231e;
+  --secondary-muted: rgba(27, 35, 30, 0.06);
+  --accent: #2b6874;
+  --accent-hover: #1f525c;
+  --accent-muted: rgba(43, 104, 116, 0.1);
+  --danger: #a4472f;
+  --danger-muted: rgba(164, 71, 47, 0.1);
+  --warning: #7f6210;
+  --warning-muted: rgba(160, 128, 30, 0.14);
+  --input-bg: #fbfcfa;
+  --sulfur: #b8922a;
+  --stitch: rgba(27, 35, 30, 0.22);
+  --shadow: 0 1px 2px rgba(27, 35, 30, 0.06), 0 6px 18px -8px rgba(27, 35, 30, 0.18);
 }
 
-/* Dark mode — GitHub dark */
+/* Dark — night moss */
 .dark {
-  --background: #0d1117;
-  --foreground: #e6edf3;
-  --surface: #161b22;
-  --surface-elevated: #21262d;
-  --muted: #8b949e;
-  --border: #30363d;
-  --primary: #238636;
-  --primary-hover: #2ea043;
-  --primary-foreground: #ffffff;
-  --primary-muted: rgba(35, 134, 54, 0.15);
-  --secondary: #e6edf3;
+  --background: #131915;
+  --foreground: #e3e8e2;
+  --surface: #18201b;
+  --surface-elevated: #1f2823;
+  --muted: #9ba79f;
+  --border: #2d3832;
+  --primary: #93c49e;
+  --primary-hover: #a8d2b1;
+  --primary-foreground: #102016;
+  --primary-muted: rgba(147, 196, 158, 0.12);
+  --secondary: #e3e8e2;
   --secondary-hover: #ffffff;
-  --secondary-foreground: #e6edf3;
-  --secondary-muted: rgba(230, 237, 243, 0.06);
-  --accent: #4493f8;
-  --accent-hover: #58a6ff;
-  --accent-muted: rgba(68, 147, 248, 0.15);
-  --danger: #da3633;
-  --danger-muted: rgba(218, 54, 51, 0.15);
-  --warning: #d29922;
-  --warning-muted: rgba(210, 153, 34, 0.15);
-  --input-bg: #0d1117;
+  --secondary-foreground: #e3e8e2;
+  --secondary-muted: rgba(227, 232, 226, 0.06);
+  --accent: #8cc3c8;
+  --accent-hover: #a7d4d8;
+  --accent-muted: rgba(140, 195, 200, 0.12);
+  --danger: #e3a08a;
+  --danger-muted: rgba(227, 160, 138, 0.12);
+  --warning: #e4cb72;
+  --warning-muted: rgba(228, 203, 114, 0.12);
+  --input-bg: #141a16;
+  --sulfur: #e4cb72;
+  --stitch: rgba(227, 232, 226, 0.18);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -12px rgba(0, 0, 0, 0.55);
 }
 
 @theme inline {
@@ -79,81 +87,144 @@
   --color-danger-muted: var(--danger-muted);
   --color-warning: var(--warning);
   --color-warning-muted: var(--warning-muted);
+  --color-sulfur: var(--sulfur);
   --color-border: var(--border);
   --color-input-bg: var(--input-bg);
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-display: var(--font-outfit), system-ui, sans-serif;
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.55;
   /* Prevent horizontal scroll on mobile */
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
+  font-stretch: 84%;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
-.admin-panel h1, .admin-panel h2, .admin-panel h3, .admin-panel h4, .admin-panel h5, .admin-panel h6 {
+p {
+  text-wrap: pretty;
+}
+
+.admin-panel h1,
+.admin-panel h2,
+.admin-panel h3,
+.admin-panel h4,
+.admin-panel h5,
+.admin-panel h6 {
   font-family: var(--font-sans);
+  font-stretch: 100%;
+  letter-spacing: 0;
 }
 
-/* Touch-friendly tap targets — minimum 44px */
-button, a, [role="button"] {
-  min-height: 44px;
+/* Browser surfaces carry the palette too */
+::selection {
+  background: color-mix(in srgb, var(--primary) 32%, transparent);
+  color: var(--foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input,
+textarea {
+  caret-color: var(--primary);
+}
+
+a {
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+html {
+  scrollbar-color: var(--border) var(--background);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.font-condensed {
+  font-stretch: 78%;
+}
+
+/* Touch tap targets — 44px on coarse pointers only, so desktop stays compact */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  .btn-cta,
+  .btn-cta-sm,
+  .btn-secondary {
+    min-height: 44px;
+  }
 }
 
 /* Prevent iOS zoom on input focus */
 @media (max-width: 640px) {
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 16px !important;
   }
 }
 
-/* Add bottom breathing room on mobile for the sticky CTA bar */
-@media (max-width: 768px) {
-  main {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  }
-  /* Sticky bar itself respects the notch */
-  .sticky-book-bar {
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+/* Bottom breathing room on phones for the sticky book bar */
+@media (max-width: 767px) {
+  .has-sticky-bar {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
   }
 }
 
 .btn-cta {
-  @apply rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover disabled:opacity-40;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-40;
+  min-height: 40px;
 }
 
 .btn-cta-sm {
-  @apply rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover disabled:opacity-60;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-60;
+  min-height: 36px;
 }
 
 .btn-secondary {
-  @apply rounded-md border border-border bg-surface-elevated px-6 py-2.5 text-sm font-semibold text-foreground shadow-sm transition hover:border-muted hover:bg-surface;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-muted;
+  min-height: 40px;
 }
 
 .field-input {
-  @apply w-full rounded-md border border-border bg-input-bg px-3 py-2 text-sm text-foreground transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
+  @apply w-full rounded-lg border border-border bg-input-bg px-3 py-2 text-sm text-foreground transition placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
 }
 
 .link-accent {
-  @apply text-accent transition hover:text-accent-hover hover:underline;
+  @apply text-accent transition-colors hover:text-accent-hover hover:underline;
 }
 
 .line-clamp-2 {
@@ -163,9 +234,9 @@ button, a, [role="button"] {
   overflow: hidden;
 }
 
-/* Booking form — GitHub panel aesthetic */
+/* Booking form */
 .booking-callout {
-  @apply rounded-md border border-border bg-surface px-4 py-3;
+  @apply rounded-lg border border-border bg-surface px-4 py-3;
 }
 
 .booking-section-label {
@@ -177,7 +248,7 @@ button, a, [role="button"] {
 }
 
 .booking-option-card {
-  @apply w-full rounded-md border p-4 text-left transition;
+  @apply w-full rounded-lg border p-4 text-left transition;
 }
 
 .booking-option-card--idle {
@@ -201,19 +272,19 @@ button, a, [role="button"] {
 }
 
 .booking-note-callout {
-  @apply mt-3 rounded-md border border-border bg-surface-elevated px-3 py-2 text-sm text-muted;
+  @apply mt-3 rounded-lg border border-border bg-surface-elevated px-3 py-2 text-sm text-muted;
 }
 
 .booking-total-box {
-  @apply rounded-md border border-primary/30 bg-primary-muted p-5;
+  @apply rounded-lg border border-primary/30 bg-primary-muted p-5;
 }
 
 .booking-review-highlight {
-  @apply rounded-md border border-border bg-surface-elevated px-3 py-2.5;
+  @apply rounded-lg border border-border bg-surface-elevated px-3 py-2.5;
 }
 
 .booking-important-checkbox {
-  @apply flex cursor-pointer items-start gap-3 rounded-md border border-border bg-surface p-4 transition hover:border-muted hover:bg-surface-elevated;
+  @apply flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-surface p-4 transition hover:border-muted hover:bg-surface-elevated;
 }
 
 .booking-important-checkbox--checked {
