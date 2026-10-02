@@ -436,3 +436,9 @@ html {
 .spec-label {
   @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-muted;
 }
+
+/* Woven label: an inset stitched seam inside a panel */
+.woven {
+  outline: 1.5px dashed var(--stitch);
+  outline-offset: -6px;
+}

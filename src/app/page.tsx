@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Dates } from "@/components/Dates";
+import { Inclusions } from "@/components/Inclusions";
 import { Reviews } from "@/components/Reviews";
 import { Trust } from "@/components/Trust";
 import { FAQ } from "@/components/FAQ";
@@ -24,6 +25,7 @@ export default async function Home() {
       <main className="has-sticky-bar">
         <Hero trip={trip} next={next} moreDates={Math.max(0, sessions.length - 1)} />
         <Dates trip={trip} privateTrip={getPrivateTrip()} sessions={sessions} />
+        {trip && <Inclusions trip={trip} />}
         <About />
         <Reviews />
         <Trust />
