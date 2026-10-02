@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server";
-import { getAllBookings } from "@/lib/bookings";
+import { getAllBookingsResult } from "@/lib/bookings";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { todayInManila } from "@/lib/utils";
 
-function escapeCsvCell(value: string): string {
-  // Neutralize spreadsheet formula injection (=, +, -, @ at cell start).
-  let cell = value;
+/** Quote a cell for CSV and neutralize spreadsheet formulas (=, +, -, @ at cell start). */
+function csvCell(value: unknown): string {
+  let cell = value === null || value === undefined ? "" : String(value);
   if (/^[=+\-@\t\r]/.test(cell)) {
     cell = `'${cell}`;
   }
-  if (
-    cell.includes('"') ||
-    cell.includes(",") ||
-    cell.includes("\n") ||
-    cell.includes("\r")
-  ) {
+  if (/[",\r\n]/.test(cell)) {
     return `"${cell.replace(/"/g, '""')}"`;
   }
   return cell;
@@ -24,53 +20,65 @@ export async function GET() {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const bookings = await getAllBookings();
+  const { bookings, error } = await getAllBookingsResult();
+  // A partial export looks complete in a spreadsheet; refuse instead.
+  if (error) {
+    return new NextResponse(`${error} Export cancelled so you don't get an incomplete file. Try again.`, {
+      status: 503,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  }
 
   const headers = [
     "ID",
-    "Lead Name",
-    "Phone",
-    "Email",
+    "Status",
+    "Trek date",
+    "Meet-up time",
     "Trip",
     "Type",
-    "Date",
-    "Time",
-    "Pax Count",
+    "Pax",
+    "Total due on trek day (PHP)",
+    "Lead name",
+    "Phone",
+    "Email",
     "Participants",
-    "Total (PHP)",
-    "Status",
-    "Emergency Contact Name",
-    "Emergency Contact Phone",
+    "Emergency contact name",
+    "Emergency contact phone",
+    "Trail preference",
     "Notes",
-    "Created At",
+    "Submitted at",
   ];
 
   const rows = bookings.map((b) => [
-    escapeCsvCell(b.id),
-    escapeCsvCell(b.leadName),
-    escapeCsvCell(b.phone),
-    escapeCsvCell(b.email),
-    escapeCsvCell(b.tripTitle),
-    b.tripType,
+    b.id,
+    b.status,
     b.preferredDate ?? "",
     b.trekTime ?? "",
-    String(b.paxCount),
-    escapeCsvCell((b.participantNames ?? []).join(" ; ")),
-    String(b.estimatedTotal),
-    b.status,
-    escapeCsvCell(b.emergencyContactName),
-    escapeCsvCell(b.emergencyContactPhone),
-    escapeCsvCell(b.notes ?? ""),
+    b.tripTitle,
+    b.tripType,
+    b.paxCount,
+    Number.isFinite(b.estimatedTotal) ? b.estimatedTotal : "",
+    b.leadName,
+    b.phone,
+    b.email,
+    (b.participantNames ?? []).filter(Boolean).join(" ; "),
+    b.emergencyContactName,
+    b.emergencyContactPhone,
+    b.locationPreference ?? "",
+    b.notes ?? "",
     b.createdAt,
   ]);
 
-  const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+  // BOM so Excel reads UTF-8 (ñ, ₱); CRLF line endings per RFC 4180.
+  const csv =
+    "﻿" + [headers, ...rows].map((r) => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
 
   return new NextResponse(csv, {
     status: 200,
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="bookings.csv"',
+      "Content-Disposition": `attachment; filename="bookings-${todayInManila()}.csv"`,
+      "Cache-Control": "no-store",
     },
   });
 }
