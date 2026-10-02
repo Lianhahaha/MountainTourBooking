@@ -1,6 +1,6 @@
 import { org } from "@/data/org";
 import { licenses } from "@/data/licenses";
-import { HangTag } from "@/components/HangTag";
+import { Box } from "@/components/Box";
 import { Icon } from "@/components/Icon";
 
 export function About() {
@@ -16,7 +16,7 @@ export function About() {
               {org.guideBio}
             </p>
 
-            <dl className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border">
+            <dl className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border">
               {org.stats.map((stat) => (
                 <div key={stat.label} className="bg-background px-3 py-2">
                   <dt className="text-[11px] font-medium text-muted">{stat.label}</dt>
@@ -40,7 +40,7 @@ export function About() {
             </ul>
           </div>
 
-          <div className="woven rounded-lg border border-border bg-surface p-5">
+          <div className="rounded-md border border-border bg-surface p-5">
             <h3 className="font-display text-lg font-bold text-foreground">
               What to expect on the trail
             </h3>
@@ -76,8 +76,8 @@ export function About() {
           <ul className="mt-5 grid gap-x-4 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
             {licenses.map((doc) => (
               <li key={doc.id}>
-                <HangTag size="sm" centerHole className="h-full" faceClassName="flex flex-col">
-                  <div className="flex flex-1 flex-col px-4 pb-4 pt-8">
+                <Box className="flex h-full flex-col">
+                  <div className="flex flex-1 flex-col p-4">
                     <p className="spec-label leading-snug">{doc.issuer}</p>
                     <p className="mt-1 font-display text-[17px] font-bold leading-tight text-foreground">
                       {doc.title}
@@ -87,7 +87,7 @@ export function About() {
                     </p>
                     {doc.validUntil && (
                       <div className="mt-auto pt-3">
-                        <div className="stitch mb-2.5" />
+                        <div className="mb-2.5 border-t border-border" />
                         <p className="tabular flex items-center gap-1.5 text-xs text-foreground">
                           <Icon name="shield" className="h-3.5 w-3.5 text-primary" />
                           Valid until {doc.validUntil}
@@ -95,7 +95,7 @@ export function About() {
                       </div>
                     )}
                   </div>
-                </HangTag>
+                </Box>
               </li>
             ))}
           </ul>

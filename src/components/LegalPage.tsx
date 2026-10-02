@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { HangTag } from "@/components/HangTag";
+import { Box, BoxHeader } from "@/components/Box";
 import { Icon } from "@/components/Icon";
 
 export const LEGAL_EMAIL = "projectneodevscoe@gmail.com";
@@ -52,7 +52,7 @@ export function LegalPage({
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
             <aside className="lg:sticky lg:top-20 lg:self-start">
-              <details className="group rounded-lg border border-border bg-surface lg:hidden">
+              <details className="group rounded-md border border-border bg-surface lg:hidden">
                 <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-2.5 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
                   On this page
                   <Icon
@@ -76,10 +76,14 @@ export function LegalPage({
             </aside>
 
             <div className="min-w-0 max-w-[70ch]">
-              <HangTag size="sm" className="mt-2">
-                <div className="px-4 pb-4 pt-3 sm:px-5">
-                  <p className="spec-label pl-6">The short version</p>
-                  <ul className="mt-3 space-y-1.5">
+              <Box className="mt-2">
+                <BoxHeader>
+                  <span className="text-[13px] font-semibold text-foreground">
+                    The short version
+                  </span>
+                </BoxHeader>
+                <div className="p-4 sm:px-5">
+                  <ul className="space-y-1.5">
                     {summary.map((point) => (
                       <li key={point} className="flex items-start gap-2.5 text-sm text-foreground">
                         <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
@@ -88,7 +92,7 @@ export function LegalPage({
                     ))}
                   </ul>
                 </div>
-              </HangTag>
+              </Box>
 
               <div className="legal mt-8">
                 {sections.map((section, i) => (
@@ -102,7 +106,7 @@ export function LegalPage({
                 ))}
               </div>
 
-              <div className="mt-10 rounded-lg border border-border bg-surface px-4 py-3 text-sm text-muted">
+              <div className="mt-10 rounded-md border border-border bg-surface px-4 py-3 text-sm text-muted">
                 Also read our{" "}
                 <Link href={sibling.href} className="link-accent font-medium">
                   {sibling.label}

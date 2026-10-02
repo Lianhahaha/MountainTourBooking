@@ -56,7 +56,7 @@ export function ThemeSegmented() {
     <div
       role="radiogroup"
       aria-label="Theme"
-      className="grid grid-cols-3 gap-1 rounded-lg border border-border bg-surface p-1"
+      className="grid grid-cols-3 gap-1 rounded-md border border-border bg-surface p-1"
     >
       {options.map((o) => {
         const active = mounted && theme === o.value;

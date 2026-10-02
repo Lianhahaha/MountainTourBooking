@@ -22,7 +22,7 @@ export function OwnerNavLink({ mobile = false }: { mobile?: boolean }) {
       href="/admin"
       className={
         mobile
-          ? "flex items-center rounded-lg px-3 py-2.5 text-[15px] font-medium text-accent transition-colors hover:bg-surface"
+          ? "flex items-center rounded-md px-3 py-2.5 text-[15px] font-medium text-accent transition-colors hover:bg-surface"
           : "rounded-md px-2 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-accent-hover"
       }
     >

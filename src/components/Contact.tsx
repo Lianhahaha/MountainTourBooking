@@ -76,7 +76,7 @@ export function Contact() {
             For anything that isn&apos;t a booking. We usually reply within a day.
           </p>
 
-          <ul className="mt-5 divide-y divide-border overflow-hidden rounded-lg border border-border bg-background">
+          <ul className="mt-5 divide-y divide-border overflow-hidden rounded-md border border-border bg-background">
             {channels.map((c) => (
               <li key={c.label}>
                 <a
@@ -103,7 +103,7 @@ export function Contact() {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-lg border border-border bg-surface-elevated p-4 sm:p-5"
+          className="rounded-md border border-border bg-surface-elevated p-4 sm:p-5"
         >
           <div className="grid gap-3 sm:grid-cols-2">
             <div>

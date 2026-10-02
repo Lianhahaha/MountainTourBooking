@@ -7,7 +7,7 @@ import { Icon } from "@/components/Icon";
 
 function BookingFormFallback() {
   return (
-    <div className="mx-auto max-w-2xl animate-pulse rounded-lg border border-border bg-surface p-8">
+    <div className="mx-auto max-w-2xl animate-pulse rounded-md border border-border bg-surface p-8">
       <div className="h-6 w-48 rounded bg-surface-elevated" />
       <div className="mt-6 h-40 rounded bg-surface-elevated" />
     </div>

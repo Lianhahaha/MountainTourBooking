@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { org } from "@/data/org";
-import { HangTag } from "@/components/HangTag";
+import { Box } from "@/components/Box";
 import { Icon } from "@/components/Icon";
 
 export default async function BookingSuccessPage({
@@ -31,16 +31,16 @@ export default async function BookingSuccessPage({
             approved.
           </p>
 
-          <HangTag size="sm" className="mt-6">
-            <div className="px-4 pb-4 pt-3 sm:px-5">
-              <div className="flex items-baseline justify-between gap-3 pl-6">
+          <Box className="mt-6">
+            <div className="p-4 sm:px-5">
+              <div className="flex items-baseline justify-between gap-3">
                 <p className="spec-label">Booking reference</p>
                 <p className="text-xs text-muted">Keep this for your records</p>
               </div>
               <p className="tabular mt-2 break-all font-display text-2xl font-bold text-foreground">
                 {id ?? "Sent — check your email"}
               </p>
-              <div className="stitch my-4" />
+              <div className="my-4 border-t border-border" />
               <p className="spec-label">What happens next</p>
               <ol className="mt-2.5 space-y-2">
                 {[
@@ -57,7 +57,7 @@ export default async function BookingSuccessPage({
                 ))}
               </ol>
             </div>
-          </HangTag>
+          </Box>
 
           <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
             <Link href="/" className="btn-cta flex-1">

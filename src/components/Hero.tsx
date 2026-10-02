@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { org } from "@/data/org";
 import { summitSpecs } from "@/data/trips";
-import { HangTag } from "@/components/HangTag";
+import { Box, BoxHeader } from "@/components/Box";
 import { SlotMeter } from "@/components/SlotMeter";
 import { Icon } from "@/components/Icon";
 import { getSessionSlotsRemaining } from "@/lib/trek-sessions-file";
@@ -30,7 +30,7 @@ export function Hero({
           {org.tagline}
         </h1>
 
-        <div className="pt-6 [grid-area:tag] md:self-center md:pt-8">
+        <div className="[grid-area:tag] md:self-center">
           {trip && next ? (
             <NextClimbTag trip={trip} session={next} moreDates={moreDates} />
           ) : (
@@ -43,7 +43,7 @@ export function Hero({
             {org.shortDescription}
           </p>
 
-          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-5">
+          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5">
             {summitSpecs.map((spec) => (
               <li
                 key={spec.label}
@@ -88,19 +88,21 @@ function NextClimbTag({
   const price = session.price ?? trip.price;
 
   return (
-    <HangTag size="lg" string>
-      <div className="px-5 pb-5 pt-4 sm:px-6">
-        <div className="flex items-start justify-between gap-3 pl-9">
-          <p className="spec-label pt-1">Next climb</p>
-          <p className="text-right text-[13px] font-medium text-muted">{trip.title}</p>
-        </div>
-
-        <div className="mt-4 flex items-end gap-4">
-          <p className="tabular font-display text-[4.25rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-[5rem]">
+    <Box className="shadow-[var(--shadow)]">
+      <BoxHeader>
+        <span className="flex items-center gap-2 text-[13px] font-semibold text-foreground">
+          <Icon name="calendar" className="h-4 w-4 text-muted" />
+          Next climb
+        </span>
+        <span className="truncate text-xs text-muted">{trip.title}</span>
+      </BoxHeader>
+      <div className="p-4 sm:p-5">
+        <div className="flex items-end gap-4">
+          <p className="tabular font-display text-[3.5rem] font-extrabold leading-[0.85] tracking-tight text-foreground sm:text-6xl">
             {month}
             <span className="ml-2 text-primary">{day}</span>
           </p>
-          <div className="pb-1 text-[13px] leading-snug">
+          <div className="whitespace-nowrap pb-1 text-[13px] leading-snug">
             <p className="font-semibold text-foreground">
               {weekday}, {year}
             </p>
@@ -122,7 +124,7 @@ function NextClimbTag({
           </p>
         )}
 
-        <div className="stitch my-4" />
+        <div className="my-4 border-t border-border" />
 
         <div className="flex items-end justify-between gap-3">
           <p className="tabular font-display text-3xl font-bold leading-none text-foreground">
@@ -144,23 +146,28 @@ function NextClimbTag({
           <Icon name="arrowRight" className="h-4 w-4" />
         </Link>
       </div>
-    </HangTag>
+    </Box>
   );
 }
 
 function NoDatesTag() {
   return (
-    <HangTag size="lg" string>
-      <div className="px-5 pb-5 pt-4 sm:px-6">
-        <p className="spec-label pl-9 pt-1">Next climb</p>
-        <p className="mt-5 font-display text-3xl font-bold leading-tight text-foreground">
+    <Box className="shadow-[var(--shadow)]">
+      <BoxHeader>
+        <span className="flex items-center gap-2 text-[13px] font-semibold text-foreground">
+          <Icon name="calendar" className="h-4 w-4 text-muted" />
+          Next climb
+        </span>
+      </BoxHeader>
+      <div className="p-4 sm:p-5">
+        <p className="font-display text-3xl font-bold leading-tight text-foreground">
           New group dates coming soon
         </p>
         <p className="mt-2 text-sm text-muted">
           Dates are posted here first. Planning with your own group? Request a private
           climb on the date you want.
         </p>
-        <div className="stitch my-4" />
+        <div className="my-4 border-t border-border" />
         <div className="flex flex-col gap-2">
           <Link href="/book?trip=private-custom" className="btn-cta w-full">
             Request a private climb
@@ -170,6 +177,6 @@ function NoDatesTag() {
           </a>
         </div>
       </div>
-    </HangTag>
+    </Box>
   );
 }

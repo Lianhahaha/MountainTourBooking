@@ -29,7 +29,7 @@ export function Inclusions({ trip }: { trip: Trip }) {
         <div
           role="tablist"
           aria-label="Trek inclusions"
-          className="mt-5 grid grid-cols-3 gap-1 rounded-lg border border-border bg-background p-1 md:hidden"
+          className="mt-5 grid grid-cols-3 gap-1 rounded-md border border-border bg-background p-1 md:hidden"
         >
           {lists.map((list) => (
             <button
@@ -60,7 +60,7 @@ export function Inclusions({ trip }: { trip: Trip }) {
               role="tabpanel"
               aria-labelledby={`tab-${list.key}`}
               className={cn(
-                "rounded-lg border border-border bg-surface-elevated p-4 woven sm:p-5",
+                "rounded-md border border-border bg-surface-elevated p-4 sm:p-5",
                 active === list.key ? "block" : "hidden md:block"
               )}
             >

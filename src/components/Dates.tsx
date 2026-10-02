@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HangTag } from "@/components/HangTag";
+import { Box } from "@/components/Box";
 import { SlotMeter } from "@/components/SlotMeter";
 import { Icon } from "@/components/Icon";
 import { getSessionSlotsRemaining } from "@/lib/trek-sessions-file";
@@ -69,7 +69,7 @@ export function Dates({
             ))}
           </ul>
         ) : (
-          <div className="mt-6 rounded-lg border border-dashed border-border px-4 py-6 text-center text-sm text-muted">
+          <div className="mt-6 rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted">
             No group dates are posted right now. New dates show up here first — or{" "}
             <Link href="/book?trip=private-custom" className="link-accent font-medium">
               request a private climb
@@ -78,11 +78,13 @@ export function Dates({
           </div>
         )}
 
-        <HangTag variant="private" size="md" className="mt-6">
-          <div className="grid gap-4 px-5 pb-5 pt-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-8">
+        <Box className="mt-6 border-accent/40">
+          <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-8">
             <div>
-              <p className="spec-label pl-8 pt-0.5">Private group</p>
-              <h3 className="mt-3 font-display text-xl font-bold text-foreground sm:text-2xl">
+              <span className="inline-flex rounded-full border border-accent/40 px-2 py-0.5 text-xs font-medium text-accent">
+                Private group
+              </span>
+              <h3 className="mt-2 font-display text-xl font-bold text-foreground sm:text-2xl">
                 {privateTrip.title}
               </h3>
               <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted">
@@ -108,7 +110,7 @@ export function Dates({
               <Icon name="arrowRight" className="h-4 w-4" />
             </Link>
           </div>
-        </HangTag>
+        </Box>
 
         <div className="mt-10">
           <h3 className="font-display text-lg font-bold text-foreground">How booking works</h3>
@@ -118,11 +120,11 @@ export function Dates({
                 {i < bookingSteps.length - 1 && (
                   <>
                     <span
-                      className="stitch-v absolute -bottom-3 left-[13px] top-9 md:hidden"
+                      className="absolute -bottom-3 left-[13px] top-9 w-0.5 bg-border md:hidden"
                       aria-hidden
                     />
                     <span
-                      className="stitch absolute -right-4 left-10 top-[13px] hidden md:block"
+                      className="absolute -right-4 left-10 top-[13px] hidden h-0.5 bg-border md:block"
                       aria-hidden
                     />
                   </>
@@ -157,9 +159,9 @@ function DateTag({
   const price = session.price ?? trip.price;
 
   return (
-    <HangTag size="sm" className="h-full" faceClassName="flex flex-col">
-      <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
-        <div className="flex items-baseline justify-between gap-3 pl-6">
+    <Box className="flex h-full flex-col">
+      <div className="flex flex-1 flex-col p-4">
+        <div className="flex items-baseline justify-between gap-3">
           <p className="spec-label">{rank === 0 ? "Next" : `${weekday.slice(0, 3)} · ${year}`}</p>
           <p className="tabular text-[13px] font-semibold text-foreground">
             {formatPrice(price)}
@@ -199,6 +201,6 @@ function DateTag({
           </Link>
         </div>
       </div>
-    </HangTag>
+    </Box>
   );
 }
