@@ -68,7 +68,7 @@ export function About() {
                   </div>
                   {doc.validUntil && (
                     <span className="tabular shrink-0 whitespace-nowrap rounded-full border border-success/40 px-2 py-0.5 text-[11px] font-medium text-success">
-                      Until {doc.validUntil}
+                      Until {doc.validUntil.replace(/^([A-Za-z]{3})[A-Za-z]*/, "$1")}
                     </span>
                   )}
                 </li>
