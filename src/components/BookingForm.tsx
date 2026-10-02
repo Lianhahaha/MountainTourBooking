@@ -14,6 +14,16 @@ const STEPS = [
   { id: 3, label: "Confirm", short: "4" },
 ];
 
+function shortMonth(date: string): string {
+  const d = new Date(date + "T00:00:00");
+  return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString("en-PH", { month: "short" }).toUpperCase();
+}
+
+function shortDay(date: string): string {
+  const d = new Date(date + "T00:00:00");
+  return Number.isNaN(d.getTime()) ? date : String(d.getDate()).padStart(2, "0");
+}
+
 function sessionSlotsRemaining(session: TrekSession): number {
   return Math.max(0, session.maxSlots - session.bookedCount);
 }
@@ -306,7 +316,7 @@ export function BookingForm() {
                         <p className="mt-1.5 text-sm text-muted">{trip.location}</p>
                         {trip.type === "scheduled" && sessionCount > 0 && !sessionsLoading && (
                           <p className="booking-slots-badge mt-3">
-                            {sessionCount} hiking day{sessionCount !== 1 ? "s" : ""} open for booking
+                            {sessionCount} date{sessionCount !== 1 ? "s" : ""} open
                           </p>
                         )}
                         <p className="mt-3 text-base font-bold text-foreground">
@@ -364,35 +374,38 @@ export function BookingForm() {
                         )}
                       >
                         <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="booking-date-badge">
-                                {formatDate(session.date)}
-                              </span>
-                              <span className="booking-time-badge">
-                                {session.time}
-                              </span>
-                            </div>
-                            <p className={cn(
-                              "mt-3",
-                              lowSlots ? "booking-slots-low" : "booking-slots-badge"
-                            )}>
-                              {remaining} slot{remaining !== 1 ? "s" : ""} left
-                              {lowSlots && " — book soon"}
-                            </p>
-                            {session.price && (
-                              <p className="mt-2 text-sm font-semibold text-primary">
-                                Special Rate: {formatPrice(session.price)}/person
+                          <div className="flex min-w-0 flex-1 items-start gap-3">
+                            <div
+                              className="w-12 shrink-0 overflow-hidden rounded-md border border-border bg-background text-center"
+                              aria-hidden
+                            >
+                              <p className="bg-accent-muted py-0.5 text-[10px] font-bold tracking-wide text-accent">
+                                {shortMonth(session.date)}
                               </p>
-                            )}
-                            {session.notes && (
-                              <div className="booking-note-callout">
-                                <p className="text-xs font-semibold text-muted">
-                                  Meet-up info
-                                </p>
-                                <p className="mt-1 font-medium">{session.notes}</p>
-                              </div>
-                            )}
+                              <p className="tabular py-1 text-lg font-bold leading-none text-foreground">
+                                {shortDay(session.date)}
+                              </p>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-foreground">
+                                {formatDate(session.date)}
+                              </p>
+                              <p className="tabular mt-0.5 text-[13px] text-muted">
+                                {session.time} meet-up
+                                {session.price ? ` · ${formatPrice(session.price)}/person` : ""}
+                              </p>
+                              <p
+                                className={cn(
+                                  "mt-1.5 !py-0.5",
+                                  lowSlots ? "booking-slots-low" : "booking-slots-badge"
+                                )}
+                              >
+                                {remaining} slot{remaining !== 1 ? "s" : ""} left
+                              </p>
+                              {session.notes && (
+                                <p className="mt-1.5 text-[13px] text-muted">{session.notes}</p>
+                              )}
+                            </div>
                           </div>
                           <SelectionIndicator selected={selected} large />
                         </div>
