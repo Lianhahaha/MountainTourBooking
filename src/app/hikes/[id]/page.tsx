@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getHikingDayById } from "@/lib/hiking-days-file";
 import { formatDate } from "@/lib/utils";
+import { Icon } from "@/components/Icon";
 
 export default async function HikeDayPage({
   params,
@@ -20,55 +21,65 @@ export default async function HikeDayPage({
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-background py-12">
+      <main className="min-h-screen bg-background py-8 sm:py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <Link href="/hikes" className="text-sm text-accent hover:underline">
-            ← All hikes
+          <Link
+            href="/hikes"
+            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-muted hover:text-foreground"
+          >
+            <Icon name="arrowLeft" className="h-4 w-4" />
+            All albums
           </Link>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-accent">
-            {formatDate(day.date)}
+          <p className="tabular mt-4 text-[13px] font-medium text-muted">{formatDate(day.date)}</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-foreground sm:text-4xl">
+            {day.title}
+          </h1>
+          <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-muted sm:text-[15px]">
+            {day.summary}
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-foreground sm:text-4xl">{day.title}</h1>
-          <p className="mt-4 max-w-3xl leading-relaxed text-muted">{day.summary}</p>
 
           {featured && (
-            <div className="relative mt-10 aspect-[21/9] overflow-hidden rounded-md border border-border bg-surface">
-              <Image
-                src={featured.src}
-                alt={featured.alt}
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                <p className="text-sm text-white">{featured.alt}</p>
+            <figure className="mt-6">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-surface sm:aspect-[21/9]">
+                <Image
+                  src={featured.src}
+                  alt={featured.alt}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority
+                />
               </div>
-            </div>
+              <figcaption className="mt-1.5 text-xs text-muted">{featured.alt}</figcaption>
+            </figure>
           )}
 
           {rest.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:gap-4">
+            <div className="mt-4 grid grid-cols-2 gap-x-2 gap-y-3 sm:grid-cols-3 lg:gap-x-3">
               {rest.map((photo) => (
-                <figure
-                  key={photo.id}
-                  className="group relative aspect-square overflow-hidden rounded-md border border-border bg-surface"
-                >
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    fill
-                    className="object-cover transition duration-300 group-hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, 33vw"
-                  />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                    <p className="text-xs text-white">{photo.alt}</p>
-                  </figcaption>
+                <figure key={photo.id}>
+                  <div className="relative aspect-square overflow-hidden rounded-md bg-surface">
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 50vw, 33vw"
+                    />
+                  </div>
+                  <figcaption className="mt-1 line-clamp-2 text-xs text-muted">{photo.alt}</figcaption>
                 </figure>
               ))}
             </div>
           )}
+
+          <div className="mt-8 flex flex-col gap-2.5 rounded-md border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-foreground">Want to be in the next album?</p>
+            <Link href="/#dates" className="btn-cta-sm">
+              See upcoming dates
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />
