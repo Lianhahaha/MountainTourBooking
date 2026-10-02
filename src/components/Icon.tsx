@@ -35,16 +35,18 @@ export function Icon({
   name,
   className = "h-4 w-4",
   title,
+  filled = false,
 }: {
   name: IconName;
   className?: string;
   title?: string;
+  filled?: boolean;
 }) {
   return (
     <svg
       className={className}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={filled ? "currentColor" : "none"}
       stroke="currentColor"
       strokeWidth={1.75}
       strokeLinecap="round"

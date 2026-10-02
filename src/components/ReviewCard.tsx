@@ -1,4 +1,4 @@
-"use client";
+import { Icon } from "@/components/Icon";
 
 interface ReviewCardProps {
   rating: number;
@@ -9,23 +9,34 @@ interface ReviewCardProps {
 }
 
 export function ReviewCard({ rating, comment, leadName, tripTitle, createdAt }: ReviewCardProps) {
+  const date = new Date(createdAt);
+  const when = Number.isNaN(date.getTime())
+    ? ""
+    : date.toLocaleDateString("en-PH", { month: "short", year: "numeric" });
+
   return (
-    <div className="rounded-md border border-border bg-surface p-4">
-      <div className="flex gap-0.5">
+    <figure className="flex h-full flex-col rounded-lg border border-border bg-surface-elevated p-4">
+      <div className="flex gap-0.5 text-sulfur" role="img" aria-label={`${rating} out of 5 stars`}>
         {[1, 2, 3, 4, 5].map((star) => (
-          <span key={star} className={star <= rating ? "text-warning" : "text-muted"}>
-            {star <= rating ? "★" : "☆"}
-          </span>
+          <Icon
+            key={star}
+            name="star"
+            filled={star <= rating}
+            className={star <= rating ? "h-3.5 w-3.5" : "h-3.5 w-3.5 text-border"}
+          />
         ))}
       </div>
-      <p className="mt-2 font-medium text-foreground">{leadName}</p>
-      <p className="text-sm text-muted">{tripTitle}</p>
-      <p className="mt-2 text-sm text-foreground">{comment}</p>
-      <p className="mt-1 text-xs text-muted">
-        {Number.isNaN(new Date(createdAt).getTime())
-          ? ""
-          : new Date(createdAt).toLocaleDateString()}
-      </p>
-    </div>
+      <blockquote className="mt-2.5 flex-1 text-sm leading-relaxed text-foreground">
+        {comment}
+      </blockquote>
+      <figcaption className="mt-3 border-t border-border pt-2.5 text-[13px]">
+        <span className="font-semibold text-foreground">{leadName}</span>
+        <span className="text-muted">
+          {" "}
+          · {tripTitle}
+          {when && ` · ${when}`}
+        </span>
+      </figcaption>
+    </figure>
   );
 }

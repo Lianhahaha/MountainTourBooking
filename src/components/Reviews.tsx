@@ -8,29 +8,26 @@ export async function Reviews() {
   const top = reviews.slice(0, 6);
 
   return (
-    <section id="reviews" className="py-20">
+    <section id="reviews" className="border-b border-border py-10 sm:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted">
-            Guest reviews
-          </p>
-          <h2 className="mt-2 text-3xl font-bold text-foreground sm:text-4xl">
-            What trekkers say
-          </h2>
-        </div>
+        <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
+          What climbers say
+        </h2>
+        <p className="mt-1 text-sm text-muted">Reviews from guests after their trek.</p>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="-mx-4 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {top.map((review) => (
-            <ReviewCard
-              key={review.id}
-              rating={review.rating}
-              comment={review.comment}
-              leadName={review.leadName}
-              tripTitle={review.tripTitle}
-              createdAt={review.createdAt}
-            />
+            <li key={review.id} className="w-[82%] shrink-0 snap-start sm:w-auto">
+              <ReviewCard
+                rating={review.rating}
+                comment={review.comment}
+                leadName={review.leadName}
+                tripTitle={review.tripTitle}
+                createdAt={review.createdAt}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
