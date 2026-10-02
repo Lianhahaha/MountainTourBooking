@@ -132,11 +132,13 @@ h6 {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
   line-height: 1.15;
-  text-wrap: balance;
+  /* Style only: the text-wrap shorthand would also reset wrapping and
+     override Tailwind's truncate/whitespace-nowrap (unlayered rules win). */
+  text-wrap-style: balance;
 }
 
 p {
-  text-wrap: pretty;
+  text-wrap-style: pretty;
 }
 
 .admin-panel h1,
