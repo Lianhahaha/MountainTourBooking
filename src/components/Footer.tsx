@@ -6,26 +6,26 @@ const columns = [
   {
     title: "Climb",
     links: [
-      { href: "/#dates", label: "Upcoming dates" },
-      { href: "/book?trip=private-custom", label: "Private group climb" },
-      { href: "/#included", label: "Inclusions & pack list" },
-      { href: "/book", label: "Book a climb" },
+      { href: "/#dates", label: "Dates" },
+      { href: "/book?trip=private-custom", label: "Private climb" },
+      { href: "/#included", label: "Inclusions" },
+      { href: "/book", label: "Book" },
     ],
   },
   {
     title: "About",
     links: [
-      { href: "/#about", label: "Our guide" },
-      { href: "/#permits", label: "Licenses & permits" },
-      { href: "/hikes", label: "Photo albums" },
+      { href: "/#about", label: "Guide" },
+      { href: "/#permits", label: "Licenses" },
+      { href: "/hikes", label: "Photos" },
       { href: "/#faq", label: "FAQ" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { href: "/terms", label: "Terms of Use" },
-      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms" },
+      { href: "/privacy", label: "Privacy" },
     ],
   },
 ];
@@ -33,7 +33,7 @@ const columns = [
 export function Footer() {
   return (
     <footer className="border-t border-border bg-background text-muted">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:px-6 sm:py-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)]">
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-7 sm:px-6 sm:py-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)]">
         <div>
           <Link href="/" className="flex items-center gap-2 text-foreground">
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
@@ -80,11 +80,11 @@ export function Footer() {
           </div>
         </div>
 
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+        <nav aria-label="Footer" className="grid grid-cols-3 gap-4 sm:gap-6">
           {columns.map((col) => (
             <div key={col.title}>
               <p className="spec-label">{col.title}</p>
-              <ul className="mt-2.5 space-y-2 text-[13px]">
+              <ul className="mt-2 space-y-1.5 text-[13px]">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="transition-colors hover:text-foreground">
