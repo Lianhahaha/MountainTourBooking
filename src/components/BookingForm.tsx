@@ -348,9 +348,10 @@ export function BookingForm() {
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="booking-section-label">
                     Choose your hiking day
-                    <span className="ml-0.5 text-danger" aria-label="required">
+                    <span className="ml-0.5 text-danger" aria-hidden>
                       *
                     </span>
+                    <span className="sr-only"> (required)</span>
                   </p>
                 </div>
                 <p className="mt-1 text-sm text-muted">Only these dates are open. Tap one.</p>
@@ -745,9 +746,12 @@ function ImportantField({
       <label className="text-sm font-semibold text-foreground">
         {label}
         {required && (
-          <span className="ml-0.5 text-danger" aria-label="required">
-            *
-          </span>
+          <>
+            <span className="ml-0.5 text-danger" aria-hidden>
+              *
+            </span>
+            <span className="sr-only"> (required)</span>
+          </>
         )}
       </label>
       {hint && <p className="mt-1 text-xs font-medium text-muted">{hint}</p>}
