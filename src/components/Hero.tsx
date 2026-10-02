@@ -43,11 +43,11 @@ export function Hero({
             {org.shortDescription}
           </p>
 
-          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-5">
+          <ul className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-5 md:grid-cols-3 xl:grid-cols-5">
             {summitSpecs.map((spec) => (
               <li
                 key={spec.label}
-                className="flex flex-col gap-0.5 bg-background px-2.5 py-2 last:col-span-2 sm:px-3 sm:last:col-span-1 md:last:col-span-2 lg:last:col-span-1"
+                className="flex flex-col gap-0.5 bg-background px-2.5 py-2 last:col-span-2 sm:px-3 sm:last:col-span-1 md:last:col-span-2 xl:last:col-span-1"
               >
                 <span className="flex items-center gap-1.5 text-muted">
                   <Icon name={spec.icon} className="h-3.5 w-3.5 shrink-0" />
