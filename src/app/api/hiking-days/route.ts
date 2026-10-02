@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAllHikingDays, saveHikingDay, slugify } from "@/lib/hiking-days-file";
+import { getAllHikingDaysStrict, saveHikingDay, slugify } from "@/lib/hiking-days-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import type { HikingDay, HikingDayPhoto } from "@/data/hiking-days";
 
 export async function GET() {
-  const days = await getAllHikingDays();
-  return NextResponse.json(days);
+  // Report an outage instead of an empty list that looks like "no albums".
+  try {
+    return NextResponse.json(await getAllHikingDaysStrict(), { headers: { "Cache-Control": "no-store" } });
+  } catch (err) {
+    console.error("Could not load hike albums:", err);
+    return NextResponse.json({ error: "Couldn't reach the albums database." }, { status: 503 });
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -61,7 +66,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const days = await getAllHikingDays();
+    let days;
+    try {
+      days = await getAllHikingDaysStrict();
+    } catch {
+      return NextResponse.json({ error: "Couldn't reach the albums database. Try again." }, { status: 503 });
+    }
     if (days.length >= 13) {
       return NextResponse.json({ error: "Maximum of 13 albums allowed. Please delete an old album first." }, { status: 400 });
     }
