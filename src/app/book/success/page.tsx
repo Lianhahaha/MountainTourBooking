@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { org } from "@/data/org";
+import { HangTag } from "@/components/HangTag";
+import { Icon } from "@/components/Icon";
 
 export default async function BookingSuccessPage({
   searchParams,
@@ -13,44 +15,56 @@ export default async function BookingSuccessPage({
   return (
     <>
       <Header />
-      <main className="flex min-h-screen items-center bg-background py-16">
-        <div className="mx-auto max-w-lg px-4 text-center sm:px-6">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md border border-primary/40 bg-primary-muted text-3xl text-primary">
-            ✓
+      <main className="bg-background py-10 sm:py-16">
+        <div className="mx-auto max-w-lg px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <Icon name="check" className="h-5 w-5" />
+            </span>
+            <h1 className="font-condensed text-3xl font-extrabold text-foreground">
+              Request sent
+            </h1>
           </div>
-          <h1 className="mt-6 text-3xl font-bold text-foreground">
-            Request submitted!
-          </h1>
-          {id && (
-            <p className="mt-3 text-lg font-semibold text-accent">
-              Reference: {id}
-            </p>
-          )}
-          <p className="mt-4 leading-relaxed text-muted">
-            Thank you for booking with {org.name}. Your request is in the queue — the owner
-            will review it and send a confirmation email to the address you provided once
-            your slot is approved and scheduled.
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            Thank you for booking with {org.name}. Your request is in the queue — we&apos;ll
+            review it and email a confirmation to the address you gave once your slot is
+            approved.
           </p>
-          <div className="mt-6 rounded-md border border-border bg-surface p-4 text-left text-sm text-foreground">
-            <p className="font-semibold">What happens next?</p>
-            <ol className="mt-2 list-inside list-decimal space-y-1 text-muted">
-              <li>Owner reviews your booking (usually 24–48 hours)</li>
-              <li>You receive an email when approved with trek date & meet-up details</li>
-              <li>Pay in person on trek day (cash or GCash)</li>
-            </ol>
-          </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/"
-              className="btn-cta !py-3"
-            >
-              Back to Home
+
+          <HangTag size="sm" className="mt-6">
+            <div className="px-4 pb-4 pt-3 sm:px-5">
+              <div className="flex items-baseline justify-between gap-3 pl-6">
+                <p className="spec-label">Booking reference</p>
+                <p className="text-xs text-muted">Keep this for your records</p>
+              </div>
+              <p className="tabular mt-2 break-all font-condensed text-2xl font-bold text-foreground">
+                {id ?? "Sent — check your email"}
+              </p>
+              <div className="stitch my-4" />
+              <p className="spec-label">What happens next</p>
+              <ol className="mt-2.5 space-y-2">
+                {[
+                  "We review your booking, usually within 24–48 hours.",
+                  "You get an email with your trek date and meet-up details once approved.",
+                  "Pay in person on trek day — cash or GCash.",
+                ].map((step, i) => (
+                  <li key={step} className="flex gap-3 text-sm text-foreground">
+                    <span className="tabular w-4 shrink-0 text-right font-bold text-muted">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </HangTag>
+
+          <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
+            <Link href="/" className="btn-cta flex-1">
+              Back to home
             </Link>
-            <Link
-              href="/#dates"
-              className="btn-secondary text-center !py-3"
-            >
-              View Treks
+            <Link href="/#included" className="btn-secondary flex-1">
+              See the pack list
             </Link>
           </div>
         </div>
