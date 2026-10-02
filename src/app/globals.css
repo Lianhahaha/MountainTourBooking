@@ -442,3 +442,54 @@ html {
   outline: 1.5px dashed var(--stitch);
   outline-offset: -6px;
 }
+
+/* Long-form legal text */
+.legal section + section {
+  margin-top: 2rem;
+}
+
+.legal h2 {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  color: var(--foreground);
+  scroll-margin-top: 5rem;
+}
+
+.legal p,
+.legal li {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--foreground) 82%, var(--muted));
+}
+
+.legal p {
+  margin-top: 0.625rem;
+}
+
+.legal ul {
+  margin-top: 0.625rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.legal li + li {
+  margin-top: 0.375rem;
+}
+
+.legal li::marker {
+  color: var(--muted);
+}
+
+.legal strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.legal a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.legal a:hover {
+  color: var(--accent-hover);
+}
