@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Box } from "@/components/Box";
+import { Box, BoxHeader } from "@/components/Box";
 import { SlotMeter } from "@/components/SlotMeter";
 import { Icon } from "@/components/Icon";
 import { getSessionSlotsRemaining } from "@/lib/trek-sessions-file";
@@ -33,41 +33,39 @@ export function Dates({
   return (
     <section id="dates" className="border-b border-border py-10 sm:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div>
-            <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
-              Upcoming climbs
-            </h2>
-            <p className="mt-1 max-w-xl text-sm text-muted">
-              Group treks with live slot counts. Pick a date, or plan a private climb for
-              your own group.
-            </p>
-          </div>
-          {trip && (
-            <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted sm:mt-0 sm:justify-end">
-              <span className="font-semibold text-foreground">{trip.title}</span>
-              <span
-                className={cn(
-                  "rounded px-1.5 py-0.5 text-[11px] font-semibold",
-                  difficultyColor(trip.difficulty)
-                )}
-              >
-                {trip.difficulty}
-              </span>
-              <span>{trip.duration}</span>
-              <span>{trip.location}</span>
-            </p>
-          )}
-        </div>
+        <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+          Upcoming climbs
+        </h2>
+        <p className="mt-1 max-w-xl text-sm text-muted">
+          Group treks with live slot counts. Pick a date, or plan a private climb for your own
+          group.
+        </p>
 
         {trip && sessions.length > 0 ? (
-          <ul className="mt-6 grid gap-x-4 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-            {sessions.map((session, i) => (
-              <li key={session.id}>
-                <DateTag trip={trip} session={session} rank={i} />
-              </li>
-            ))}
-          </ul>
+          <Box className="mt-5">
+            <BoxHeader className="flex-wrap">
+              <span className="flex flex-wrap items-center gap-2 text-[13px]">
+                <span className="font-semibold text-foreground">{trip.title}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                    difficultyColor(trip.difficulty)
+                  )}
+                >
+                  {trip.difficulty}
+                </span>
+                <span className="text-muted">{trip.duration}</span>
+              </span>
+              <span className="text-xs text-muted">
+                {sessions.length} date{sessions.length === 1 ? "" : "s"} open
+              </span>
+            </BoxHeader>
+            <ul className="divide-y divide-border">
+              {sessions.map((session, i) => (
+                <DateRow key={session.id} trip={trip} session={session} isNext={i === 0} />
+              ))}
+            </ul>
+          </Box>
         ) : (
           <div className="mt-6 rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted">
             No group dates are posted right now. New dates show up here first — or{" "}
@@ -145,62 +143,60 @@ export function Dates({
   );
 }
 
-function DateTag({
+function DateRow({
   trip,
   session,
-  rank,
+  isNext,
 }: {
   trip: Trip;
   session: TrekSession;
-  rank: number;
+  isNext: boolean;
 }) {
   const { month, day, weekday, year } = dateParts(session.date);
   const remaining = getSessionSlotsRemaining(session);
   const price = session.price ?? trip.price;
 
   return (
-    <Box className="flex h-full flex-col">
-      <div className="flex flex-1 flex-col p-4">
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="spec-label">{rank === 0 ? "Next" : `${weekday.slice(0, 3)} · ${year}`}</p>
-          <p className="tabular text-[13px] font-semibold text-foreground">
-            {formatPrice(price)}
-          </p>
-        </div>
-
-        <div className="mt-2 flex items-end justify-between gap-3">
-          <p
-            className={cn(
-              "tabular font-display font-extrabold leading-none tracking-tight text-foreground",
-              rank === 0 ? "text-[2.75rem]" : "text-[2.125rem]"
-            )}
-          >
-            {month} <span className="text-primary">{day}</span>
-          </p>
-          <p className="flex items-center gap-1 pb-1 text-[13px] text-muted">
-            <Icon name="clock" className="h-3.5 w-3.5" />
-            {session.time}
-          </p>
-        </div>
-
-        <div className="mt-3">
-          <SlotMeter maxSlots={session.maxSlots} remaining={remaining} compact />
-        </div>
-
-        {session.notes && (
-          <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted">{session.notes}</p>
-        )}
-
-        <div className="mt-auto pt-3.5">
-          <Link
-            href={`/book?trip=${trip.id}&session=${session.id}`}
-            className="btn-cta-sm w-full"
-            aria-label={`Book ${weekday}, ${month} ${day}`}
-          >
-            Book this date
-          </Link>
-        </div>
+    <li className="grid gap-x-5 gap-y-2.5 px-4 py-3.5 md:grid-cols-[8rem_minmax(0,1fr)_minmax(0,14rem)_auto] md:items-center">
+      <div className="flex items-baseline gap-2.5 md:block">
+        <p className="tabular font-display text-[1.75rem] font-extrabold leading-none tracking-tight text-foreground">
+          {month} <span className="text-primary">{day}</span>
+        </p>
+        <p className="text-xs text-muted md:mt-1">
+          {weekday}, {year}
+        </p>
       </div>
-    </Box>
+
+      <div className="min-w-0 text-[13px]">
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-foreground">
+          <span className="tabular flex items-center gap-1.5">
+            <Icon name="clock" className="h-3.5 w-3.5 text-muted" />
+            {session.time} meet-up
+          </span>
+          {isNext && (
+            <span className="rounded-full border border-primary/40 px-1.5 py-px text-[11px] font-medium text-primary">
+              Next
+            </span>
+          )}
+        </p>
+        {session.notes && <p className="mt-0.5 line-clamp-2 text-muted">{session.notes}</p>}
+      </div>
+
+      <SlotMeter maxSlots={session.maxSlots} remaining={remaining} compact />
+
+      <div className="flex items-center justify-between gap-3 md:justify-end">
+        <p className="tabular text-sm font-semibold text-foreground">
+          {formatPrice(price)}
+          <span className="ml-1 text-xs font-normal text-muted">/ person</span>
+        </p>
+        <Link
+          href={`/book?trip=${trip.id}&session=${session.id}`}
+          className="btn-cta-sm"
+          aria-label={`Book ${weekday}, ${month} ${day}`}
+        >
+          Book
+        </Link>
+      </div>
+    </li>
   );
 }
