@@ -82,7 +82,7 @@ export function Contact() {
                 >
                   <Icon name={c.icon} className="h-5 w-5 text-accent" />
                   <span className="text-[13px] font-semibold text-foreground">{c.label}</span>
-                  <span className="w-full truncate text-[11px] text-muted">{c.value}</span>
+                  <span className="hidden w-full truncate text-[11px] text-muted sm:block">{c.value}</span>
                 </a>
               </li>
             ))}
