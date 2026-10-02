@@ -47,7 +47,7 @@ export default async function BookingSuccessPage({
               Back to Home
             </Link>
             <Link
-              href="/#trips"
+              href="/#dates"
               className="btn-secondary text-center !py-3"
             >
               View Treks

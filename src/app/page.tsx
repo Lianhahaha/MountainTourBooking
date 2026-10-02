@@ -2,13 +2,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
-import { Trips } from "@/components/Trips";
+import { Dates } from "@/components/Dates";
 import { Reviews } from "@/components/Reviews";
 import { Trust } from "@/components/Trust";
 import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
 import { StickyBookButton } from "@/components/StickyBookButton";
-import { getScheduledTrips } from "@/data/trips";
+import { getPrivateTrip, getScheduledTrips } from "@/data/trips";
 import { getAvailableTrekSessions } from "@/lib/trek-sessions-file";
 
 export const dynamic = "force-dynamic";
@@ -23,8 +23,8 @@ export default async function Home() {
       <Header />
       <main className="has-sticky-bar">
         <Hero trip={trip} next={next} moreDates={Math.max(0, sessions.length - 1)} />
+        <Dates trip={trip} privateTrip={getPrivateTrip()} sessions={sessions} />
         <About />
-        <Trips />
         <Reviews />
         <Trust />
         <FAQ />
