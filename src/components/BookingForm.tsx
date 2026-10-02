@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trips, getTripById } from "@/data/trips";
-import { formatDate, formatPrice, cn, todayInManila } from "@/lib/utils";
+import { dateParts, formatDate, formatPrice, cn, todayInManila } from "@/lib/utils";
 import type { Trip, TripType, TrekSession } from "@/types";
 import { Icon } from "@/components/Icon";
 
@@ -13,16 +13,6 @@ const STEPS = [
   { id: 2, label: "Contact", short: "3" },
   { id: 3, label: "Confirm", short: "4" },
 ];
-
-function shortMonth(date: string): string {
-  const d = new Date(date + "T00:00:00");
-  return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString("en-PH", { month: "short" }).toUpperCase();
-}
-
-function shortDay(date: string): string {
-  const d = new Date(date + "T00:00:00");
-  return Number.isNaN(d.getTime()) ? date : String(d.getDate()).padStart(2, "0");
-}
 
 function sessionSlotsRemaining(session: TrekSession): number {
   return Math.max(0, session.maxSlots - session.bookedCount);
@@ -385,10 +375,10 @@ export function BookingForm() {
                               aria-hidden
                             >
                               <p className="bg-accent-muted py-0.5 text-[10px] font-bold tracking-wide text-accent">
-                                {shortMonth(session.date)}
+                                {dateParts(session.date).month}
                               </p>
                               <p className="tabular py-1 text-lg font-bold leading-none text-foreground">
-                                {shortDay(session.date)}
+                                {dateParts(session.date).day}
                               </p>
                             </div>
                             <div className="min-w-0">
