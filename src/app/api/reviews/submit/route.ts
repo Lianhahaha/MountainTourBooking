@@ -3,6 +3,10 @@ import { saveReview } from "@/lib/reviews";
 import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  if (!req.headers.get("content-type")?.includes("application/json")) {
+    return NextResponse.json({ ok: false, error: "Expected a JSON request" }, { status: 415 });
+  }
+
   const ip = clientIp(req.headers);
   if (isRateLimited("reviews", ip, 5)) {
     return NextResponse.json(

@@ -422,6 +422,7 @@ export function BookingForm() {
                   <input
                     type="date"
                     required
+                    autoComplete="off"
                     value={form.preferredDate}
                     min={todayInManila()}
                     onChange={(e) => setForm({ ...form, preferredDate: e.target.value })}
@@ -452,6 +453,7 @@ export function BookingForm() {
               >
                 <input
                   type="number"
+                  inputMode="numeric"
                   min={1}
                   max={maxPaxForStep || 1}
                   value={form.paxCount}
@@ -469,6 +471,8 @@ export function BookingForm() {
                   <input
                     key={i + 1}
                     type="text"
+                    aria-label={`Participant ${i + 2} name`}
+                    autoComplete="off"
                     placeholder={`Participant ${i + 2}`}
                     value={name}
                     onChange={(e) => {
@@ -500,6 +504,7 @@ export function BookingForm() {
               <ImportantField label="Full name" required className="sm:col-span-2">
                 <input
                   required
+                  autoComplete="name"
                   value={form.leadName}
                   onChange={(e) => setForm({ ...form, leadName: e.target.value })}
                   className="field-input"
@@ -509,6 +514,8 @@ export function BookingForm() {
                 <input
                   required
                   type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
                   placeholder="+63 9XX XXX XXXX"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
@@ -519,6 +526,10 @@ export function BookingForm() {
                 <input
                   required
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  spellCheck={false}
                   placeholder="you@email.com"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -532,6 +543,7 @@ export function BookingForm() {
               <ImportantField label="Emergency contact name" required>
                 <input
                   required
+                  autoComplete="off"
                   value={form.emergencyContactName}
                   onChange={(e) => setForm({ ...form, emergencyContactName: e.target.value })}
                   className="field-input"
@@ -541,6 +553,8 @@ export function BookingForm() {
                 <input
                   required
                   type="tel"
+                  inputMode="tel"
+                  autoComplete="off"
                   value={form.emergencyContactPhone}
                   onChange={(e) => setForm({ ...form, emergencyContactPhone: e.target.value })}
                   className="field-input"
@@ -549,6 +563,7 @@ export function BookingForm() {
               <Field label="Notes (optional)" className="sm:col-span-2">
                 <textarea
                   rows={3}
+                  autoComplete="off"
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   className="field-input"
@@ -731,9 +746,11 @@ function ImportantField({
   children: React.ReactNode;
   className?: string;
 }) {
+  // The input is nested inside the label so screen readers get an accessible
+  // name without every call site having to generate ids.
   return (
-    <div className={className}>
-      <label className="text-sm font-semibold text-foreground">
+    <label className={className}>
+      <span className="block text-sm font-semibold text-foreground">
         {label}
         {required && (
           <>
@@ -743,10 +760,10 @@ function ImportantField({
             <span className="sr-only"> (required)</span>
           </>
         )}
-      </label>
-      {hint && <p className="mt-1 text-xs font-medium text-muted">{hint}</p>}
-      <div className="mt-1.5">{children}</div>
-    </div>
+      </span>
+      {hint && <span className="mt-1 block text-xs font-medium text-muted">{hint}</span>}
+      <span className="mt-1.5 block">{children}</span>
+    </label>
   );
 }
 
@@ -760,10 +777,10 @@ function Field({
   className?: string;
 }) {
   return (
-    <div className={className}>
-      <label className="block text-sm font-medium text-foreground">{label}</label>
-      <div className="mt-1">{children}</div>
-    </div>
+    <label className={className}>
+      <span className="block text-sm font-medium text-foreground">{label}</span>
+      <span className="mt-1 block">{children}</span>
+    </label>
   );
 }
 

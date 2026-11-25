@@ -16,10 +16,12 @@ export function Dates({
   trip,
   privateTrip,
   sessions,
+  error,
 }: {
   trip: Trip | undefined;
   privateTrip: Trip;
   sessions: TrekSession[];
+  error?: string | null;
 }) {
   return (
     <section id="dates" className="border-b border-border py-8 sm:py-12">
@@ -56,6 +58,24 @@ export function Dates({
               ))}
             </ul>
           </Box>
+        ) : error ? (
+          <div className="mt-6 rounded-md border border-warning/40 bg-warning-muted px-4 py-5 text-sm text-foreground">
+            <p className="flex items-start gap-2 font-medium">
+              <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
+              {error}
+            </p>
+            <p className="mt-2 pl-6 text-muted">
+              You can still{" "}
+              <Link href="/book?trip=private-custom" className="link-accent font-medium">
+                request a private climb
+              </Link>{" "}
+              on your own schedule, or{" "}
+              <Link href="/#contact" className="link-accent font-medium">
+                message us
+              </Link>
+              .
+            </p>
+          </div>
         ) : (
           <div className="mt-6 rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted">
             No group dates are posted right now. New dates show up here first — or{" "}
@@ -132,7 +152,7 @@ function DateRow({
   session: TrekSession;
   isNext: boolean;
 }) {
-  const { month, day, weekday, year } = dateParts(session.date);
+  const { month, monthShort, day, weekday, year } = dateParts(session.date);
   const remaining = getSessionSlotsRemaining(session);
   const price = session.price ?? trip.price;
   const full = remaining === 0;
@@ -160,7 +180,7 @@ function DateRow({
       <div className="min-w-0 [grid-area:info]">
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span className="text-[15px] font-semibold text-foreground">
-            {weekday}, {month} {day}
+            {weekday}, {monthShort} {day}
           </span>
           {isNext && (
             <span className="rounded-full border border-accent/40 bg-accent-muted px-2 py-px text-[11px] font-semibold text-accent">

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -7,6 +8,32 @@ import { getHikingDayById } from "@/lib/hiking-days-file";
 import { isSampleAlbum } from "@/data/hiking-days";
 import { formatDate } from "@/lib/utils";
 import { Icon } from "@/components/Icon";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const day = await getHikingDayById(id);
+    if (!day) return { title: "Album not found", robots: { index: false } };
+    const cover = day.photos?.[0]?.src;
+    return {
+      title: day.title,
+      description: day.summary.slice(0, 160),
+      alternates: { canonical: `/hikes/${id}` },
+      openGraph: {
+        type: "article",
+        title: day.title,
+        description: day.summary.slice(0, 160),
+        images: cover ? [{ url: cover }] : undefined,
+      },
+    };
+  } catch {
+    return { title: "Photo album" };
+  }
+}
 
 export default async function HikeDayPage({
   params,

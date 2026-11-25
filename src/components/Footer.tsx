@@ -46,7 +46,10 @@ export function Footer() {
           <p className="mt-2 text-[13px]">{org.tagline}</p>
           <ul className="mt-4 space-y-1.5 text-[13px]">
             <li>
-              <a href={`tel:${org.contact.phone.replace(/\s/g, "")}`} className="hover:text-foreground">
+              <a
+                href={`tel:${org.contact.phone.replace(/[^\d+]/g, "")}`}
+                className="hover:text-foreground"
+              >
                 {org.contact.phone}
               </a>
             </li>

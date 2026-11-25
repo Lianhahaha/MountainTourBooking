@@ -9,6 +9,10 @@ import {
 } from "@/lib/admin-auth";
 
 export async function POST(request: NextRequest) {
+  if (!request.headers.get("content-type")?.includes("application/json")) {
+    return NextResponse.json({ error: "Expected a JSON request" }, { status: 415 });
+  }
+
   if (!process.env.ADMIN_PASSWORD) {
     return NextResponse.json(
       { error: "Admin login is not configured. Set ADMIN_PASSWORD in .env.local" },

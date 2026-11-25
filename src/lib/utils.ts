@@ -46,10 +46,12 @@ export function cn(...classes: (string | false | undefined | null)[]): string {
 export function dateParts(dateStr: string) {
   const d = new Date(dateStr + "T00:00:00");
   if (Number.isNaN(d.getTime())) {
-    return { month: "", day: dateStr, weekday: "", year: "" };
+    return { month: "", monthShort: "", day: dateStr, weekday: "", year: "" };
   }
+  const monthShort = d.toLocaleDateString("en-PH", { month: "short" });
   return {
-    month: d.toLocaleDateString("en-PH", { month: "short" }).toUpperCase(),
+    month: monthShort.toUpperCase(),
+    monthShort,
     day: String(d.getDate()).padStart(2, "0"),
     weekday: d.toLocaleDateString("en-PH", { weekday: "long" }),
     year: String(d.getFullYear()),

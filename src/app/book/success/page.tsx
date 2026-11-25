@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -5,12 +6,18 @@ import { org } from "@/data/org";
 import { Box } from "@/components/Box";
 import { Icon } from "@/components/Icon";
 
+export const metadata: Metadata = {
+  title: "Request sent",
+  robots: { index: false, follow: false },
+};
+
 export default async function BookingSuccessPage({
   searchParams,
 }: {
   searchParams: Promise<{ id?: string }>;
 }) {
   const { id } = await searchParams;
+  const reference = typeof id === "string" && /^LTO-\d{8}-[A-Z0-9]{6}$/.test(id) ? id : null;
 
   return (
     <>
@@ -37,7 +44,7 @@ export default async function BookingSuccessPage({
                 <p className="text-xs text-muted">Keep this for your records</p>
               </div>
               <p className="tabular mt-2 break-all font-display text-2xl font-bold text-foreground">
-                {id ?? "Sent — check your email"}
+                {reference ?? "Sent — check your email"}
               </p>
               <div className="my-4 border-t border-border" />
               <p className="spec-label">What happens next</p>

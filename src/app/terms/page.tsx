@@ -4,8 +4,9 @@ import { LegalPage, LEGAL_EMAIL, type LegalSection } from "@/components/LegalPag
 import { org } from "@/data/org";
 
 export const metadata: Metadata = {
-  title: `Terms of Use — ${org.name}`,
+  title: "Terms of Use",
   description: `The terms for booking a guided Mt. Apo trek with ${org.name} and using this website.`,
+  alternates: { canonical: "/terms" },
 };
 
 const EFFECTIVE = "October 2, 2026";

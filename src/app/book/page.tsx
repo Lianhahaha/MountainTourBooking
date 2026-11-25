@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BookingForm } from "@/components/BookingForm";
 import { Icon } from "@/components/Icon";
+
+export const metadata: Metadata = {
+  title: "Book a climb",
+  description:
+    "Request a scheduled Mt. Apo group trek or a private climb. Confirmed within 24–48 hours; pay cash or GCash on trek day.",
+  alternates: { canonical: "/book" },
+};
 
 function BookingFormFallback() {
   return (

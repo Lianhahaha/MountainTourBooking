@@ -1,16 +1,23 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getAllHikingDays } from "@/lib/hiking-days-file";
+import { getAllHikingDaysResult } from "@/lib/hiking-days-file";
 import { isSampleAlbum } from "@/data/hiking-days";
 import { formatDate } from "@/lib/utils";
 import { Icon } from "@/components/Icon";
 
 export const dynamic = "force-dynamic";
 
+export const metadata: Metadata = {
+  title: "Photo albums",
+  description: "Photos and notes from each guided Mt. Apo hiking day.",
+  alternates: { canonical: "/hikes" },
+};
+
 export default async function HikesPage() {
-  const days = await getAllHikingDays();
+  const { days, error } = await getAllHikingDaysResult();
 
   return (
     <>
@@ -24,7 +31,12 @@ export default async function HikesPage() {
             Photos and notes from each hiking day on Mt. Apo.
           </p>
 
-          {days.length === 0 ? (
+          {error ? (
+            <p className="mt-8 flex items-start justify-center gap-2 rounded-md border border-warning/40 bg-warning-muted px-4 py-5 text-center text-sm text-foreground">
+              <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
+              {error}
+            </p>
+          ) : days.length === 0 ? (
             <p className="mt-8 rounded-md border border-dashed border-border px-4 py-8 text-center text-sm text-muted">
               No albums posted yet. Check back after the next climb.
             </p>

@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { themeInitScript } from "@/lib/theme-script";
 import { Analytics } from "@vercel/analytics/react";
 import PWAInstaller from "@/components/PWAInstaller";
+import { siteUrl } from "@/lib/site";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -16,12 +17,36 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: `${org.name} — ${org.tagline}`,
+  metadataBase: new URL(siteUrl()),
+  title: {
+    default: `${org.name} — ${org.tagline}`,
+    template: `%s — ${org.name}`,
+  },
   description: org.description,
+  applicationName: org.name,
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: org.name,
     description: org.tagline,
     type: "website",
+    locale: "en_PH",
+    siteName: org.name,
+    url: "/",
+    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: org.name }],
+  },
+  twitter: {
+    card: "summary",
+    title: org.name,
+    description: org.tagline,
+    images: ["/icon-512.png"],
+  },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
   },
 };
 
@@ -31,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <link
           rel="preload"
@@ -52,7 +77,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <ThemeProvider>{children}</ThemeProvider>
-        <Analytics />
+        {process.env.VERCEL ? <Analytics /> : null}
         <PWAInstaller />
       </body>
     </html>

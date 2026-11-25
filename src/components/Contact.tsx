@@ -48,7 +48,7 @@ export function Contact() {
       icon: "phone" as const,
       label: "Call",
       value: org.contact.phone,
-      href: `tel:${org.contact.phone.replace(/\s/g, "")}`,
+      href: `tel:${org.contact.phone.replace(/[^\d+]/g, "")}`,
     },
     {
       icon: "mail" as const,
