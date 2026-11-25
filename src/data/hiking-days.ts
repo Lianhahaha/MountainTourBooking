@@ -4,7 +4,7 @@ export interface HikingDayPhoto {
   alt: string;
 }
 
-/** Shape matches future Firebase documents */
+/** Shape stored in Supabase and the local development store. */
 export interface HikingDay {
   id: string;
   title: string;

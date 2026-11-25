@@ -1,6 +1,10 @@
 import type { BookingRequest, BookingStatus } from "@/types";
-import { getSupabase } from "@/lib/supabase";
-import { getBookingsFromFileStrict, updateBookingStatusInFile } from "@/lib/bookings-file";
+import { getSupabase, saveBookingToSupabase } from "@/lib/supabase";
+import {
+  getBookingsFromLocalStrict,
+  saveBookingToLocal,
+  updateBookingStatusInLocal,
+} from "@/lib/bookings-local";
 
 const PAGE_SIZE = 1000;
 
@@ -56,57 +60,43 @@ export interface BookingsResult {
 }
 
 /**
- * Reads bookings from every store. New bookings go to Supabase and fall back
- * to Firestore when Supabase is down, so both stores are read and merged
- * (Supabase wins on duplicate ids). A failed read is reported, never hidden.
+ * Reads bookings from Supabase, or from the local JSON store when Supabase is
+ * not configured (local development). A failed read is reported, never hidden.
  */
 export async function getAllBookingsResult(): Promise<BookingsResult> {
-  const errors: string[] = [];
-  const byId = new Map<string, BookingRequest>();
-
-  const [firestore, supabase] = await Promise.allSettled([
-    getBookingsFromFileStrict(),
-    getSupabase() ? getSupabaseBookings() : Promise.resolve([] as BookingRequest[]),
-  ]);
-
-  if (firestore.status === "fulfilled") {
-    for (const b of firestore.value) byId.set(b.id, b);
-  } else {
-    console.error("Firestore bookings read failed:", firestore.reason);
-    errors.push("Firestore");
-  }
-  if (supabase.status === "fulfilled") {
-    for (const b of supabase.value) byId.set(b.id, b);
-  } else {
-    console.error("Supabase bookings read failed:", supabase.reason);
-    errors.push("Supabase");
+  if (getSupabase()) {
+    try {
+      return { bookings: await getSupabaseBookings(), error: null };
+    } catch (err) {
+      console.error("Supabase bookings read failed:", err);
+      return {
+        bookings: [],
+        error: "Could not read bookings from the database. The list may be incomplete.",
+      };
+    }
   }
 
-  const bookings = [...byId.values()].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
-  return {
-    bookings,
-    error: errors.length ? `Could not read bookings from ${errors.join(" and ")}. The list may be incomplete.` : null,
-  };
-}
-
-export async function getAllBookings(): Promise<BookingRequest[]> {
-  return (await getAllBookingsResult()).bookings;
+  try {
+    return { bookings: await getBookingsFromLocalStrict(), error: null };
+  } catch (err) {
+    console.error("Local bookings read failed:", err);
+    return {
+      bookings: [],
+      error: "Could not read bookings from the local store. Configure Supabase for production.",
+    };
+  }
 }
 
 export async function getBookingById(id: string): Promise<BookingRequest | undefined> {
   const client = getSupabase();
   if (client) {
     const { data, error } = await client.from("booking_requests").select("*").eq("id", id).maybeSingle();
-    if (!error && data) return rowToBooking(data);
+    if (error) throw new Error(error.message);
+    return data ? rowToBooking(data) : undefined;
   }
 
-  try {
-    return (await getBookingsFromFileStrict()).find((b) => b.id === id);
-  } catch {
-    return undefined;
-  }
+  const bookings = await getBookingsFromLocalStrict();
+  return bookings.find((b) => b.id === id);
 }
 
 /**
@@ -127,7 +117,7 @@ export async function updateBookingStatus(
     if (error) return { ok: false, error: error.message };
     if (data) return { ok: true, booking: rowToBooking(data) };
 
-    // No row updated: either the status moved on, or the booking lives in Firestore.
+    // No row updated: either the status moved on, or the booking is missing.
     const { data: existing } = await client.from("booking_requests").select("id").eq("id", id).maybeSingle();
     if (existing) {
       return {
@@ -136,8 +126,14 @@ export async function updateBookingStatus(
         error: "This booking was already updated. Refresh to see its current status.",
       };
     }
+    return { ok: false, error: "Booking not found" };
   }
 
-  const result = await updateBookingStatusInFile(id, status, expectedStatus);
-  return { ok: result.ok, booking: result.booking, error: result.error, conflict: result.conflict };
+  return updateBookingStatusInLocal(id, status, expectedStatus);
+}
+
+/** Stores a new booking, using the local store only when Supabase is absent. */
+export async function saveBooking(booking: BookingRequest): Promise<{ ok: boolean; error?: string }> {
+  if (getSupabase()) return saveBookingToSupabase(booking);
+  return saveBookingToLocal(booking);
 }

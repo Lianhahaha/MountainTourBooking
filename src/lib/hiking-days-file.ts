@@ -1,45 +1,102 @@
-import { db } from "@/lib/firebase";
-import { collection, doc, getDocs, getDoc, setDoc, deleteDoc } from "firebase/firestore";
-import type { HikingDay } from "@/data/hiking-days";
+import { getSupabase } from "@/lib/supabase";
+import { readLocal, updateLocal } from "@/lib/local-store";
+import type { HikingDay, HikingDayPhoto } from "@/data/hiking-days";
 
-const COLLECTION = "hiking_days";
+const TABLE = "hiking_days";
+const LOCAL = "hiking-days";
 
-/** Every album. Throws when Firestore is unavailable so admin screens can say so. */
+function rowToDay(row: Record<string, unknown>): HikingDay {
+  const photos = Array.isArray(row.photos) ? (row.photos as HikingDayPhoto[]) : [];
+  return {
+    id: String(row.id),
+    title: typeof row.title === "string" ? row.title : "",
+    summary: typeof row.summary === "string" ? row.summary : "",
+    date: typeof row.date === "string" ? row.date : "",
+    photos: photos.filter(
+      (photo) => photo && typeof photo.id === "string" && typeof photo.src === "string"
+    ),
+    createdAt: typeof row.created_at === "string" ? row.created_at : "",
+    updatedAt: typeof row.updated_at === "string" ? row.updated_at : "",
+  };
+}
+
+function dayToRow(day: HikingDay) {
+  return {
+    id: day.id,
+    title: day.title,
+    summary: day.summary,
+    date: day.date,
+    photos: day.photos,
+    created_at: day.createdAt,
+    updated_at: day.updatedAt,
+  };
+}
+
+function newestFirst(days: HikingDay[]): HikingDay[] {
+  return [...days].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/** Every album. Throws when the store is unavailable so admin screens can say so. */
 export async function getAllHikingDaysStrict(): Promise<HikingDay[]> {
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  const days: HikingDay[] = [];
-  snapshot.forEach((d) => {
-    days.push(d.data() as HikingDay);
-  });
-  return days.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const client = getSupabase();
+  if (client) {
+    const { data, error } = await client.from(TABLE).select("*").order("date", { ascending: false });
+    if (error) throw new Error(error.message);
+    return (data ?? []).map(rowToDay);
+  }
+  return newestFirst(await readLocal<HikingDay[]>(LOCAL, []));
 }
 
 /**
- * Every album, or none when Firestore is unavailable. Sample albums are not
+ * Every album, or none when the store is unavailable. Sample albums are not
  * written back when the owner deletes the last one.
  */
 export async function getAllHikingDays(): Promise<HikingDay[]> {
+  return (await getAllHikingDaysResult()).days;
+}
+
+/** Tells "no albums yet" apart from "the store is down" on the public page. */
+export async function getAllHikingDaysResult(): Promise<{
+  days: HikingDay[];
+  error: string | null;
+}> {
   try {
-    return await getAllHikingDaysStrict();
+    return { days: await getAllHikingDaysStrict(), error: null };
   } catch (err) {
-    console.error("Firestore unavailable, returning no hike albums:", err);
-    return [];
+    console.error("Albums store unavailable, returning no hike albums:", err);
+    return {
+      days: [],
+      error: "Photo albums are temporarily unavailable. Please check back soon.",
+    };
   }
 }
 
+/** Throws when the store itself is unavailable; returns undefined only for a real miss. */
 export async function getHikingDayById(id: string): Promise<HikingDay | undefined> {
-  try {
-    const snap = await getDoc(doc(db, COLLECTION, id));
-    return snap.exists() ? (snap.data() as HikingDay) : undefined;
-  } catch (err) {
-    console.error("Firestore unavailable, could not look up hike album:", err);
-    return undefined;
+  const client = getSupabase();
+  if (client) {
+    const { data, error } = await client.from(TABLE).select("*").eq("id", id).maybeSingle();
+    if (error) throw new Error(error.message);
+    return data ? rowToDay(data) : undefined;
   }
+  return (await readLocal<HikingDay[]>(LOCAL, [])).find((day) => day.id === id);
 }
 
 export async function saveHikingDay(day: HikingDay): Promise<{ ok: boolean; error?: string }> {
+  const client = getSupabase();
+  if (client) {
+    const { error } = await client.from(TABLE).upsert(dayToRow(day), { onConflict: "id" });
+    return error ? { ok: false, error: error.message } : { ok: true };
+  }
+
   try {
-    await setDoc(doc(db, COLLECTION, day.id), day);
+    await updateLocal<HikingDay[]>(LOCAL, [], (current) => {
+      const index = current.findIndex((d) => d.id === day.id);
+      if (index === -1) return newestFirst([...current, day]);
+      const next = [...current];
+      next[index] = day;
+      return newestFirst(next);
+    });
     return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Failed to save" };
@@ -47,8 +104,14 @@ export async function saveHikingDay(day: HikingDay): Promise<{ ok: boolean; erro
 }
 
 export async function deleteHikingDay(id: string): Promise<{ ok: boolean; error?: string }> {
+  const client = getSupabase();
+  if (client) {
+    const { error } = await client.from(TABLE).delete().eq("id", id);
+    return error ? { ok: false, error: error.message } : { ok: true };
+  }
+
   try {
-    await deleteDoc(doc(db, COLLECTION, id));
+    await updateLocal<HikingDay[]>(LOCAL, [], (current) => current.filter((day) => day.id !== id));
     return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Failed to delete" };

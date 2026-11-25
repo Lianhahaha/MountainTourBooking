@@ -29,7 +29,7 @@ A registered, licensed local operator with scheduled group dates and live slot c
 
 ## Capabilities and Constraints
 
-- Next.js 16 app router, Tailwind CSS v4, Supabase/Firebase storage, Resend email, deployed on Vercel.
+- Next.js 16 app router, Tailwind CSS v4, Supabase storage (with a local JSON store for development), Resend email, deployed on Vercel.
 - Public routes: `/` (landing), `/hikes` and `/hikes/[id]` (photo albums), `/book`, `/book/success`.
 - Owner routes under `/admin`.
 - Light and dark themes; dark is the default for new visitors (confirmed).

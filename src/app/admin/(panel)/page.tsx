@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getAllBookingsResult } from "@/lib/bookings";
 import { getAllTrekSessionsStrict } from "@/lib/trek-sessions-file";
-import { getAllReviews } from "@/lib/reviews";
+import { getPendingReviewCount } from "@/lib/reviews";
 import {
   addDaysISO,
   ageLabel,
@@ -38,13 +38,13 @@ export default async function AdminTodayPage() {
   // The layout checks auth too, but pages must not rely on it alone.
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
 
-  const [bookingsResult, sessionsResult, reviews] = await Promise.all([
+  const [bookingsResult, sessionsResult, pendingReviews] = await Promise.all([
     getAllBookingsResult(),
     getAllTrekSessionsStrict().then(
       (sessions) => ({ sessions, error: null as string | null }),
       () => ({ sessions: [] as TrekSession[], error: "Could not read hiking days." })
     ),
-    getAllReviews(),
+    getPendingReviewCount(),
   ]);
   const { bookings } = bookingsResult;
   const { sessions } = sessionsResult;
@@ -83,7 +83,7 @@ export default async function AdminTodayPage() {
   const expectedPax = confirmed30.reduce((n, b) => n + (b.paxCount || 0), 0);
   const pendingValue = pending30.reduce((n, b) => n + safeTotal(b), 0);
 
-  const pendingReviews = reviews.filter((r) => r.status === "pending").length;
+  // Count comes from the store, not a full review list.
   const errors = [bookingsResult.error, sessionsResult.error].filter(Boolean);
 
   return (

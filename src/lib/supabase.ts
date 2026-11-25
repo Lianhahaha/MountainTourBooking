@@ -10,7 +10,10 @@ export function getSupabase(): SupabaseClient | null {
   if (!url || !key) return null;
 
   if (!supabase) {
-    supabase = createClient(url, key);
+    // Server-only client: no browser session persistence or token refresh.
+    supabase = createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    });
   }
 
   return supabase;

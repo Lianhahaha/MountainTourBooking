@@ -25,7 +25,16 @@ export async function PATCH(
   }
 
   const { id } = await params;
-  const existing = await getTrekSessionById(id);
+  let existing: TrekSession | undefined;
+  try {
+    existing = await getTrekSessionById(id);
+  } catch (err) {
+    console.error("Could not read hiking day:", err);
+    return NextResponse.json(
+      { error: "Couldn't read the schedule right now. Try again in a moment." },
+      { status: 503 }
+    );
+  }
   if (!existing) {
     return NextResponse.json({ error: "Hiking day not found" }, { status: 404 });
   }
@@ -98,11 +107,23 @@ async function editSession(existing: TrekSession, body: Record<string, unknown>)
       { status: 409 }
     );
   }
-  if (scheduleChanged && (await sessionConflictExists(date, time, existing.id))) {
-    return NextResponse.json(
-      { error: "Another hiking day already exists for this date and time" },
-      { status: 409 }
-    );
+  if (scheduleChanged) {
+    let conflict = false;
+    try {
+      conflict = await sessionConflictExists(date, time, existing.id);
+    } catch (err) {
+      console.error("Could not check the schedule:", err);
+      return NextResponse.json(
+        { error: "Couldn't read the schedule right now. Try again in a moment." },
+        { status: 503 }
+      );
+    }
+    if (conflict) {
+      return NextResponse.json(
+        { error: "Another hiking day already exists for this date and time" },
+        { status: 409 }
+      );
+    }
   }
 
   const result = await updateTrekSession(existing.id, (current) => {
@@ -134,9 +155,6 @@ async function editSession(existing: TrekSession, body: Record<string, unknown>)
 }
 
 async function cancelSession(existing: TrekSession, reason: string) {
-  if (existing.status === "cancelled") {
-    return NextResponse.json({ session: existing, cancelledBookings: 0, emailsSent: 0, failures: [] });
-  }
   if (reason.length > 1000) {
     return NextResponse.json({ error: "Reason must be at most 1000 characters" }, { status: 400 });
   }
@@ -151,13 +169,24 @@ async function cancelSession(existing: TrekSession, reason: string) {
     );
   }
 
-  const marked = await updateTrekSession(existing.id, (current) => ({
-    ...current,
-    status: "cancelled",
-    updatedAt: new Date().toISOString(),
-  }));
-  if (!marked.ok || !marked.session) {
-    return NextResponse.json({ error: marked.error ?? "Could not cancel the hiking day" }, { status: 500 });
+  // A retry after a partial failure must still reach the bookings that were
+  // missed, so an already-cancelled day continues to the notification loop.
+  let marked: { ok: boolean; session?: TrekSession; error?: string } = {
+    ok: true,
+    session: existing,
+  };
+  if (existing.status !== "cancelled") {
+    marked = await updateTrekSession(existing.id, (current) => ({
+      ...current,
+      status: "cancelled",
+      updatedAt: new Date().toISOString(),
+    }));
+    if (!marked.ok || !marked.session) {
+      return NextResponse.json(
+        { error: marked.error ?? "Could not cancel the hiking day" },
+        { status: 500 }
+      );
+    }
   }
 
   const note =
@@ -210,7 +239,16 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const existing = await getTrekSessionById(id);
+  let existing: TrekSession | undefined;
+  try {
+    existing = await getTrekSessionById(id);
+  } catch (err) {
+    console.error("Could not read hiking day:", err);
+    return NextResponse.json(
+      { error: "Couldn't read the schedule right now. Try again in a moment." },
+      { status: 503 }
+    );
+  }
   if (!existing) {
     return NextResponse.json({ error: "Hiking day not found" }, { status: 404 });
   }

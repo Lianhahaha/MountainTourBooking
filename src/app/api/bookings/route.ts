@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { BookingRequest } from "@/types";
-import { saveBookingToSupabase } from "@/lib/supabase";
-import { saveBookingToFile } from "@/lib/bookings-file";
-import { getAllBookingsResult } from "@/lib/bookings";
+import { getAllBookingsResult, saveBooking } from "@/lib/bookings";
 import { sendBookingEmails, generateBookingId } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { reserveSessionSlots, releaseSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
@@ -22,6 +20,10 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!request.headers.get("content-type")?.includes("application/json")) {
+    return NextResponse.json({ error: "Expected a JSON request" }, { status: 415 });
+  }
+
   // Rate limit per IP so scripted abuse cannot reserve every slot on a
   // hiking day with junk bookings.
   const ip = clientIp(request.headers);
@@ -223,18 +225,16 @@ export async function POST(request: NextRequest) {
       slotsReserved = true;
     }
 
-    const supabaseResult = await saveBookingToSupabase(booking);
-    if (!supabaseResult.ok) {
-      const fileResult = await saveBookingToFile(booking);
-      if (!fileResult.ok) {
-        if (slotsReserved && booking.sessionId) {
-          await releaseSessionSlots(booking.sessionId, booking.paxCount);
-        }
-        return NextResponse.json(
-          { error: "Failed to save booking. Please try again or contact us directly." },
-          { status: 500 }
-        );
+    const saved = await saveBooking(booking);
+    if (!saved.ok) {
+      console.error("Could not save booking:", saved.error);
+      if (slotsReserved && booking.sessionId) {
+        await releaseSessionSlots(booking.sessionId, booking.paxCount);
       }
+      return NextResponse.json(
+        { error: "Failed to save booking. Please try again or contact us directly." },
+        { status: 500 }
+      );
     }
     slotsReserved = false;
 

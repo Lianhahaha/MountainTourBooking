@@ -33,9 +33,12 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# local booking data (dev fallback)
+# local JSON store (dev fallback when Supabase is not configured)
 /data/bookings.json
 /data/contacts.json
+/data/trek-sessions.json
+/data/hiking-days.json
+/data/reviews.json
 
 # vercel
 .vercel
@@ -48,3 +51,6 @@ next-env.d.ts
 /.impeccable/questions/
 /.impeccable/review/
 /.impeccable/mocks/
+
+# coding-agent session files
+/.mimocode/

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { BookingStatus } from "@/types";
+import type { BookingRequest, BookingStatus, TrekSession } from "@/types";
 import { getBookingById, updateBookingStatus } from "@/lib/bookings";
 import {
   sendBookingApprovedEmail,
@@ -46,7 +46,16 @@ export async function PATCH(
     return NextResponse.json({ error: "Message must be at most 1000 characters" }, { status: 400 });
   }
 
-  const existing = await getBookingById(id);
+  let existing: BookingRequest | undefined;
+  try {
+    existing = await getBookingById(id);
+  } catch (err) {
+    console.error("Could not read booking:", err);
+    return NextResponse.json(
+      { error: "Couldn't read this booking right now. Try again in a moment." },
+      { status: 503 }
+    );
+  }
   if (!existing) {
     return NextResponse.json({ error: "Booking not found" }, { status: 404 });
   }
@@ -70,7 +79,16 @@ export async function PATCH(
   if (status === "confirmed") {
     const today = todayInManila();
     if (existing.sessionId) {
-      const session = await getTrekSessionById(existing.sessionId);
+      let session: TrekSession | undefined;
+      try {
+        session = await getTrekSessionById(existing.sessionId);
+      } catch (err) {
+        console.error("Could not read hiking day:", err);
+        return NextResponse.json(
+          { error: "Couldn't read the hiking day right now. Try again in a moment." },
+          { status: 503 }
+        );
+      }
       if (!session) {
         return NextResponse.json({ error: "This hiking day no longer exists." }, { status: 409 });
       }

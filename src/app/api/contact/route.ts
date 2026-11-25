@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveContactToSupabase } from "@/lib/supabase";
-import { saveContactToFile } from "@/lib/bookings-file";
+import { saveContactToLocal } from "@/lib/bookings-local";
 import { sendContactEmail } from "@/lib/email";
 import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  if (!request.headers.get("content-type")?.includes("application/json")) {
+    return NextResponse.json({ error: "Expected a JSON request" }, { status: 415 });
+  }
+
   const ip = clientIp(request.headers);
   if (isRateLimited("contact", ip, 5)) {
     return NextResponse.json(
@@ -55,8 +59,8 @@ export async function POST(request: NextRequest) {
 
     const supabaseResult = await saveContactToSupabase({ name, email, phone, message });
     if (!supabaseResult.ok) {
-      const fileResult = await saveContactToFile({ name, email, phone, message });
-      if (!fileResult.ok) {
+      const localResult = await saveContactToLocal({ name, email, phone, message });
+      if (!localResult.ok) {
         return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
       }
     }

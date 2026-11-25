@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  getAllTrekSessions,
+  getAllTrekSessionsStrict,
   saveTrekSession,
   slugifySessionDate,
 } from "@/lib/trek-sessions-file";
@@ -51,7 +51,16 @@ export async function POST(request: NextRequest) {
     }
 
     const today = todayInManila();
-    const existing = await getAllTrekSessions();
+    let existing: TrekSession[];
+    try {
+      existing = await getAllTrekSessionsStrict();
+    } catch (err) {
+      console.error("Could not read the schedule:", err);
+      return NextResponse.json(
+        { error: "Couldn't read the schedule right now. Try again in a moment." },
+        { status: 503 }
+      );
+    }
     // Build a set of "date|normalizedTime" keys for all non-cancelled sessions
     const normalizedTime = time.trim().toLowerCase();
     const existingKeys = new Set(

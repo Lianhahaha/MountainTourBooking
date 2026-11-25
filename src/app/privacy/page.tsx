@@ -4,8 +4,9 @@ import { LegalPage, LEGAL_EMAIL, type LegalSection } from "@/components/LegalPag
 import { org } from "@/data/org";
 
 export const metadata: Metadata = {
-  title: `Privacy Policy — ${org.name}`,
+  title: "Privacy Policy",
   description: `How ${org.name} collects, uses, and protects the personal information you share when booking a Mt. Apo trek.`,
+  alternates: { canonical: "/privacy" },
 };
 
 const EFFECTIVE = "October 2, 2026";
@@ -93,8 +94,8 @@ const sections: LegalSection[] = [
           </li>
           <li>
             <strong>Service providers</strong> that run the site for us: Vercel (hosting and
-            analytics), Supabase and Google Firebase (databases), and Resend (booking emails).
-            They process data only on our instructions.
+            analytics), Supabase (database), and Resend (booking emails). They process data
+            only on our instructions.
           </li>
           <li>
             <strong>Emergency responders</strong>, if needed to protect someone&apos;s life or

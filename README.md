@@ -8,8 +8,8 @@ A mobile-first booking website for **Laag Ta ORB**, a registered hiking organiza
 - **Trip catalog** — scheduled Mt. Apo group treks with slot availability + private group bookings
 - **Multi-step booking** — participant info, health waivers, manual payment notice, booking reference ID
 - **Hike log** — `/hikes` page with photo albums per trekking day (title, summary, photos)
-- **Admin dashboard** — `/admin` for bookings and hiking day management
-- **Backend** — Supabase (production) with Firestore fallback
+- **Admin dashboard** — `/admin` for bookings, hiking days, albums, and reviews
+- **Backend** — Supabase (production) with a local JSON store for development
 - **Email notifications** — owner + client auto-reply via Resend (optional)
 
 ## Quick start
@@ -42,15 +42,23 @@ Copy `.env.example` to `.env.local`:
 cp .env.example .env.local
 ```
 
-- **Without Supabase env vars**: bookings fall back to Firestore (`booking_requests` collection)
-- **With Supabase**: bookings persist on Vercel (required for production deploy)
+- **Without Supabase env vars**: everything is stored in `data/*.json` (local development only)
+- **With Supabase**: bookings, hiking days, albums, and reviews persist on Vercel
 - **With Resend**: owner and client receive email on each booking
 
 ### Supabase setup
 
 1. Create a free project at [supabase.com](https://supabase.com)
-2. Run `supabase/schema.sql` in the SQL editor
-3. Add URL and service role key to `.env.local`
+2. Run `supabase/schema.sql` in the SQL editor (it creates all four tables)
+3. Add the project URL and service role key to `.env.local`
+4. Deploy. Row level security is enabled with no public policies, so the anon
+   key cannot read bookings or reviews.
+
+> **Upgrading from the Firestore version:** the app no longer reads Firestore.
+> Export the old `booking_requests`, `trek_sessions`, `hiking_days`, and
+> `reviews` collections from the Firebase console, then import them into the
+> matching Supabase tables (the column names are snake_case). The old Firebase
+> project can be deleted once the export is verified.
 
 ### Resend setup
 
@@ -70,10 +78,11 @@ Set environment variables in the Vercel dashboard. Supabase is recommended for p
 ```
 src/
   app/           # Pages and API routes
-  components/    # UI sections and booking form
+  components/    # UI sections, booking form, owner dashboard
   data/          # Editable content (replace with client data)
-  lib/           # Firestore, Supabase, email, utilities
+  lib/           # Supabase, local dev store, email, utilities
   types/         # TypeScript interfaces
+data/            # Local JSON store (gitignored, development only)
 supabase/
   schema.sql     # Database schema
 ```

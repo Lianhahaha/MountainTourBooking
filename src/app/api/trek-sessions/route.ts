@@ -100,7 +100,20 @@ export async function POST(request: NextRequest) {
     // (e.g. "6:00 AM" vs "6.00 AM"), which would overwrite an active session.
     // Overwriting a cancelled document is allowed (re-adding that slot), but
     // only once it holds no bookings — otherwise its count would reset to 0.
-    const idOwner = await getTrekSessionById(id);
+    let idOwner: TrekSession | undefined;
+    let conflict = false;
+    try {
+      idOwner = await getTrekSessionById(id);
+      // Block if any active session already uses this date + time.
+      conflict = await sessionConflictExists(date.trim(), time.trim());
+    } catch (err) {
+      console.error("Could not check the schedule:", err);
+      return NextResponse.json(
+        { error: "Couldn't read the schedule right now. Try again in a moment." },
+        { status: 503 }
+      );
+    }
+
     if (idOwner && (idOwner.status !== "cancelled" || idOwner.bookedCount > 0)) {
       return NextResponse.json(
         { error: "A hiking day already exists for this date and time" },
@@ -108,8 +121,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Block if any active session already uses this date + time
-    if (await sessionConflictExists(date.trim(), time.trim())) {
+    if (conflict) {
       return NextResponse.json(
         { error: "A hiking day already exists for this date and time" },
         { status: 409 }

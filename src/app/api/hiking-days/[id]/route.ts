@@ -1,18 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getHikingDayById, saveHikingDay, deleteHikingDay } from "@/lib/hiking-days-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import type { HikingDayPhoto } from "@/data/hiking-days";
+import type { HikingDay, HikingDayPhoto } from "@/data/hiking-days";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const day = await getHikingDayById(id);
-  if (!day) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  try {
+    const day = await getHikingDayById(id);
+    if (!day) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    return NextResponse.json(day);
+  } catch (err) {
+    console.error("Could not load hike album:", err);
+    return NextResponse.json({ error: "Couldn't reach the albums database." }, { status: 503 });
   }
-  return NextResponse.json(day);
 }
 
 export async function PATCH(
@@ -24,7 +29,13 @@ export async function PATCH(
   }
 
   const { id } = await params;
-  const existing = await getHikingDayById(id);
+  let existing: HikingDay | undefined;
+  try {
+    existing = await getHikingDayById(id);
+  } catch (err) {
+    console.error("Could not read hike album:", err);
+    return NextResponse.json({ error: "Couldn't reach the albums database." }, { status: 503 });
+  }
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -110,7 +121,13 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const existing = await getHikingDayById(id);
+  let existing: HikingDay | undefined;
+  try {
+    existing = await getHikingDayById(id);
+  } catch (err) {
+    console.error("Could not read hike album:", err);
+    return NextResponse.json({ error: "Couldn't reach the albums database." }, { status: 503 });
+  }
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }

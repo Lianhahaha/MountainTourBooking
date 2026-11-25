@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getAllBookingsResult } from "@/lib/bookings";
-import { getAllReviews } from "@/lib/reviews";
+import { getPendingReviewCount } from "@/lib/reviews";
 import { hoursSince } from "@/lib/admin";
 import { org } from "@/data/org";
 import { Icon } from "@/components/Icon";
@@ -21,12 +21,15 @@ export default async function AdminPanelLayout({
 
   // Counters for the nav. Failures fall back to no badge; each page reports
   // its own read errors.
-  const [{ bookings }, reviews] = await Promise.all([getAllBookingsResult(), getAllReviews()]);
+  const [{ bookings }, pendingReviews] = await Promise.all([
+    getAllBookingsResult(),
+    getPendingReviewCount(),
+  ]);
   const pending = bookings.filter((b) => b.status === "pending");
   const counts: AdminNavCounts = {
     pendingBookings: pending.length,
     overdueBookings: pending.filter((b) => hoursSince(b.createdAt) >= 48).length,
-    pendingReviews: reviews.filter((r) => r.status === "pending").length,
+    pendingReviews,
   };
 
   return (
