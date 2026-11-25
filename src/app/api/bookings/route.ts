@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { BookingRequest } from "@/types";
 import { saveBookingToSupabase } from "@/lib/supabase";
 import { saveBookingToFile } from "@/lib/bookings-file";
-import { getAllBookings } from "@/lib/bookings";
+import { getAllBookingsResult } from "@/lib/bookings";
 import { sendBookingEmails, generateBookingId } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { reserveSessionSlots, releaseSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
@@ -15,8 +15,10 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const bookings = await getAllBookings();
-  return NextResponse.json(bookings);
+  // `error` is set when a store could not be read: the list may be incomplete,
+  // and the dashboard says so instead of showing a falsely short queue.
+  const { bookings, error } = await getAllBookingsResult();
+  return NextResponse.json({ bookings, error });
 }
 
 export async function POST(request: NextRequest) {
