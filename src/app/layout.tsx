@@ -1,23 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 import { org } from "@/data/org";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { themeInitScript } from "@/lib/theme-script";
 import { Analytics } from "@vercel/analytics/react";
 import PWAInstaller from "@/components/PWAInstaller";
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -44,8 +31,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${outfit.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          rel="preload"
+          href="/fonts/dm-sans-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/outfit-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <link rel="manifest" href="/manifest.json" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
