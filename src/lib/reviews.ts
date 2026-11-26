@@ -116,16 +116,6 @@ export async function getAllReviewsStrict(): Promise<Review[]> {
   return (await readLocal<Review[]>("reviews", [])).sort(newestFirst);
 }
 
-/** Every review, newest first, or none when the store is unavailable. */
-export async function getAllReviews(): Promise<Review[]> {
-  try {
-    return await getAllReviewsStrict();
-  } catch (e) {
-    console.error("Reviews store unavailable, returning no reviews:", e);
-    return [];
-  }
-}
-
 /** Dashboard badge count without loading every review. */
 export async function getPendingReviewCount(): Promise<number> {
   const client = getSupabase();

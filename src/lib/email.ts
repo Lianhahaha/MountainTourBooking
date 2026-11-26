@@ -15,7 +15,8 @@ New booking request — ${booking.id}
 
 Trip: ${booking.tripTitle}
 Type: ${booking.tripType}
-${booking.preferredDate ? `Preferred date: ${booking.preferredDate}` : ""}
+${booking.preferredDate ? `Trek date: ${booking.preferredDate}` : "Trek date: to be confirmed"}
+${booking.trekTime ? `Meet-up time: ${booking.trekTime}` : ""}
 ${booking.locationPreference ? `Location preference: ${booking.locationPreference}` : ""}
 Participants: ${booking.paxCount}
 Estimated total: ₱${safeAmount(booking.estimatedTotal)}
@@ -62,6 +63,8 @@ Thank you for your booking request with ${org.name}!
 
 Reference: ${booking.id}
 Trip: ${booking.tripTitle}
+Date: ${booking.preferredDate ?? "To be confirmed"}
+Meet-up: ${booking.trekTime ?? "To be confirmed"}
 Participants: ${booking.paxCount}
 Estimated total: ₱${safeAmount(booking.estimatedTotal)} (pay in person on trek day)
 

@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { getAllHikingDays } from "@/lib/hiking-days-file";
 import { siteUrl } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
+// Rebuild at most hourly; album additions appear without a redeploy.
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();

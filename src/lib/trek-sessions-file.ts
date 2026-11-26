@@ -334,7 +334,12 @@ export async function releaseSessionSlots(
       const next: TrekSession = {
         ...current,
         bookedCount,
-        status: current.status === "full" ? "open" : current.status,
+        status:
+          current.status === "cancelled"
+            ? "cancelled"
+            : bookedCount >= current.maxSlots
+              ? "full"
+              : "open",
       };
       const result = await updateSessionRow(current, next);
       if (result.ok) return { ok: true };
@@ -364,7 +369,11 @@ async function releaseLocalSlots(
       const next = {
         ...current,
         bookedCount,
-        status: (current.status === "full" ? "open" : current.status) as TrekSession["status"],
+        status: (current.status === "cancelled"
+          ? "cancelled"
+          : bookedCount >= current.maxSlots
+            ? "full"
+            : "open") as TrekSession["status"],
         updatedAt: new Date().toISOString(),
       };
       const copy = [...sessions];

@@ -71,7 +71,13 @@ cp .env.example .env.local
 npx vercel
 ```
 
-Set environment variables in the Vercel dashboard. Supabase is recommended for production since serverless functions cannot write to the filesystem.
+Set environment variables in the Vercel dashboard. Supabase is **required** for
+production: serverless functions cannot write to the filesystem, so without it
+the local store refuses to run and the site reports the outage instead of
+losing data. Also set `NEXT_PUBLIC_SITE_URL` to the production origin so
+canonical links, the sitemap, and Open Graph tags point at the real domain.
+For Resend, verify your sending domain and set `RESEND_FROM_EMAIL` to an address
+on it; the default `onboarding@resend.dev` is only for testing.
 
 ## Project structure
 
