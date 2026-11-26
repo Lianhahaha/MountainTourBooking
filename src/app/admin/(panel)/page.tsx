@@ -4,6 +4,7 @@ import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getAllBookingsResult } from "@/lib/bookings";
 import { getAllTrekSessionsStrict } from "@/lib/trek-sessions-file";
 import { getPendingReviewCount } from "@/lib/reviews";
+import { describeSupabaseError } from "@/lib/supabase";
 import {
   addDaysISO,
   ageLabel,
@@ -42,7 +43,13 @@ export default async function AdminTodayPage() {
     getAllBookingsResult(),
     getAllTrekSessionsStrict().then(
       (sessions) => ({ sessions, error: null as string | null }),
-      () => ({ sessions: [] as TrekSession[], error: "Could not read hiking days." })
+      (err: unknown) => ({
+        sessions: [] as TrekSession[],
+        error:
+          err instanceof Error
+            ? describeSupabaseError(err.message)
+            : "Could not read hiking days.",
+      })
     ),
     getPendingReviewCount(),
   ]);

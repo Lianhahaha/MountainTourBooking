@@ -69,10 +69,11 @@ export async function getAllBookingsResult(): Promise<BookingsResult> {
       return { bookings: await getSupabaseBookings(), error: null };
     } catch (err) {
       console.error("Supabase bookings read failed:", err);
-      return {
-        bookings: [],
-        error: "Could not read bookings from the database. The list may be incomplete.",
-      };
+      const reason =
+        err instanceof Error
+          ? describeSupabaseError(err.message)
+          : "Could not read bookings from the database.";
+      return { bookings: [], error: `${reason} The list may be incomplete.` };
     }
   }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllHikingDaysStrict, saveHikingDay, slugify } from "@/lib/hiking-days-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { describeSupabaseError } from "@/lib/supabase";
 import { isSafeImageSrc, isValidISODate } from "@/lib/utils";
 import type { HikingDay, HikingDayPhoto } from "@/data/hiking-days";
 
@@ -10,7 +11,15 @@ export async function GET() {
     return NextResponse.json(await getAllHikingDaysStrict(), { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     console.error("Could not load hike albums:", err);
-    return NextResponse.json({ error: "Couldn't reach the albums database." }, { status: 503 });
+    return NextResponse.json(
+      {
+        error:
+          err instanceof Error
+            ? describeSupabaseError(err.message)
+            : "Couldn't reach the albums database.",
+      },
+      { status: 503 }
+    );
   }
 }
 

@@ -8,6 +8,7 @@ import {
   sessionConflictExists,
 } from "@/lib/trek-sessions-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { describeSupabaseError } from "@/lib/supabase";
 import { isValidISODate, todayInManila } from "@/lib/utils";
 import type { TrekSession } from "@/types";
 
@@ -31,7 +32,10 @@ export async function GET(request: NextRequest) {
       console.error("Trek sessions admin GET error:", err);
       return NextResponse.json({
         sessions: [],
-        error: "Couldn't load hiking days. The database may be unavailable.",
+        error:
+          err instanceof Error
+            ? describeSupabaseError(err.message)
+            : "Couldn't load hiking days. The database may be unavailable.",
       });
     }
   }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllReviewsStrict, isReviewStatus, updateReviewStatus } from "@/lib/reviews";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { describeSupabaseError } from "@/lib/supabase";
 
 /**
  * Owner dashboard: every review, newest first.
@@ -20,7 +21,13 @@ export async function GET() {
   } catch (e) {
     console.error("Could not load reviews:", e);
     return NextResponse.json(
-      { reviews: [], error: "Couldn't reach the reviews database." },
+      {
+        reviews: [],
+        error:
+          e instanceof Error
+            ? describeSupabaseError(e.message)
+            : "Couldn't reach the reviews database.",
+      },
       { status: 500 }
     );
   }
