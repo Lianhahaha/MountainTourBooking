@@ -26,6 +26,9 @@ export async function POST(request: NextRequest) {
     if (!Array.isArray(dates) || dates.length === 0) {
       return NextResponse.json({ error: "Select at least one date" }, { status: 400 });
     }
+    if (dates.length > 31) {
+      return NextResponse.json({ error: "Add at most 31 dates at once" }, { status: 400 });
+    }
 
     if (
       !time?.trim() ||

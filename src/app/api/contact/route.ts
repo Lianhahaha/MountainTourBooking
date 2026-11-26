@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name, email, phone, message } = body;
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+    let { name, email, phone, message } = body;
 
     if (!name || !email || !phone || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -33,6 +36,14 @@ export async function POST(request: NextRequest) {
       typeof message !== "string"
     ) {
       return NextResponse.json({ error: "Invalid field types" }, { status: 400 });
+    }
+
+    name = name.trim();
+    email = email.trim();
+    phone = phone.trim();
+    message = message.trim();
+    if (!name || !email || !phone || !message) {
+      return NextResponse.json({ error: "Required fields cannot be blank" }, { status: 400 });
     }
 
     const limits: Array<[string, string, number]> = [

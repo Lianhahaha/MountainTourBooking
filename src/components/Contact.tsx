@@ -38,7 +38,12 @@ export function Contact() {
       setErrorMsg("");
       setForm({ name: "", email: "", phone: "", message: "" });
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed");
+      const raw = err instanceof Error ? err.message : "";
+      setErrorMsg(
+        raw && !/failed to fetch|networkerror|load failed/i.test(raw)
+          ? raw
+          : "Couldn't send your message. Check your signal and try again."
+      );
       setStatus("error");
     }
   }

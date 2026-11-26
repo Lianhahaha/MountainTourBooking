@@ -253,10 +253,12 @@ export function BookingForm() {
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Booking failed");
+      const data: { id?: string; error?: string } = await res
+        .json()
+        .catch(() => ({}));
+      if (!res.ok) throw new Error(data.error ?? "Booking failed. Please try again.");
 
-      router.push(`/book/success?id=${data.id}`);
+      router.push(data.id ? `/book/success?id=${encodeURIComponent(data.id)}` : "/book/success");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

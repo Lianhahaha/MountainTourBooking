@@ -39,6 +39,9 @@ export async function POST(request: NextRequest) {
   let slotsReserved = false;
   try {
     const body = await request.json();
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
 
     booking = {
       id: generateBookingId(),
@@ -125,6 +128,25 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    booking.leadName = booking.leadName.trim();
+    booking.phone = booking.phone.trim();
+    booking.email = booking.email.trim();
+    booking.emergencyContactName = booking.emergencyContactName.trim();
+    booking.emergencyContactPhone = booking.emergencyContactPhone.trim();
+    booking.notes = (booking.notes ?? "").trim();
+    booking.trekTime = booking.trekTime?.trim() ?? null;
+    booking.locationPreference = booking.locationPreference?.trim() || null;
+
+    if (
+      !booking.leadName ||
+      !booking.phone ||
+      !booking.email ||
+      !booking.emergencyContactName ||
+      !booking.emergencyContactPhone
+    ) {
+      return NextResponse.json({ error: "Required fields cannot be blank" }, { status: 400 });
+    }
+
     if (
       !Array.isArray(booking.participantNames) ||
       booking.participantNames.length > booking.paxCount ||
@@ -137,6 +159,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    booking.participantNames = booking.participantNames.map((name) => name.trim());
 
     if (booking.tripType !== "scheduled" && booking.tripType !== "private") {
       return NextResponse.json({ error: "Invalid trip type" }, { status: 400 });
@@ -244,9 +267,13 @@ export async function POST(request: NextRequest) {
     }
     const savedBooking = booking;
     after(async () => {
-      const emailResult = await sendBookingEmails(savedBooking);
-      if (!emailResult.ownerSent || !emailResult.clientSent) {
-        console.warn("Booking emails incomplete for", savedBooking.id, emailResult);
+      try {
+        const emailResult = await sendBookingEmails(savedBooking);
+        if (!emailResult.ownerSent || !emailResult.clientSent) {
+          console.warn("Booking emails incomplete for", savedBooking.id, emailResult);
+        }
+      } catch (err) {
+        console.error("Booking email task failed for", savedBooking.id, err);
       }
     });
 
