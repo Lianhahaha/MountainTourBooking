@@ -68,7 +68,7 @@ export default async function Home() {
       />
       <Header />
       <SectionTabs tabs={tabs} />
-      <main className="has-sticky-bar">
+      <main id="main" className="has-sticky-bar">
         <Hero trip={trip} next={next} moreDates={Math.max(0, sessions.length - 1)} />
         <Dates trip={trip} privateTrip={getPrivateTrip()} sessions={sessions} error={sessionsResult.error} />
         {trip && <Inclusions trip={trip} />}

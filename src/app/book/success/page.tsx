@@ -22,7 +22,7 @@ export default async function BookingSuccessPage({
   return (
     <>
       <Header />
-      <main className="bg-background py-10 sm:py-16">
+      <main id="main" className="bg-background py-10 sm:py-16">
         <div className="mx-auto max-w-lg px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">

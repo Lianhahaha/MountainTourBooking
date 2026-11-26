@@ -76,6 +76,12 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <a
+          href="#main"
+          className="sr-only rounded-md bg-surface px-4 py-2 text-sm font-semibold text-foreground shadow-[var(--shadow)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
+        >
+          Skip to content
+        </a>
         <ThemeProvider>{children}</ThemeProvider>
         {process.env.VERCEL ? <Analytics /> : null}
         <PWAInstaller />

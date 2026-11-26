@@ -28,7 +28,7 @@ export function LegalPage({
   return (
     <>
       <Header />
-      <main className="py-8 sm:py-12">
+      <main id="main" className="py-8 sm:py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <nav aria-label="Breadcrumb" className="text-[13px] text-muted">
             <Link href="/" className="hover:text-foreground">

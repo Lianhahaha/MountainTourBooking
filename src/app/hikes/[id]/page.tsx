@@ -49,7 +49,7 @@ export default async function HikeDayPage({
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-background py-8 sm:py-12">
+      <main id="main" className="min-h-screen bg-background py-8 sm:py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <Link
             href="/hikes"

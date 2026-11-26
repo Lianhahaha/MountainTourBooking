@@ -5,8 +5,10 @@ function toLocalDateISO(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
+import { isValidISODate } from "@/lib/utils";
+
 function isValidDateISO(dateISO: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}$/.test(dateISO) && !Number.isNaN(new Date(`${dateISO}T00:00:00`).getTime());
+  return isValidISODate(dateISO);
 }
 
 /** Monday of the ISO week containing `dateISO` (YYYY-MM-DD). */

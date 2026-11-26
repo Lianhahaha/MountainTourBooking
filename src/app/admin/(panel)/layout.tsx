@@ -70,7 +70,7 @@ export default async function AdminPanelLayout({
             <AdminLogoutButton />
           </div>
         </header>
-        <main className="flex-1 px-4 pb-24 pt-5 md:px-6 md:pb-10 md:pt-6">
+        <main id="main" className="flex-1 px-4 pb-24 pt-5 md:px-6 md:pb-10 md:pt-6">
           <div className="mx-auto max-w-5xl">{children}</div>
         </main>
       </div>

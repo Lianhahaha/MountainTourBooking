@@ -21,7 +21,7 @@ export default function ErrorPage({
   return (
     <>
       <Header />
-      <main className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
+      <main id="main" className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
         <span className="flex h-11 w-11 items-center justify-center rounded-full bg-danger-muted text-danger">
           <Icon name="close" className="h-5 w-5" />
         </span>
