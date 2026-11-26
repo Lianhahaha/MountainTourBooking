@@ -1,10 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function AdminLogoutButton() {
-  const router = useRouter();
   const [busy, setBusy] = useState(false);
 
   async function handleLogout() {
@@ -12,8 +10,9 @@ export function AdminLogoutButton() {
     try {
       await fetch("/api/admin/login", { method: "DELETE" });
     } finally {
-      router.push("/admin/login");
-      router.refresh();
+      // A full navigation clears the client router cache, so a shared device
+      // cannot press Back into a signed-in dashboard.
+      window.location.assign("/admin/login");
     }
   }
 

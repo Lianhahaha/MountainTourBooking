@@ -45,6 +45,8 @@ cp .env.example .env.local
 - **Without Supabase env vars**: everything is stored in `data/*.json` (local development only)
 - **With Supabase**: bookings, hiking days, albums, and reviews persist on Vercel
 - **With Resend**: owner and client receive email on each booking
+- **`ADMIN_PASSWORD`**: protects `/admin`; use a long random value in production
+- **`NEXT_PUBLIC_SITE_URL`**: the public origin, used for canonical URLs, OG tags, and the sitemap
 
 ### Supabase setup
 

@@ -103,7 +103,7 @@ function NextClimbTag({
         </p>
         <p className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
           <span className="font-semibold text-foreground">
-            {weekday}, {year}
+            {weekday} · {year}
           </span>
           <span className="flex items-center gap-1.5 text-muted">
             <Icon name="clock" className="h-3.5 w-3.5" />

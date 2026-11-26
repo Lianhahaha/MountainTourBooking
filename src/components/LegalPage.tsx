@@ -3,8 +3,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Box, BoxHeader } from "@/components/Box";
 import { Icon } from "@/components/Icon";
+import { org } from "@/data/org";
 
-export const LEGAL_EMAIL = "projectneodevscoe@gmail.com";
+export const LEGAL_EMAIL = org.contact.email;
 
 export interface LegalSection {
   id: string;

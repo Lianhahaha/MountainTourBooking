@@ -62,6 +62,7 @@ export default async function AdminPanelLayout({
             <Link
               href="/"
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted transition-colors hover:bg-background hover:text-foreground"
             >
               <Icon name="external" className="h-4 w-4" />
