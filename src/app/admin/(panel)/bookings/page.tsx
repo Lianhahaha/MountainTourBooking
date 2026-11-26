@@ -3,7 +3,7 @@
 import { Fragment, Suspense, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { BookingRequest, BookingStatus, TrekSession } from "@/types";
 import { Box, BoxHeader } from "@/components/Box";
 import { Icon } from "@/components/Icon";
@@ -802,6 +802,7 @@ function BookingRow({
 /* ------------------------------------------------------------------ */
 
 function BookingsScreen() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const paramsKey = searchParams.toString();
 
@@ -990,11 +991,14 @@ function BookingsScreen() {
       }
       setResult(notice);
       refresh();
+      // The sidebar badge lives in the server layout; refresh its counts too.
+      router.refresh();
     },
     onConflict(message, booking) {
       applyBooking(booking);
       setResult({ tone: "error", text: message });
       refresh();
+      router.refresh();
     },
     onAuthExpired() {
       setAuthExpired(true);

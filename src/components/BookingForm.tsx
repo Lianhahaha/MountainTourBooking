@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trips, getTripById } from "@/data/trips";
 import { dateParts, formatDate, formatPrice, cn, todayInManila } from "@/lib/utils";
@@ -70,16 +70,56 @@ export function BookingForm() {
   });
   const [sessions, setSessions] = useState<TrekSession[]>([]);
   const [sessionsLoading, setSessionsLoading] = useState(true);
+  const [sessionsError, setSessionsError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const mountedRef = useRef(false);
 
+  // Move focus to the new step heading so keyboard and screen-reader users
+  // land at the start of the step instead of on the button they just left.
   useEffect(() => {
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
+    headingRef.current?.focus();
+  }, [step]);
+
+  const fetchSessions = useCallback(() => {
     fetch("/api/trek-sessions?available=true")
-      .then((res) => res.json())
-      .then((data) => setSessions(Array.isArray(data) ? data : []))
-      .catch(() => setSessions([]))
+      .then(async (res) => {
+        const data: unknown = await res.json().catch(() => null);
+        if (!res.ok) {
+          const message =
+            data && typeof data === "object" && "error" in data
+              ? String((data as { error: unknown }).error)
+              : "Live dates couldn't load.";
+          throw new Error(message);
+        }
+        setSessions(Array.isArray(data) ? (data as TrekSession[]) : []);
+      })
+      .catch((err: unknown) => {
+        setSessions([]);
+        const raw = err instanceof Error ? err.message : "";
+        const friendly =
+          raw && !/failed to fetch|networkerror|load failed|aborted/i.test(raw)
+            ? raw
+            : "Live dates couldn't load. Check your signal and try again.";
+        setSessionsError(friendly);
+      })
       .finally(() => setSessionsLoading(false));
   }, []);
+
+  useEffect(() => {
+    void fetchSessions();
+  }, [fetchSessions]);
+
+  function retrySessions() {
+    setSessionsLoading(true);
+    setSessionsError(null);
+    void fetchSessions();
+  }
 
   useEffect(() => {
     if (sessionsLoading || !preselectedTrip) return;
@@ -232,6 +272,7 @@ export function BookingForm() {
             <li key={s.id} className="flex flex-1 items-center">
               <div className="flex flex-col items-center gap-1">
                 <span
+                  aria-current={step === s.id ? "step" : undefined}
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition",
                     step > s.id && "border border-primary/50 bg-primary-muted text-primary",
@@ -266,8 +307,21 @@ export function BookingForm() {
       <div className="rounded-md border border-border bg-surface p-4 sm:p-6">
         {step === 0 && (
           <div>
-            <h2 className="text-lg font-bold text-foreground sm:text-xl">Select your trek</h2>
+            <h2 ref={headingRef} tabIndex={-1} className="text-lg font-bold text-foreground sm:text-xl">
+              Select your trek
+            </h2>
             <p className="mt-1 text-sm text-muted">Join a group date or plan a private climb.</p>
+            {sessionsError && (
+              <div
+                role="alert"
+                className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-md border border-warning/40 bg-warning-muted px-3.5 py-2.5 text-sm text-foreground"
+              >
+                <span>{sessionsError}</span>
+                <button type="button" onClick={retrySessions} className="link-accent font-semibold">
+                  Retry
+                </button>
+              </div>
+            )}
             <div className="mt-4 space-y-3">
               {trips.map((trip) => {
                 const noDates = trip.type === "scheduled" && !sessionsLoading && sessions.length === 0;
@@ -315,7 +369,9 @@ export function BookingForm() {
                               ? "Loading available dates..."
                               : sessionCount > 0
                               ? `${formatPrice(trip.type === "scheduled" && sessionCount === 1 && sessions[0].price ? sessions[0].price : trip.price)}/person`
-                                : "No hiking days scheduled yet"
+                                : sessionsError
+                                  ? "Live dates unavailable"
+                                  : "No hiking days scheduled yet"
                             : `From ${formatPrice(trip.price)}/person · Flexible dates`}
                         </p>
                       </div>
@@ -330,7 +386,9 @@ export function BookingForm() {
 
         {step === 1 && selectedTrip && (
           <div>
-            <h2 className="text-lg font-bold text-foreground sm:text-xl">Group details</h2>
+            <h2 ref={headingRef} tabIndex={-1} className="text-lg font-bold text-foreground sm:text-xl">
+              Group details
+            </h2>
             <TripSummary trip={selectedTrip} session={selectedSession} />
 
             {isScheduled && (
@@ -498,7 +556,9 @@ export function BookingForm() {
 
         {step === 2 && (
           <div>
-            <h2 className="text-lg font-bold text-foreground sm:text-xl">Contact information</h2>
+            <h2 ref={headingRef} tabIndex={-1} className="text-lg font-bold text-foreground sm:text-xl">
+              Contact information
+            </h2>
             <p className="mt-1 text-sm text-muted">We confirm by email and SMS. Double-check both.</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <ImportantField label="Full name" required className="sm:col-span-2">
@@ -576,7 +636,9 @@ export function BookingForm() {
 
         {step === 3 && selectedTrip && (
           <div>
-            <h2 className="text-lg font-bold text-foreground sm:text-xl">Review & confirm</h2>
+            <h2 ref={headingRef} tabIndex={-1} className="text-lg font-bold text-foreground sm:text-xl">
+              Review &amp; confirm
+            </h2>
             <p className="mt-1 text-sm text-muted">Check your details. We email you once approved.</p>
 
             <div className="mt-4 space-y-3 rounded-md border border-border bg-surface-elevated p-4 text-sm">

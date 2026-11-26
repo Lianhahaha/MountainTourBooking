@@ -16,12 +16,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
-  const albumRoutes: MetadataRoute.Sitemap = days.map((day) => ({
-    url: `${base}/hikes/${day.id}`,
-    lastModified: day.updatedAt ? new Date(day.updatedAt) : undefined,
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
+  const albumRoutes: MetadataRoute.Sitemap = days.map((day) => {
+    const updated = day.updatedAt ? new Date(day.updatedAt) : null;
+    return {
+      url: `${base}/hikes/${day.id}`,
+      lastModified: updated && !Number.isNaN(updated.getTime()) ? updated : undefined,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    };
+  });
 
   return [...staticRoutes, ...albumRoutes];
 }

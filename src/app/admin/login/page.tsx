@@ -62,6 +62,9 @@ export default function AdminLoginPage() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 required
+                autoComplete="current-password"
+                autoCapitalize="none"
+                spellCheck={false}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="field-input pr-10"
@@ -69,6 +72,8 @@ export default function AdminLoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-pressed={showPassword}
+                aria-label={showPassword ? "Hide password" : "Show password"}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-muted hover:text-foreground"
               >
                 {showPassword ? "Hide" : "Show"}
