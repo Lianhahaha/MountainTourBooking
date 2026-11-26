@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import type { BookingRequest } from "@/types";
 import { getAllBookingsResult, saveBooking } from "@/lib/bookings";
 import { sendBookingEmails, generateBookingId } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { reserveSessionSlots, releaseSessionSlots, getTrekSessionById } from "@/lib/trek-sessions-file";
 import { getTripById, getPrivateTrip } from "@/data/trips";
-import { todayInManila } from "@/lib/utils";
+import { isValidISODate, todayInManila } from "@/lib/utils";
 import { isRateLimited, hitRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function GET() {
@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
       tripId: body.tripId ?? null,
       sessionId: body.sessionId ?? null,
       tripType: body.tripType,
-      tripTitle: body.tripTitle,
+      // Ignored: the title is resolved from the trip catalogue below.
+      tripTitle: "",
       preferredDate: body.preferredDate ?? null,
       trekTime: body.trekTime ?? null,
       locationPreference: body.locationPreference ?? null,
@@ -69,7 +70,6 @@ export async function POST(request: NextRequest) {
     // Waiver flags must be real booleans — truthy strings like "yes" would
     // otherwise pass the required check and get stored as-is.
     const missingRequired =
-      !booking.tripTitle ||
       !booking.leadName ||
       !booking.phone ||
       !booking.email ||
@@ -106,7 +106,6 @@ export async function POST(request: NextRequest) {
     }
 
     const textLimits: Array<[string, unknown, number, boolean]> = [
-      ["tripTitle", booking.tripTitle, 200, false],
       ["leadName", booking.leadName, 100, false],
       ["phone", booking.phone, 30, false],
       ["email", booking.email, 254, false],
@@ -169,9 +168,9 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      if (!booking.preferredDate || !/^\d{4}-\d{2}-\d{2}$/.test(booking.preferredDate)) {
+      if (!isValidISODate(booking.preferredDate)) {
         return NextResponse.json(
-          { error: "Please choose a preferred trek date" },
+          { error: "Please choose a real preferred trek date" },
           { status: 400 }
         );
       }
@@ -238,12 +237,20 @@ export async function POST(request: NextRequest) {
     }
     slotsReserved = false;
 
-    const emailResult = await sendBookingEmails(booking);
-    if (!emailResult.ownerSent || !emailResult.clientSent) {
-      console.warn("Booking emails incomplete for", booking.id, emailResult);
+    // Email is slow and must never delay the confirmation screen. The booking
+    // is already saved; send the notices after the response is on its way.
+    if (!booking) {
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
+    const savedBooking = booking;
+    after(async () => {
+      const emailResult = await sendBookingEmails(savedBooking);
+      if (!emailResult.ownerSent || !emailResult.clientSent) {
+        console.warn("Booking emails incomplete for", savedBooking.id, emailResult);
+      }
+    });
 
-    return NextResponse.json({ id: booking.id, status: "pending" });
+    return NextResponse.json({ id: savedBooking.id, status: "pending" });
   } catch (err) {
     console.error("Booking POST error:", err);
     // Release any slots reserved before the failure, otherwise a thrown error

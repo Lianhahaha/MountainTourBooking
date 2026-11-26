@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { getSupabase } from "@/lib/supabase";
+import { describeSupabaseError, getSupabase } from "@/lib/supabase";
 import { readLocal, updateLocal } from "@/lib/local-store";
 
 export interface Review {
@@ -55,7 +55,7 @@ export async function saveReview(
       status: "pending",
       created_at: new Date().toISOString(),
     });
-    return error ? { ok: false, error: error.message } : { ok: true };
+    return error ? { ok: false, error: describeSupabaseError(error.message) } : { ok: true };
   }
 
   try {
@@ -110,7 +110,7 @@ export async function getAllReviewsStrict(): Promise<Review[]> {
       .from("reviews")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     return (data ?? []).map(rowToReview);
   }
   return (await readLocal<Review[]>("reviews", [])).sort(newestFirst);
@@ -160,7 +160,7 @@ export async function updateReviewStatus(
       .eq("id", id)
       .select("id")
       .maybeSingle();
-    if (error) return { ok: false, error: error.message };
+    if (error) return { ok: false, error: describeSupabaseError(error.message) };
     if (!data) return { ok: false, error: "Review not found" };
     return { ok: true };
   }

@@ -1,5 +1,5 @@
 import type { BookingRequest, BookingStatus } from "@/types";
-import { getSupabase, saveBookingToSupabase } from "@/lib/supabase";
+import { describeSupabaseError, getSupabase, saveBookingToSupabase } from "@/lib/supabase";
 import {
   getBookingsFromLocalStrict,
   saveBookingToLocal,
@@ -46,7 +46,7 @@ async function getSupabaseBookings(): Promise<BookingRequest[]> {
       .select("*")
       .order("created_at", { ascending: false })
       .range(from, from + PAGE_SIZE - 1);
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     all.push(...(data ?? []).map(rowToBooking));
     if (!data || data.length < PAGE_SIZE) break;
   }
@@ -91,7 +91,7 @@ export async function getBookingById(id: string): Promise<BookingRequest | undef
   const client = getSupabase();
   if (client) {
     const { data, error } = await client.from("booking_requests").select("*").eq("id", id).maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     return data ? rowToBooking(data) : undefined;
   }
 
@@ -114,7 +114,7 @@ export async function updateBookingStatus(
     if (expectedStatus) query = query.eq("status", expectedStatus);
     const { data, error } = await query.select("*").maybeSingle();
 
-    if (error) return { ok: false, error: error.message };
+    if (error) return { ok: false, error: describeSupabaseError(error.message) };
     if (data) return { ok: true, booking: rowToBooking(data) };
 
     // No row updated: either the status moved on, or the booking is missing.

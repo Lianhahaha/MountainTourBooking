@@ -8,7 +8,7 @@ import {
   sessionConflictExists,
 } from "@/lib/trek-sessions-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { todayInManila } from "@/lib/utils";
+import { isValidISODate, todayInManila } from "@/lib/utils";
 import type { TrekSession } from "@/types";
 
 export async function GET(request: NextRequest) {
@@ -55,15 +55,22 @@ export async function POST(request: NextRequest) {
       notes?: string;
     };
 
-    if (!date?.trim() || !time?.trim() || !maxSlots || !Number.isInteger(maxSlots) || maxSlots < 1) {
+    if (
+      !date?.trim() ||
+      !time?.trim() ||
+      typeof maxSlots !== "number" ||
+      !Number.isInteger(maxSlots) ||
+      maxSlots < 1 ||
+      maxSlots > 100
+    ) {
       return NextResponse.json(
-        { error: "Date, time, and max slots (whole number ≥ 1) are required" },
+        { error: "Date, time, and max slots (1–100) are required" },
         { status: 400 }
       );
     }
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date.trim())) {
-      return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+    if (!isValidISODate(date.trim())) {
+      return NextResponse.json({ error: "Please choose a real calendar date" }, { status: 400 });
     }
 
     if (time.trim().length > 50) {

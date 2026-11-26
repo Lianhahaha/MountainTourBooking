@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getHikingDayById, saveHikingDay, deleteHikingDay } from "@/lib/hiking-days-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { isSafeImageSrc, isValidISODate } from "@/lib/utils";
 import type { HikingDay, HikingDayPhoto } from "@/data/hiking-days";
 
 export async function GET(
@@ -57,13 +58,14 @@ export async function PATCH(
             !p ||
             typeof p !== "object" ||
             typeof p.id !== "string" ||
-            typeof p.src !== "string" ||
-            p.src.length === 0 ||
-            typeof p.alt !== "string"
+            p.id.length > 100 ||
+            !isSafeImageSrc(p.src) ||
+            typeof p.alt !== "string" ||
+            p.alt.length > 300
         )
       ) {
         return NextResponse.json(
-          { error: "Photos must be an array of { id, src, alt } objects" },
+          { error: "Photos need { id, src, alt }, with an HTTPS or /path image URL" },
           { status: 400 }
         );
       }
@@ -73,8 +75,8 @@ export async function PATCH(
       }
     }
 
-    if (date !== undefined && (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date))) {
-      return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+    if (date !== undefined && !isValidISODate(date)) {
+      return NextResponse.json({ error: "Please choose a real calendar date" }, { status: 400 });
     }
 
     // Guard against empty strings: `??` only skips null/undefined, so a blank

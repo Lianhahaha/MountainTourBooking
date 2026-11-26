@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase";
+import { describeSupabaseError, getSupabase } from "@/lib/supabase";
 import { readLocal, updateLocal } from "@/lib/local-store";
 import type { TrekSession } from "@/types";
 import { todayInManila } from "@/lib/utils";
@@ -67,7 +67,7 @@ export async function getAllTrekSessionsStrict(): Promise<TrekSession[]> {
       .select("*")
       .order("date", { ascending: true })
       .order("time", { ascending: true });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     return (data ?? []).map(rowToSession);
   }
   return sortSessions(await readLocal<TrekSession[]>(LOCAL, []));
@@ -115,7 +115,7 @@ export async function getTrekSessionById(id: string): Promise<TrekSession | unde
   const client = getSupabase();
   if (client) {
     const { data, error } = await client.from(TABLE).select("*").eq("id", id).maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     return data ? rowToSession(data) : undefined;
   }
   return (await readLocal<TrekSession[]>(LOCAL, [])).find((s) => s.id === id);
@@ -137,7 +137,7 @@ export async function saveTrekSession(session: TrekSession): Promise<{ ok: boole
   const client = getSupabase();
   if (client) {
     const { error } = await client.from(TABLE).upsert(sessionToRow(session), { onConflict: "id" });
-    return error ? { ok: false, error: error.message } : { ok: true };
+    return error ? { ok: false, error: describeSupabaseError(error.message) } : { ok: true };
   }
 
   try {
@@ -177,7 +177,7 @@ async function updateSessionRow(
     .select("*")
     .maybeSingle();
 
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: describeSupabaseError(error.message) };
   if (!data) return { ok: false, retry: true };
   return { ok: true, session: rowToSession(data) };
 }
@@ -237,7 +237,7 @@ export async function deleteTrekSession(id: string): Promise<{ ok: boolean; erro
   const client = getSupabase();
   if (client) {
     const { error } = await client.from(TABLE).delete().eq("id", id);
-    return error ? { ok: false, error: error.message } : { ok: true };
+    return error ? { ok: false, error: describeSupabaseError(error.message) } : { ok: true };
   }
 
   try {

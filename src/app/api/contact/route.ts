@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { saveContactToSupabase } from "@/lib/supabase";
 import { saveContactToLocal } from "@/lib/bookings-local";
 import { sendContactEmail } from "@/lib/email";
@@ -67,18 +67,19 @@ export async function POST(request: NextRequest) {
 
     // The message is already persisted at this point — an email failure must
     // not surface as a 500, or the client shows an error and resubmits a
-    // duplicate message.
-    let emailSent = false;
-    try {
-      emailSent = await sendContactEmail({ name, email, phone, message });
-    } catch (err) {
-      console.error("Contact email failed:", err);
-    }
-    if (!emailSent) {
-      console.warn("Contact email not sent (missing key or provider error)");
-    }
+    // duplicate message. Send it after the response so the form stays fast.
+    after(async () => {
+      try {
+        const emailSent = await sendContactEmail({ name, email, phone, message });
+        if (!emailSent) {
+          console.warn("Contact email not sent (missing key or provider error)");
+        }
+      } catch (err) {
+        console.error("Contact email failed:", err);
+      }
+    });
 
-    return NextResponse.json({ ok: true, emailSent });
+    return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Contact form error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

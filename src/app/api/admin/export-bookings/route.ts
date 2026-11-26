@@ -6,7 +6,8 @@ import { todayInManila } from "@/lib/utils";
 /** Quote a cell for CSV and neutralize spreadsheet formulas (=, +, -, @ at cell start). */
 function csvCell(value: unknown): string {
   let cell = value === null || value === undefined ? "" : String(value);
-  if (/^[=+\-@\t\r]/.test(cell)) {
+  // Excel trims leading whitespace before treating a cell as a formula.
+  if (/^\s*[=+\-@\t\r]/.test(cell)) {
     cell = `'${cell}`;
   }
   if (/[",\r\n]/.test(cell)) {

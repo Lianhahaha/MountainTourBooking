@@ -5,7 +5,7 @@ import {
   slugifySessionDate,
 } from "@/lib/trek-sessions-file";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { todayInManila } from "@/lib/utils";
+import { isValidISODate, todayInManila } from "@/lib/utils";
 import type { TrekSession } from "@/types";
 
 export async function POST(request: NextRequest) {
@@ -27,9 +27,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Select at least one date" }, { status: 400 });
     }
 
-    if (!time?.trim() || !maxSlots || !Number.isInteger(maxSlots) || maxSlots < 1) {
+    if (
+      !time?.trim() ||
+      typeof maxSlots !== "number" ||
+      !Number.isInteger(maxSlots) ||
+      maxSlots < 1 ||
+      maxSlots > 100
+    ) {
       return NextResponse.json(
-        { error: "Time and max slots (whole number ≥ 1) are required" },
+        { error: "Time and max slots (1–100) are required" },
         { status: 400 }
       );
     }
@@ -87,8 +93,8 @@ export async function POST(request: NextRequest) {
       const date = typeof rawDate === "string" ? rawDate.trim() : "";
       if (!date) continue;
 
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        skipped.push({ date, reason: "Invalid date format" });
+      if (!isValidISODate(date)) {
+        skipped.push({ date, reason: "Invalid calendar date" });
         continue;
       }
 

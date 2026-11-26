@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase";
+import { describeSupabaseError, getSupabase } from "@/lib/supabase";
 import { readLocal, updateLocal } from "@/lib/local-store";
 import type { HikingDay, HikingDayPhoto } from "@/data/hiking-days";
 
@@ -41,7 +41,7 @@ export async function getAllHikingDaysStrict(): Promise<HikingDay[]> {
   const client = getSupabase();
   if (client) {
     const { data, error } = await client.from(TABLE).select("*").order("date", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     return (data ?? []).map(rowToDay);
   }
   return newestFirst(await readLocal<HikingDay[]>(LOCAL, []));
@@ -76,7 +76,7 @@ export async function getHikingDayById(id: string): Promise<HikingDay | undefine
   const client = getSupabase();
   if (client) {
     const { data, error } = await client.from(TABLE).select("*").eq("id", id).maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(describeSupabaseError(error.message));
     return data ? rowToDay(data) : undefined;
   }
   return (await readLocal<HikingDay[]>(LOCAL, [])).find((day) => day.id === id);
@@ -86,7 +86,7 @@ export async function saveHikingDay(day: HikingDay): Promise<{ ok: boolean; erro
   const client = getSupabase();
   if (client) {
     const { error } = await client.from(TABLE).upsert(dayToRow(day), { onConflict: "id" });
-    return error ? { ok: false, error: error.message } : { ok: true };
+    return error ? { ok: false, error: describeSupabaseError(error.message) } : { ok: true };
   }
 
   try {
@@ -107,7 +107,7 @@ export async function deleteHikingDay(id: string): Promise<{ ok: boolean; error?
   const client = getSupabase();
   if (client) {
     const { error } = await client.from(TABLE).delete().eq("id", id);
-    return error ? { ok: false, error: error.message } : { ok: true };
+    return error ? { ok: false, error: describeSupabaseError(error.message) } : { ok: true };
   }
 
   try {

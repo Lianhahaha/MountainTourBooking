@@ -9,7 +9,7 @@ import {
 import { getAllBookingsResult, updateBookingStatus } from "@/lib/bookings";
 import { sendBookingCancelledEmail } from "@/lib/email";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { formatDate, todayInManila } from "@/lib/utils";
+import { formatDate, isValidISODate, todayInManila } from "@/lib/utils";
 
 /**
  * Edit a hiking day (date, time, slots, price, notes), or cancel it with
@@ -75,8 +75,8 @@ async function editSession(existing: TrekSession, body: Record<string, unknown>)
   if (!date || !time) {
     return NextResponse.json({ error: "Date and time are required" }, { status: 400 });
   }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    return NextResponse.json({ error: "Date must be in YYYY-MM-DD format" }, { status: 400 });
+  if (!isValidISODate(date)) {
+    return NextResponse.json({ error: "Please choose a real calendar date" }, { status: 400 });
   }
   if (date < today) {
     return NextResponse.json({ error: "Date cannot be in the past" }, { status: 400 });
@@ -87,8 +87,8 @@ async function editSession(existing: TrekSession, body: Record<string, unknown>)
   if (notes.length > 1000) {
     return NextResponse.json({ error: "Notes must be at most 1000 characters" }, { status: 400 });
   }
-  if (typeof maxSlots !== "number" || !Number.isInteger(maxSlots) || maxSlots < 1) {
-    return NextResponse.json({ error: "Max slots must be a whole number of at least 1" }, { status: 400 });
+  if (typeof maxSlots !== "number" || !Number.isInteger(maxSlots) || maxSlots < 1 || maxSlots > 100) {
+    return NextResponse.json({ error: "Max slots must be a whole number between 1 and 100" }, { status: 400 });
   }
   if (price !== undefined && (typeof price !== "number" || !Number.isFinite(price) || price < 0)) {
     return NextResponse.json({ error: "Price must be a non-negative number" }, { status: 400 });

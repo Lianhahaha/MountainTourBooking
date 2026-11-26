@@ -47,12 +47,14 @@ export async function sendBookingEmails(
     resend.emails.send({
       from,
       to: ownerEmail,
+      replyTo: booking.email,
       subject: `[New Booking] ${booking.tripTitle} — ${booking.id}`,
       text: body,
     }),
     resend.emails.send({
       from,
       to: booking.email,
+      replyTo: ownerEmail,
       subject: `Booking request received — ${booking.id}`,
       text: `Hi ${booking.leadName},
 

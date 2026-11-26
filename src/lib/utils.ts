@@ -3,6 +3,18 @@ export function formatPrice(amount: number): string {
   return `₱${safe.toLocaleString("en-PH")}`;
 }
 
+/** Album photos must be same-origin paths or HTTPS URLs the image loader accepts. */
+export function isSafeImageSrc(value: unknown): value is string {
+  return typeof value === "string" && (value.startsWith("/") || /^https:\/\//i.test(value));
+}
+
+/** True only for a real calendar date in YYYY-MM-DD form (rejects 2026-02-31). */
+export function isValidISODate(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(value + "T00:00:00Z");
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
 /** Today's date in Asia/Manila (business timezone), as YYYY-MM-DD. */
 export function todayInManila(): string {
   return new Intl.DateTimeFormat("en-CA", {
