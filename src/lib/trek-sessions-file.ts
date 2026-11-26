@@ -86,10 +86,6 @@ export async function getAllTrekSessions(): Promise<TrekSession[]> {
   }
 }
 
-export async function getAvailableTrekSessions(): Promise<TrekSession[]> {
-  return (await getAvailableTrekSessionsResult()).sessions;
-}
-
 /**
  * Public pages need to tell "no dates posted" apart from "the store is down",
  * so they do not tell visitors the schedule is empty during an outage.

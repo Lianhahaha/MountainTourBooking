@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getAllTrekSessionsStrict,
-  getAvailableTrekSessions,
+  getAvailableTrekSessionsResult,
   getTrekSessionById,
   saveTrekSession,
   slugifySessionDate,
@@ -40,7 +40,10 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const sessions = await getAvailableTrekSessions();
+  const { sessions, error } = await getAvailableTrekSessionsResult();
+  if (error) {
+    return NextResponse.json({ sessions: [], error }, { status: 503 });
+  }
   return NextResponse.json(sessions);
 }
 
